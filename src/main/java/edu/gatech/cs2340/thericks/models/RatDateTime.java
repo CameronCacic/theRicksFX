@@ -1,15 +1,11 @@
 package edu.gatech.cs2340.thericks.models;
 
-import android.support.annotation.NonNull;
-
-import java.io.Serializable;
-
 /**
  * Created by Cameron on 10/31/2017.
  * Holds a date and time and can read dates and times in from
  * properly formatted Strings and raw data
  */
-public final class RatDateTime implements Comparable<RatDateTime>, Serializable{
+public final class RatDateTime implements Comparable<RatDateTime> {
 
     private final RatDate date;
     private final RatTime time;
@@ -243,7 +239,7 @@ public final class RatDateTime implements Comparable<RatDateTime>, Serializable{
 // --Commented out by Inspection STOP (11/20/2017 12:51 PM)
 
     @Override
-    public int compareTo(@NonNull RatDateTime ratDateTime) {
+    public int compareTo(RatDateTime ratDateTime) {
         int dateComp = date.compareTo(ratDateTime.getDate());
         if (dateComp == 0) {
             return time.compareTo(ratDateTime.getTime());

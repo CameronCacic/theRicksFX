@@ -1,0 +1,56 @@
+<resources>
+    <string name="google_maps_key">AIzaSyC58XScqKOkerCLSWOJDts6xGK-QTh2lm8</string>
+
+    <string name="app_name">The Ricks</string>
+    <string name="welcome_message">Welcome!</string>
+    <string name="create_account_message">Create Account</string>
+    <string name="register_message">Register</string>
+    <string name="login_message">Login</string>
+    <string name="logout_message">Logout</string>
+    <string name="incorrect_login_message">Incorrect username or password</string>
+    <string name="password_label">Password</string>
+    <string name="username_label">Username</string>
+    <string name="create_username_label">Create Username</string>
+    <string name="create_password_label">Create Password</string>
+    <string name="reenter_password_label">Re-enter Password</string>
+    <string name="empty_message" />
+    <string name="invalid_username_message">Must be at least 6 characters</string>
+    <string name="registration_password_mismatch">Password entries don\'t match</string>
+    <string name="invalid_password_message">Must be at least 8 lower/uppercase characters,
+        and numbers</string>
+    <string name="map_message">Map</string>
+    <string name="rat_list_data_message">Rat Data</string>
+    <string name="graph_message">Graph</string>
+    <string name="profile_message">Profile</string>
+    <string name="settings_message">Settings</string>
+    <string name="report_message">Report a Rat</string>
+    <string name="normal_label">Normal</string>
+    <string name="admin_label">Admin</string>
+
+    <string name="apply_label">Apply</string>
+    <string name="date_separator_label">to</string>
+    <string name="dashboard_message">Dashboard</string>
+    <string name="save_entry_message">Save Entry</string>
+    <string name="cancel_entry_message">Cancel Entry</string>
+
+    <string name="date_time_label">Date and Time</string>
+    <string name="apply_filters_message">Edit Filters</string>
+    <string name="cancel_message">Cancel</string>
+    <string name="no_matching_data_label">No data found, try different filters</string>
+    <string name="clear_message">Clear</string>
+
+    <string name="date_label">Date</string>
+    <string name="city_label">City</string>
+    <string name="borough_label">Borough</string>
+    <string name="address_label">Address</string>
+    <string name="zipcode_label">Zipcode</string>
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="rat_data_list_title">Rat Data</string>
+    <string name="unique_key_label">Unique Key</string>
+    <string name="location_type_label">Location Type</string>
+    <string name="user_x">User: X</string>
+    <string name="usernameText">text that shows the profile username</string>
+    <string name="settings_title_header">settings title header</string>
+    <string name="settings">SETTINGS</string>
+</resources>

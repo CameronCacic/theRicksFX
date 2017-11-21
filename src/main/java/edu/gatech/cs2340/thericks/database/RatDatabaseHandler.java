@@ -1,8 +1,8 @@
 package edu.gatech.cs2340.thericks.database;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * Singleton class that handles the rat database connection.
@@ -12,32 +12,42 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by Ben Lashley on 10/9/2017.
  */
 
-final class RatDatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+final class RatDatabaseHandler {
+    //private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "rat_data.db";
 
     private static final RatDatabaseHandler instance =
-            new RatDatabaseHandler(RatTrackerApplication.getAppContext());
+            new RatDatabaseHandler();
 
+    private Connection connection;
+    
     /**
      * Creates and/or opens a database that will be used for reading and writing
      * @return writable database
      */
-    static synchronized SQLiteDatabase provideWritableDatabase() {
-        return instance.getWritableDatabase();
+    static synchronized Connection provideDatabaseConnection() {
+        return instance.getDatabaseConnection();
     }
 
-    private RatDatabaseHandler(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    private RatDatabaseHandler() {
+        try {
+			connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_NAME);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public Connection getDatabaseConnection() {
+    	return connection;
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        RatDataDAO.onCreate(sqLiteDatabase);
+
+    public void onCreate(Connection connection) {
+        RatDataDAO.onCreate(connection);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        RatDataDAO.onUpgrade(sqLiteDatabase, oldVersion, newVersion);
+
+    public void onUpgrade(Connection connection, int oldVersion, int newVersion) {
+        RatDataDAO.onUpgrade(connection, oldVersion, newVersion);
     }
 }

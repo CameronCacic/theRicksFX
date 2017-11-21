@@ -8,6 +8,7 @@ import java.util.Locale;
 import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.utils.DateUtility;
 import edu.gatech.cs2340.thericks.utils.Log;
+import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
@@ -91,9 +92,15 @@ public class FilterActivity extends VBox {
     private Text longSeparator;
 
     private RatFilter filter;
+    private ResultObtainedCallback<Integer> callback;
 
-    public FilterActivity(RatFilter f) {
+    public FilterActivity(RatFilter f, ResultObtainedCallback<Integer> call) {
+    	
+    	assert f != null;
     	filter = f;
+    	
+    	assert call != null;
+    	callback = call;
     	
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_filter.fxml"));
     	loader.setController(this);
@@ -227,10 +234,7 @@ public class FilterActivity extends VBox {
         }
         filter.setPredicateEnabled(RatFilter.LONGITUDE, longitudeCheck.getState());
 
-//        Intent intent = new Intent();
-//        intent.putExtra(FILTER, filter);
-//        setResult(RESULT_OK, intent);
-//        finish();
+        callback.onResultObtained(ResultObtainedCallback.RESULT_OK);
     }
 
     /**
@@ -238,8 +242,7 @@ public class FilterActivity extends VBox {
      * @param v the clicked view
      */
     public void onCancelButtonClicked() {
-//        setResult(RESULT_CANCELED);
-//        finish();
+    	callback.onResultObtained(ResultObtainedCallback.RESULT_CANCELED);
     }
 
     /**

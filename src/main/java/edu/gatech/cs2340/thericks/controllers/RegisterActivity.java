@@ -6,6 +6,7 @@ import edu.gatech.cs2340.thericks.database.UserDatabase;
 import edu.gatech.cs2340.thericks.models.Privilege;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.Log;
+import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import edu.gatech.cs2340.thericks.utils.Security;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -55,8 +56,11 @@ public class RegisterActivity  {
     private Button createAccount;
 
     private UserDatabase db;
+    private ResultObtainedCallback<User> callback;
 
-    public RegisterActivity() {
+    public RegisterActivity(ResultObtainedCallback<User> call) {
+    	callback = call;
+    	
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_registration.fxml"));
     	loader.setController(this);
 		try {
@@ -126,11 +130,8 @@ public class RegisterActivity  {
 
                 // User object to pass to dashboard activity.
                 User u = new User(username, password, user_privilege);
-
-//                Context context = v.getContext();
-//                Intent intent = new Intent(context, DashMapActivity.class);
-//                intent.putExtra("edu.gatech.cs2340.thericks.User", u);
-//                context.startActivity(intent);
+                
+                callback.onResultObtained(u);
             }
         });
     }

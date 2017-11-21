@@ -35,13 +35,13 @@ class UserDAO {
     											+ COLUMN_SALT + ","
     											+ COLUMN_PRIVILEGE + ")";
 
-    private static PreparedStatement insertOrReplaceStatement;
+    private PreparedStatement insertOrReplaceStatement;
 
     /**
      * Create a user table in the database
      * @param sqLiteDatabase Database where table is stored
      */
-    static void onCreate(Connection connection) {
+    UserDAO(Connection connection) {
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_USERS + "(" +
                 COLUMN_USERNAME + " TEXT PRIMARY KEY, " +
                 COLUMN_PASSWORD + " TEXT, " +
@@ -61,30 +61,10 @@ class UserDAO {
     }
 
     /**
-     * Currently re-creates table on all upgrades
-     * @param sqLiteDatabase Database being upgraded
-     * @param oldVersion previous version of database
-     * @param newVersion new version of database
-     */
-    static void onUpgrade(Connection connection, int oldVersion, int newVersion) {
-        if (oldVersion < newVersion) {
-            // Get rid of the old table
-        	try {
-            	Statement statement = connection.createStatement();
-				statement.executeUpdate("DROP TABLE IF EXISTS " + TABLE_USERS);
-				// Create new table
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-            onCreate(connection);
-        }
-    }
-
-    /**
      * Insert new user into database if the user does not exist. If the user already exists,
      * replace the existing data.
     */
-    static void createUser(String username, String password, Privilege privilege) {
+    void createUser(String username, String password, Privilege privilege) {
 
         if (insertOrReplaceStatement != null) {
     		try {
@@ -106,7 +86,7 @@ class UserDAO {
      * @param result the ResultSet for traversing the table
      * @return a new User Object
      */
-    private static User cursorToUser(ResultSet result) {
+    private User cursorToUser(ResultSet result) {
     	User rtnUser = null;
     	try {
     		Privilege privilege = Privilege.values()[result.getInt(COLUMN_PRIVILEGE)];
@@ -130,7 +110,7 @@ class UserDAO {
      * @param connection the connection to the database to search in
      * @param username the username of the user to delete
      */
-    static void deleteUser(Connection connection, String username) {
+    void deleteUser(Connection connection, String username) {
     	try {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate("DELETE FROM " + TABLE_USERS
@@ -148,7 +128,7 @@ class UserDAO {
      * @param username the username of the user to search for
      * @return user with specified id, null if none found
      */
-    static User getUserByUsername(Connection connection, String username) {
+    User getUserByUsername(Connection connection, String username) {
         User user = null;
         String query = "SELECT FROM " + TABLE_USERS
         		+ " WHERE " + COLUMN_USERNAME + " = '" + username + "'";
@@ -175,7 +155,7 @@ class UserDAO {
      * @param db the database to search in
      * @return all users in a list
      */
-    static List<User> getAllUsers(Connection connection) {
+    List<User> getAllUsers(Connection connection) {
         List<User> userList = new ArrayList<>();
         String selectAllQuery = "SELECT * FROM " + TABLE_USERS;
 

@@ -5,19 +5,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Singleton class that handles the rat database connection.
+ * Singleton class that handles the database connection.
  * Provides a single connection throughout the
  * application's life cycle.
  *
  * Created by Ben Lashley on 10/9/2017.
  */
 
-final class RatDatabaseHandler {
+final class DatabaseHandler {
     //private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "rat_data.db";
 
-    private static final RatDatabaseHandler instance =
-            new RatDatabaseHandler();
+    private static final DatabaseHandler instance =
+            new DatabaseHandler();
 
     private Connection connection;
     
@@ -29,7 +29,7 @@ final class RatDatabaseHandler {
         return instance.getDatabaseConnection();
     }
 
-    private RatDatabaseHandler() {
+    private DatabaseHandler() {
         try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_NAME);
 		} catch (SQLException e) {
@@ -39,15 +39,5 @@ final class RatDatabaseHandler {
     
     public Connection getDatabaseConnection() {
     	return connection;
-    }
-
-
-    public void onCreate(Connection connection) {
-        RatDataDAO.onCreate(connection);
-    }
-
-
-    public void onUpgrade(Connection connection, int oldVersion, int newVersion) {
-        RatDataDAO.onUpgrade(connection, oldVersion, newVersion);
     }
 }

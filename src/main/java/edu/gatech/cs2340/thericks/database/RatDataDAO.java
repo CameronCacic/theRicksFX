@@ -50,9 +50,9 @@ class RatDataDAO {
     												+ COLUMN_LATITUDE + ","
     												+ COLUMN_LONGITUDE + ")";
 
-    private static PreparedStatement insertOrReplaceStatement;
+    private PreparedStatement insertOrReplaceStatement;
 
-    static void onCreate(Connection connection) {
+    RatDataDAO (Connection connection) {
         Log.d(TAG, "Creating database");
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_RAT_DATA + "(" +
                 COLUMN_KEY + " INTEGER PRIMARY KEY, " +
@@ -78,26 +78,6 @@ class RatDataDAO {
     }
 
     /**
-     * Currently re-creates table on all upgrades
-     * @param statement Database being upgraded
-     * @param oldVersion previous version of database
-     * @param newVersion new version of database
-     */
-    static void onUpgrade(Connection connection, int oldVersion, int newVersion) {
-        if (oldVersion < newVersion) {
-            // Get rid of the old table
-            try {
-            	Statement statement = connection.createStatement();
-				statement.executeUpdate("DROP TABLE IF EXISTS " + TABLE_RAT_DATA);
-				// Create new table
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-            onCreate(connection);
-        }
-    }
-
-    /**
      * Insert new rat data into database if key does not exist. If key already exists,
      * replace the existing data.
      * @param db the SQLiteDatabase where the RatData Object will be inserted
@@ -111,7 +91,7 @@ class RatDataDAO {
      * @param latitude latitude
      * @param longitude longitude
      */
-    static void createRatData(int key, String createdDateTime,
+    void createRatData(int key, String createdDateTime,
                               String locationType, int incidentZip, String incidentAddress,
                               String city, String borough, double latitude, double longitude) {
 
@@ -140,7 +120,7 @@ class RatDataDAO {
      * @param result the ResultSet used for traversing
      * @return RatData Object
      */
-    private static RatData cursorToRatData(ResultSet result) {
+    private RatData cursorToRatData(ResultSet result) {
     	RatData rtnData = null;
         try {
 			rtnData =  new RatData(result.getInt(COLUMN_KEY),
@@ -165,7 +145,7 @@ class RatDataDAO {
      * @param connection the connection to the database where the RatData Object will be deleted
      * @param key the RatData Object's unique key
      */
-    static void deleteRatData(Connection connection, int key) {
+    void deleteRatData(Connection connection, int key) {
         try {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate("DELETE FROM " + TABLE_RAT_DATA + " WHERE " + COLUMN_KEY + " = " + key);
@@ -210,7 +190,7 @@ class RatDataDAO {
      * @param db the SQLiteDatabase that houses all the RatData Objects
      * @return a list of RatData Objects
      */
-    static List<RatData> getAllRatData(Connection connection) {
+    List<RatData> getAllRatData(Connection connection) {
         List<RatData> ratDataList = new ArrayList<>(INITIAL_CAPACITY);
         String selectAllQuery = "SELECT * FROM " + TABLE_RAT_DATA;
 
@@ -232,7 +212,7 @@ class RatDataDAO {
         return ratDataList;
     }
 
-    static List<RatData> getFilteredRatData(Connection connection,
+    List<RatData> getFilteredRatData(Connection connection,
                                             Collection<Predicate<RatData>> filters) {
         List<RatData> ratDataList = new ArrayList<>(INITIAL_CAPACITY);
         String selectAllQuery = "SELECT * FROM " + TABLE_RAT_DATA;

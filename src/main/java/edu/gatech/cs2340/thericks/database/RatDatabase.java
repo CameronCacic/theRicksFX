@@ -20,18 +20,18 @@ import edu.gatech.cs2340.thericks.utils.Log;
 public class RatDatabase implements RatDataSource {
 
     private static final String TAG = RatDatabase.class.getSimpleName();
+    
+    private RatDataDAO dao;
     private Connection connection;
 
     /**
      * initializes the SQLite Database to a RatDatabaseHandler 
      */
     public RatDatabase() {
-        open();
+    	connection = DatabaseHandler.provideDatabaseConnection();
+    	dao = new RatDataDAO(connection);
     }
 
-    private void open() {
-        connection = RatDatabaseHandler.provideDatabaseConnection();
-    }
 
     /**
      * Loads in a list of RatData Objects
@@ -61,19 +61,19 @@ public class RatDatabase implements RatDataSource {
     public void createRatData(int key, String createdDateTime, String locationType, int incidentZip,
                               String incidentAddress, String city, String borough, double latitude,
                               double longitude) {
-        RatDataDAO.createRatData(key, createdDateTime, locationType, incidentZip,
+        dao.createRatData(key, createdDateTime, locationType, incidentZip,
                 incidentAddress, city, borough, latitude, longitude);
     }
 
     @Override
     public void deleteRatData(RatData data) {
-        RatDataDAO.deleteRatData(connection, data.getKey());
+        dao.deleteRatData(connection, data.getKey());
     }
 
 
     @Override
     public List<RatData> getAllRatData() {
-        return RatDataDAO.getAllRatData(connection);
+        return dao.getAllRatData(connection);
     }
 
     /**
@@ -83,7 +83,7 @@ public class RatDatabase implements RatDataSource {
      */
     public List<RatData> getFilteredRatData(RatFilter filter) {
         // return RatDataDAO.applyFilters(RatDataDAO.getAllRatData(db), filters);
-        return RatDataDAO.getFilteredRatData(connection, filter.getPredicates());
+        return dao.getFilteredRatData(connection, filter.getPredicates());
     }
 
 // --Commented out by Inspection START (11/13/2017 1:34 AM):

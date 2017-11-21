@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -55,6 +54,8 @@ class LoadRatDataTask extends Thread {
             BufferedReader br = new BufferedReader(new InputStreamReader(input,
                     StandardCharsets.UTF_8));
 
+            RatDataDAO dao = new RatDataDAO(DatabaseHandler.provideDatabaseConnection());
+            
             String line;
             br.readLine(); //get rid of header line
             line = br.readLine();
@@ -93,7 +94,7 @@ class LoadRatDataTask extends Thread {
                     longitude = 0;
                 }
                 // Add new rat data to database
-                RatDataDAO.createRatData(key, createdDateTime, locationType, incidentZip,
+                dao.createRatData(key, createdDateTime, locationType, incidentZip,
                         incidentAddress, city, borough, latitude, longitude);
                 line = br.readLine();
             }

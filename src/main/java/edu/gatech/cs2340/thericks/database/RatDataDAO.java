@@ -137,7 +137,7 @@ class RatDataDAO {
 
     /**
      * Convert result's current position into rat data
-     * @param cursor the Cursor used for traversing
+     * @param result the ResultSet used for traversing
      * @return RatData Object
      */
     private static RatData cursorToRatData(ResultSet result) {
@@ -162,7 +162,7 @@ class RatDataDAO {
 
     /**
      * Removes all rat data with the provided key
-     * @param db the SQLiteDatabase where the RatData Object will be deleted
+     * @param connection the connection to the database where the RatData Object will be deleted
      * @param key the RatData Object's unique key
      */
     static void deleteRatData(Connection connection, int key) {
@@ -226,7 +226,6 @@ class RatDataDAO {
 			    ratDataList.add(data);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
         

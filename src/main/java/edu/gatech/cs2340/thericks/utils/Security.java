@@ -1,7 +1,5 @@
 package edu.gatech.cs2340.thericks.utils;
 
-import android.util.Log;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -90,7 +88,7 @@ public class Security {
      * @param username the desired username
      * @return true if valid, false if not
      */
-    public static boolean validateUsername(@SuppressWarnings("TypeMayBeWeakened") String username) {
+    public static boolean validateUsername(String username) {
         // Check if username is valid
         if ((username == null) || username.isEmpty()) {
             return false;

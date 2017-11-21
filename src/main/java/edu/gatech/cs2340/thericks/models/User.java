@@ -1,5 +1,6 @@
 package edu.gatech.cs2340.thericks.models;
 
+import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.Security;
 
 /**

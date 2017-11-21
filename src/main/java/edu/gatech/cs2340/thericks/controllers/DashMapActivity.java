@@ -106,7 +106,7 @@ public class DashMapActivity extends AnchorPane implements MapComponentInitializ
 				.zoomControl(true)
 				.zoom(ZOOM);
     	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_main.fxml"));
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_dash_map.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {
@@ -116,6 +116,7 @@ public class DashMapActivity extends AnchorPane implements MapComponentInitializ
 		}
     }
     
+    @FXML
     public void initialize() {
 
         Log.d(TAG, "Entered dashboard activity");

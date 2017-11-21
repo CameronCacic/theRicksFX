@@ -1,5 +1,6 @@
 package edu.gatech.cs2340.thericks.models;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -165,7 +166,7 @@ public class RatFilter {
      * Sets the beginning date for the date filter
      * @param beginDate the beginning date
      */
-    public void setBeginDate(Date beginDate) {
+    public void setBeginDate(LocalDateTime beginDate) {
         beginDateStr = DateUtility.DATE_FORMAT.format(beginDate);
         beginTimeStr = DateUtility.TIME_FORMAT.format(beginDate);
         if ((endDateStr != null) && (endTimeStr != null)) {
@@ -177,7 +178,7 @@ public class RatFilter {
      * Sets the ending date for the date filter
      * @param endDate the ending date
      */
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         endDateStr = DateUtility.DATE_FORMAT.format(endDate);
         endTimeStr = DateUtility.TIME_FORMAT.format(endDate);
         if ((beginDateStr != null) && (beginTimeStr != null)) {
@@ -335,7 +336,7 @@ public class RatFilter {
      * Returns the location type
      * @return the location type
      */
-    public CharSequence getLocationType() {
+    public String getLocationType() {
         return locationType;
     }
 
@@ -351,7 +352,7 @@ public class RatFilter {
      * Returns the address
      * @return the address
      */
-    public CharSequence getAddress() {
+    public String getAddress() {
         return address;
     }
 
@@ -359,7 +360,7 @@ public class RatFilter {
      * Returns the city
      * @return the city
      */
-    public CharSequence getCity() {
+    public String getCity() {
         return city;
     }
 
@@ -367,7 +368,7 @@ public class RatFilter {
      * Returns the borough
      * @return the borough
      */
-    public CharSequence getBorough() {
+    public String getBorough() {
         return borough;
     }
 
@@ -425,7 +426,7 @@ public class RatFilter {
     public static RatFilter getDefaultInstance() {
         RatFilter filter = new RatFilter();
         filter.setBeginDate(DateUtility.getLastMonth());
-        filter.setEndDate(Calendar.getInstance().getTime());
+        filter.setEndDate(LocalDateTime.now());
         return filter;
     }
 }

@@ -3,6 +3,8 @@ package edu.gatech.cs2340.thericks.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -19,27 +21,21 @@ import edu.gatech.cs2340.thericks.models.RatData;
  */
 
 public class DateUtility {
-    private static final DateFormat DATE_TIME_FORMAT
-            = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
-    public static final DateFormat TIME_FORMAT
-            = new SimpleDateFormat("hh:mm:ss a", Locale.ENGLISH);
-    public static final DateFormat DATE_FORMAT
-            = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+    public static final DateTimeFormatter DATE_TIME_FORMAT 
+    		= DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
+    public static final DateTimeFormatter TIME_FORMAT
+    		= DateTimeFormatter.ofPattern("hh:mm:ss a", Locale.ENGLISH);
+    public static final DateTimeFormatter DATE_FORMAT
+    		= DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
 
     /**
      * Returns a Date object containing the date exactly one month from today
      * @return the Date one month ago
      */
-    public static Date getLastMonth() {
-        Calendar cal = Calendar.getInstance();
-        int month = cal.get(Calendar.MONTH);
-        if (month > 0) {
-            cal.set(Calendar.MONTH, month - 1);
-        } else {
-            cal.set(Calendar.MONTH, Calendar.DECEMBER);
-            cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) - 1);
-        }
-        return cal.getTime();
+    public static LocalDateTime getLastMonth() {
+        LocalDateTime dateTime = LocalDateTime.now();
+        dateTime.minusMonths(1);
+        return dateTime;
     }
 
     /**
@@ -47,13 +43,8 @@ public class DateUtility {
      * @param input the String to parse
      * @return the Date resulting from the String
      */
-    public static Date parse(String input) {
-        try {
-            return DATE_TIME_FORMAT.parse(input);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public static LocalDateTime parse(String input) {
+        return LocalDateTime.parse(input, DATE_TIME_FORMAT);
     }
 
     /**
@@ -62,11 +53,10 @@ public class DateUtility {
      * @param end the end date
      * @return the predicate
      */
-    public static Predicate<RatData> createDateRangeFilter(Date begin, Date end) {
+    public static Predicate<RatData> createDateRangeFilter(LocalDateTime begin, LocalDateTime end) {
         return ratData -> {
-            Date d = parse(ratData.getCreatedDateTime());
-            return (d != null) && ((begin == null) || !d.before(begin))
-                    && ((end == null) || !d.after(end));
+        	LocalDateTime dateTime = LocalDateTime.parse(ratData.getCreatedDateTime(), DATE_TIME_FORMAT);
+            return (dateTime.compareTo(begin) >= 0) && (dateTime.compareTo(end) <= 0);
         };
     }
 
@@ -77,7 +67,7 @@ public class DateUtility {
      * @param data the list
      * @return a list containing the RatData between the specified dates
      */
-    public static Collection<RatData> filterByDate(Date begin, Date end, Collection<RatData> data) {
+    public static Collection<RatData> filterByDate(LocalDateTime begin, LocalDateTime end, Collection<RatData> data) {
         Predicate<RatData> predicate = createDateRangeFilter(begin, end);
         return data.stream().filter(predicate).collect(Collectors.toList());
     }

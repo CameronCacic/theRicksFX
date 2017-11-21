@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 /**
@@ -24,7 +25,7 @@ import javafx.scene.text.Text;
  * be created the user is prompted with what field is insufficient
  * and what they need to add to fix it
  */
-public class RegisterActivity  {
+public class RegisterActivity extends VBox {
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
 
@@ -63,6 +64,7 @@ public class RegisterActivity  {
     	
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_registration.fxml"));
     	loader.setController(this);
+    	loader.setRoot(this);
 		try {
 			loader.load();
 		} catch (IOException e) {

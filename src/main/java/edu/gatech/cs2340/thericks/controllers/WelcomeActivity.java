@@ -24,7 +24,7 @@ public class WelcomeActivity extends Application {
 	
     @Override
     public void start(Stage stage) {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_welcome.xml"));
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_welcome.fxml"));
     	loader.setController(this);
 		try {
 			loader.load();

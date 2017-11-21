@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import edu.gatech.cs2340.thericks.R;
 import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatFilter;
+import edu.gatech.cs2340.thericks.utils.Log;
 
 /**
  * Async task that loads in rat data from the csv file and inserts it into a SQLite database.
@@ -53,8 +53,7 @@ class LoadRatDataTask extends AsyncTask<SQLiteDatabase, Void, Long> {
         db.beginTransaction();
         long lineCount = 0;
         try {
-            InputStream input = RatTrackerApplication.getAppContext().getResources()
-                    .openRawResource(R.raw.rat_data);
+            InputStream input = RatTrackerApplication.class.getResourceAsStream("rat_data.csv");
             BufferedReader br = new BufferedReader(new InputStreamReader(input,
                     StandardCharsets.UTF_8));
 

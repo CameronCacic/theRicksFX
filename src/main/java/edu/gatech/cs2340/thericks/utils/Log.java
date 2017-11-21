@@ -17,7 +17,20 @@ public class Log {
 	 * @param message the error message
 	 */
 	public static void e(String tag, String message) {
+		e(tag, message, null);
+	}
+	
+	/**
+	 * Logs an error level message
+	 * @param tag the tag
+	 * @param message the error message
+	 * @param e the Exception
+	 */
+	public static void e(String tag, String message, Exception e) {
 		System.err.println("[ERROR] " + tag + ": " + message);
+		if (e != null) {
+			e.printStackTrace();
+		}
 	}
 
 }

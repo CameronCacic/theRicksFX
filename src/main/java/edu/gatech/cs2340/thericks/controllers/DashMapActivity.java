@@ -82,7 +82,8 @@ public class DashMapActivity extends AnchorPane implements MapComponentInitializ
     @FXML
     private ProgressBar progressBar;
 
-    public DashMapActivity(User u) {
+    public DashMapActivity(User u, RatFilter f) {
+    	filter = f;
     	user = u;
     	
     	staticMapOptions = new MapOptions();
@@ -106,7 +107,7 @@ public class DashMapActivity extends AnchorPane implements MapComponentInitializ
 				.zoomControl(true)
 				.zoom(ZOOM);
     	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_dash_map.fxml"));
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_dashboard.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {

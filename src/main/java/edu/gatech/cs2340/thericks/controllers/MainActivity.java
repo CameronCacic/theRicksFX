@@ -1,5 +1,6 @@
 package edu.gatech.cs2340.thericks.controllers;
 
+import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.application.Application;
@@ -27,20 +28,23 @@ public class MainActivity extends Application {
     	stage.initModality(Modality.APPLICATION_MODAL);
     	stage.initOwner(primaryStage);
 		
+    	
+    	ResultObtainedCallback<User> launchDashMap = new ResultObtainedCallback<User>() {
+
+			@Override
+			public void onResultObtained(User result) {
+				mainPane.setCenter(new DashMapActivity(result, RatFilter.getDefaultInstance()));
+				stage.close();
+			}
+			
+		};
+		
+		
+    	
 		WelcomeActivity welcomeActivity = new WelcomeActivity(new ResultObtainedCallback<Integer>() {
 			
 			@Override
 			public void onResultObtained(Integer result) {
-				
-				ResultObtainedCallback<User> launchDashMap = new ResultObtainedCallback<User>() {
-
-					@Override
-					public void onResultObtained(User result) {
-						mainPane.setCenter(new DashMapActivity(result));
-						stage.close();
-					}
-					
-				};
 				
 				if (result == RESULT_LOGIN) {
 					
@@ -62,6 +66,11 @@ public class MainActivity extends Application {
 		});
 		stage.setScene(new Scene(welcomeActivity));
 		stage.showAndWait();
+		
+		if (mainPane.getCenter() == null) {
+			primaryStage.close();
+			return;
+		}
 	}
 	
 	public static void main(String[] args) {

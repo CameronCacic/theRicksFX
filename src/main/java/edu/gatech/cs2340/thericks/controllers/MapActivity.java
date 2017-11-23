@@ -1,6 +1,7 @@
 package edu.gatech.cs2340.thericks.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.lynden.gmapsfx.GoogleMapView;
@@ -15,21 +16,23 @@ import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 import edu.gatech.cs2340.thericks.database.RatDatabase;
 import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatFilter;
+import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 
-public class MapActivity extends AnchorPane implements MapComponentInitializedListener {
+public class MapActivity extends AnchorPane implements MapComponentInitializedListener, NewFilterCallback {
 	
 	private static final LatLong POSITION = new LatLong(40.776278, -73.99086);
     private static final double ZOOM = 12;
     private static final double BEARING = 30;
 
     private MapOptions engagedMapOptions;
-    private MapOptions staticMapOptions;
     
     private GoogleMap map;
+    
+    private RatFilter filter;
     
     @FXML
     private GoogleMapView mapView;
@@ -38,16 +41,8 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
     private ProgressBar progressBar;
     
     public MapActivity() {
-
-    	staticMapOptions = new MapOptions();
-    	staticMapOptions.center(POSITION)
-    			.mapType(MapTypeIdEnum.ROADMAP)
-    			.overviewMapControl(false)
-    			.panControl(false)
-    			.rotateControl(false)
-    			.scaleControl(false)
-    			.streetViewControl(false)
-    			.zoomControl(false);
+    	
+    	filter = RatFilter.getDefaultInstance();
     	
     	engagedMapOptions.center(POSITION)
 				.mapType(MapTypeIdEnum.ROADMAP)
@@ -75,19 +70,29 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
      * filters, and adds a marker to the map for each one before
      * re-enabling all map widgets
      */
-    private void loadFilteredMapMarkers(RatFilter filter) {
+    private void loadFilteredMapMarkers() {
         progressBar.setVisible(true);
-        map = mapView.createMap(staticMapOptions);
-        
-        List<RatData> filteredList = new RatDatabase().getFilteredRatData(filter);
         map.clearMarkers();
-        for (RatData r: filteredList) {
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(new LatLong(r.getLatitude(), r.getLongitude()));
-            markerOptions.title(r.getKey() + "");
-            markerOptions.label(r.getIncidentAddress() + "\n" + r.getCreatedDateTime());
-        }
-        progressBar.setVisible(false);
+        
+        Thread thread = new Thread() {
+        	
+        	@Override
+        	public void run() {
+        		List<RatData> filteredList = new RatDatabase().getFilteredRatData(filter);
+        		List<Marker> markerList = new ArrayList<>();
+    	        for (RatData r: filteredList) {
+    	            MarkerOptions markerOptions = new MarkerOptions();
+    	            markerOptions.position(new LatLong(r.getLatitude(), r.getLongitude()));
+    	            markerOptions.title(r.getKey() + "");
+    	            markerOptions.label(r.getIncidentAddress() + "\n" + r.getCreatedDateTime());
+    	            markerList.add(new Marker(markerOptions));
+    	        }
+    	        map.addMarkers(markerList);
+    	        progressBar.setVisible(false);
+        	}
+        	
+        };
+        thread.start();
     }
 
 	@Override
@@ -95,5 +100,10 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
 		map = mapView.createMap(engagedMapOptions);
 		map.setHeading(BEARING);
 		loadFilteredMapMarkers();
+	}
+
+	@Override
+	public void onNewFilter(RatFilter f) {
+		filter = f;
 	}
 }

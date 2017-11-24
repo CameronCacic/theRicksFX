@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 
 import edu.gatech.cs2340.thericks.models.RatFilter;
+import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.DateUtility;
 import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
@@ -92,15 +93,19 @@ public class FilterActivity extends VBox {
     private Text longSeparator;
 
     private RatFilter filter;
+    private User user;
     private ResultObtainedCallback<Integer> callback;
 
-    public FilterActivity(RatFilter f, ResultObtainedCallback<Integer> call) {
+    public FilterActivity(RatFilter f, User u, ResultObtainedCallback<Integer> call) {
     	
     	assert f != null;
     	filter = f;
     	
     	assert call != null;
     	callback = call;
+    	
+    	assert u != null;
+    	user = u;
     	
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_filter.fxml"));
     	loader.setController(this);

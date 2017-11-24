@@ -1,7 +1,10 @@
 package edu.gatech.cs2340.thericks.controllers;
 
+import com.sun.org.apache.regexp.internal.REUtil;
+
 import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
+import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -27,20 +30,67 @@ public class MainActivity extends Application {
     	stage.setWidth(POPUP_WIDTH);
     	stage.initModality(Modality.APPLICATION_MODAL);
     	stage.initOwner(primaryStage);
-		
     	
-    	ResultObtainedCallback<User> launchDashMap = new ResultObtainedCallback<User>() {
+    	RatFilter filter = RatFilter.getDefaultInstance();
+    	User[] user = new User[1];
+    	
+    	NewFilterCallback[] filterCallback = new NewFilterCallback[0];
+    	
+    	ResultObtainedCallback<Integer> filterResult = new ResultObtainedCallback<Integer>() {
+
+			@Override
+			public void onResultObtained(Integer result) {
+				if (result == RESULT_OK) {
+					if (filterCallback[0] != null) {
+						filterCallback[0].notifyFilterUpdated();
+					}
+				}
+			}
+			
+		};
+		
+    	ResultObtainedCallback<Integer> dashboardResult = new ResultObtainedCallback<Integer>() {
+
+			@Override
+			public void onResultObtained(Integer result) {
+				switch (result) {
+				case RESULT_MAP:
+					MapActivity mapActivity = new MapActivity(filter);
+					filterCallback[0] = mapActivity;
+					mainPane.setCenter(mapActivity);
+					break;
+				case RESULT_GRAPH:
+					break;
+				case RESULT_DATA_LIST:
+					break;
+				case RESULT_PROFILE:
+					break;
+				case RESULT_SETTINGS:
+					break;
+				case RESULT_REPORT:
+					break;
+				case RESULT_LOGOUT:
+					break;
+				case RESULT_FILTER:
+					FilterActivity filterActivity = new FilterActivity(filter, user[0], filterResult);
+					mainPane.setRight(filterActivity);
+					break;
+				}
+			}
+			
+		};
+    	
+    	ResultObtainedCallback<User> launchDashboard = new ResultObtainedCallback<User>() {
 
 			@Override
 			public void onResultObtained(User result) {
-				mainPane.setCenter(new DashMapActivity(result, RatFilter.getDefaultInstance()));
+				user[0] = result;
+				mainPane.setLeft(new DashboardActivity(user[0], dashboardResult));
 				stage.close();
 			}
 			
 		};
 		
-		
-    	
 		WelcomeActivity welcomeActivity = new WelcomeActivity(new ResultObtainedCallback<Integer>() {
 			
 			@Override
@@ -48,12 +98,12 @@ public class MainActivity extends Application {
 				
 				if (result == RESULT_LOGIN) {
 					
-					LoginActivity loginActivity = new LoginActivity(launchDashMap);
+					LoginActivity loginActivity = new LoginActivity(launchDashboard);
 					stage.setScene(new Scene(loginActivity));
 					
 				} else if (result == RESULT_REGISTER) {
 					
-					RegisterActivity registerActivity = new RegisterActivity(launchDashMap);
+					RegisterActivity registerActivity = new RegisterActivity(launchDashboard);
 					stage.setScene(new Scene(registerActivity));
 					
 				} else {
@@ -67,7 +117,7 @@ public class MainActivity extends Application {
 		stage.setScene(new Scene(welcomeActivity));
 		stage.showAndWait();
 		
-		if (mainPane.getCenter() == null) {
+		if (mainPane.getLeft() == null) {
 			primaryStage.close();
 			return;
 		}

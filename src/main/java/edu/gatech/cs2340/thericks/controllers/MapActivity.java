@@ -40,9 +40,9 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
     @FXML
     private ProgressBar progressBar;
     
-    public MapActivity() {
+    public MapActivity(RatFilter f) {
     	
-    	filter = RatFilter.getDefaultInstance();
+    	filter = f;
     	
     	engagedMapOptions.center(POSITION)
 				.mapType(MapTypeIdEnum.ROADMAP)
@@ -103,7 +103,7 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
 	}
 
 	@Override
-	public void onNewFilter(RatFilter f) {
-		filter = f;
+	public void notifyFilterUpdated() {
+		loadFilteredMapMarkers();
 	}
 }

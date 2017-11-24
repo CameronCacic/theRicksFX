@@ -1,8 +1,10 @@
 package edu.gatech.cs2340.thericks.controllers;
 
 import java.io.IOException;
+
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.Log;
+import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -20,6 +22,8 @@ public class DashboardActivity extends AnchorPane {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private User user;
+    
+    private ResultObtainedCallback<Integer> callback;
     
     @FXML
     private Button mapButton;
@@ -45,7 +49,8 @@ public class DashboardActivity extends AnchorPane {
     @FXML
     private ProgressBar progressBar;
 
-    public DashboardActivity(User u) {
+    public DashboardActivity(User u, ResultObtainedCallback<Integer> call) {
+    	callback = call;
     	user = u;
     	
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_dashboard.fxml"));
@@ -69,43 +74,33 @@ public class DashboardActivity extends AnchorPane {
         
         mapButton.setOnAction(e -> {
             Log.d(TAG, "Rat Map Button pressed");
+            callback.onResultObtained(ResultObtainedCallback.RESULT_MAP);
         });
 
         graphButton.setOnAction(e ->  {
             Log.d(TAG, "Graph button pressed");
-//            Context context = v.getContext();
-//            Intent intent = new Intent(context, GraphActivity.class);
-//            context.startActivity(intent);
+            callback.onResultObtained(ResultObtainedCallback.RESULT_GRAPH);
         });
 
         listRatDataButton.setOnAction(e -> {
             Log.d(TAG, "Rat Data List button pressed");
-//            Context context = v.getContext();
-//            Intent intent = new Intent(context, RatDataListActivity.class);
-//            context.startActivity(intent);
+            callback.onResultObtained(ResultObtainedCallback.RESULT_DATA_LIST);
         });
 
         profileButton.setOnAction(e -> {
             Log.d(TAG, "Profile button pressed");
-//            Context context = v.getContext();
-//            Intent intent = new Intent(context, FilterActivity.class);
-//            context.startActivity(intent);
+            callback.onResultObtained(ResultObtainedCallback.RESULT_PROFILE);
         });
 
         reportRatButton.setOnAction(e -> {
             Log.d(TAG, "Report a Rat button pushed");
-//            Context context = v.getContext();
-//            Intent intent = new Intent(context, RatEntryActivity.class);
-//            startActivityForResult(intent, ADD_RAT_DATA_REQUEST);
+            callback.onResultObtained(ResultObtainedCallback.RESULT_REPORT);
         });
 
         logoutButton.setOnAction(e -> {
             user.logout();
             Log.d(TAG, "Logout button pressed");
-//            Context context = v.getContext();
-//            Intent intent = new Intent(context, WelcomeActivity.class);
-//            context.startActivity(intent);
-            //finish();
+            callback.onResultObtained(ResultObtainedCallback.RESULT_LOGOUT);
         });
     }
 }

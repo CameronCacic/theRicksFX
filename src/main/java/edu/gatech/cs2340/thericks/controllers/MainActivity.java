@@ -14,20 +14,19 @@ public class MainActivity extends Application {
 	
 	private static final int POPUP_HEIGHT = 200;
 	private static final int POPUP_WIDTH = 300;
+	
+	private static Stage primaryStage;
+	private static BorderPane mainPane;
 
 	@Override
-	public void start(Stage primaryStage) {
-		BorderPane mainPane = new BorderPane();
+	public void start(Stage pStage) {
+		primaryStage = pStage;
+		
+		mainPane = new BorderPane();
 		
 		primaryStage.setScene(new Scene(mainPane));
 		primaryStage.setMaximized(true);
 		primaryStage.show();
-		
-		Stage stage = new Stage();
-    	stage.setHeight(POPUP_HEIGHT);
-    	stage.setWidth(POPUP_WIDTH);
-    	stage.initModality(Modality.APPLICATION_MODAL);
-    	stage.initOwner(primaryStage);
     	
     	RatFilter filter = RatFilter.getDefaultInstance();
     	User[] user = new User[1];
@@ -71,6 +70,14 @@ public class MainActivity extends Application {
 				case RESULT_REPORT:
 					break;
 				case RESULT_LOGOUT:
+					filterCallback[0] = null;
+					user[0] = null;
+					// filter.reset();
+					mainPane = new BorderPane();
+					user[0] = loginSequence();
+					if (user[0] != null) {
+						mainPane.setLeft(new DashboardActivity(user[0], dashboardResult));
+					}
 					break;
 				case RESULT_FILTER:
 					FilterActivity filterActivity = new FilterActivity(filter, user[0], filterResult);
@@ -80,18 +87,32 @@ public class MainActivity extends Application {
 			}
 			
 		};
+		
+		user[0] = loginSequence();
+		if (user[0] != null) {
+			mainPane.setLeft(new DashboardActivity(user[0], dashboardResult));
+		}
+	}
+	
+	public static User loginSequence() {
+		Stage stage = new Stage();
+    	stage.setHeight(POPUP_HEIGHT);
+    	stage.setWidth(POPUP_WIDTH);
+    	stage.initModality(Modality.APPLICATION_MODAL);
+    	stage.initOwner(primaryStage);
     	
-    	ResultObtainedCallback<User> launchDashboard = new ResultObtainedCallback<User>() {
+    	User[] user = new User[1];
+    	
+    	ResultObtainedCallback<User> getUserResult = new ResultObtainedCallback<User>() {
 
 			@Override
 			public void onResultObtained(User result) {
 				user[0] = result;
-				mainPane.setLeft(new DashboardActivity(user[0], dashboardResult));
 				stage.close();
 			}
 			
 		};
-		
+    	
 		WelcomeActivity welcomeActivity = new WelcomeActivity(new ResultObtainedCallback<Integer>() {
 			
 			@Override
@@ -99,12 +120,12 @@ public class MainActivity extends Application {
 				
 				if (result == RESULT_LOGIN) {
 					
-					LoginActivity loginActivity = new LoginActivity(launchDashboard);
+					LoginActivity loginActivity = new LoginActivity(getUserResult);
 					stage.setScene(new Scene(loginActivity));
 					
 				} else if (result == RESULT_REGISTER) {
 					
-					RegisterActivity registerActivity = new RegisterActivity(launchDashboard);
+					RegisterActivity registerActivity = new RegisterActivity(getUserResult);
 					stage.setScene(new Scene(registerActivity));
 					
 				} else {
@@ -117,11 +138,7 @@ public class MainActivity extends Application {
 		});
 		stage.setScene(new Scene(welcomeActivity));
 		stage.showAndWait();
-		
-		if (mainPane.getLeft() == null) {
-			primaryStage.close();
-			return;
-		}
+		return user[0];
 	}
 	
 	public static void main(String[] args) {

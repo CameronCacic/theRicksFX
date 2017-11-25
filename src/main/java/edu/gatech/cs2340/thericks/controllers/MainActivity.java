@@ -1,7 +1,5 @@
 package edu.gatech.cs2340.thericks.controllers;
 
-import com.sun.org.apache.regexp.internal.REUtil;
-
 import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
@@ -60,6 +58,9 @@ public class MainActivity extends Application {
 					mainPane.setCenter(mapActivity);
 					break;
 				case RESULT_GRAPH:
+					GraphActivity graphActivity = new GraphActivity(filter);
+					filterCallback[0] = graphActivity;
+					mainPane.setCenter(graphActivity);
 					break;
 				case RESULT_DATA_LIST:
 					break;

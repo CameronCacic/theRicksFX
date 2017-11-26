@@ -1,9 +1,6 @@
 package edu.gatech.cs2340.thericks.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
-
+import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.Security;
 
 /**
@@ -12,7 +9,7 @@ import edu.gatech.cs2340.thericks.utils.Security;
  * Class represents a user of the rat-tracker application.
  */
 
-public class User implements Parcelable {
+public class User {
     private static final String TAG = User.class.getSimpleName();
 
     /** User's secure login data **/
@@ -90,45 +87,4 @@ public class User implements Parcelable {
     public Login getLogin() {
         return loginInfo;
     }
-
-
-
-    /* *****************************************************
-     * METHODS FOR IMPLEMENTING PARCELABLE
-     * *****************************************************/
-
-    private User(Parcel in) {
-        loginInfo = (Login) in.readSerializable();
-        loggedIn = in.readByte() != 0;
-        privilege = (Privilege) in.readSerializable();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-    
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeSerializable(loginInfo);
-        dest.writeByte((byte) (loggedIn ? 1: 0));
-        dest.writeSerializable(privilege);
-
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<User> CREATOR
-            = new Parcelable.Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
-
-    /* *****************************************************/
 }

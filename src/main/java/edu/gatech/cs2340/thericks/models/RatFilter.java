@@ -1,8 +1,6 @@
 package edu.gatech.cs2340.thericks.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,7 +22,7 @@ import edu.gatech.cs2340.thericks.utils.DateUtility;
  * any Predicate that will be put into the map with a procedurally
  * generated key)
  */
-public class RatFilter implements Parcelable {
+public class RatFilter {
 
     public static final String DATE = "DATE";
     public static final String LOCATION_TYPE = "LOCATION_TYPE";
@@ -168,7 +166,7 @@ public class RatFilter implements Parcelable {
      * Sets the beginning date for the date filter
      * @param beginDate the beginning date
      */
-    public void setBeginDate(Date beginDate) {
+    public void setBeginDate(LocalDateTime beginDate) {
         beginDateStr = DateUtility.DATE_FORMAT.format(beginDate);
         beginTimeStr = DateUtility.TIME_FORMAT.format(beginDate);
         if ((endDateStr != null) && (endTimeStr != null)) {
@@ -180,7 +178,7 @@ public class RatFilter implements Parcelable {
      * Sets the ending date for the date filter
      * @param endDate the ending date
      */
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         endDateStr = DateUtility.DATE_FORMAT.format(endDate);
         endTimeStr = DateUtility.TIME_FORMAT.format(endDate);
         if ((beginDateStr != null) && (beginTimeStr != null)) {
@@ -338,7 +336,7 @@ public class RatFilter implements Parcelable {
      * Returns the location type
      * @return the location type
      */
-    public CharSequence getLocationType() {
+    public String getLocationType() {
         return locationType;
     }
 
@@ -354,7 +352,7 @@ public class RatFilter implements Parcelable {
      * Returns the address
      * @return the address
      */
-    public CharSequence getAddress() {
+    public String getAddress() {
         return address;
     }
 
@@ -362,7 +360,7 @@ public class RatFilter implements Parcelable {
      * Returns the city
      * @return the city
      */
-    public CharSequence getCity() {
+    public String getCity() {
         return city;
     }
 
@@ -370,7 +368,7 @@ public class RatFilter implements Parcelable {
      * Returns the borough
      * @return the borough
      */
-    public CharSequence getBorough() {
+    public String getBorough() {
         return borough;
     }
 
@@ -428,128 +426,7 @@ public class RatFilter implements Parcelable {
     public static RatFilter getDefaultInstance() {
         RatFilter filter = new RatFilter();
         filter.setBeginDate(DateUtility.getLastMonth());
-        filter.setEndDate(Calendar.getInstance().getTime());
+        filter.setEndDate(LocalDateTime.now());
         return filter;
     }
-
-    //////////////////////////////////////
-    // CODE FOR PARCELABLE IMPLEMENTATION
-    //////////////////////////////////////
-    private RatFilter(Parcel in) {
-        predicates = new HashMap<>();
-        enabledMap = new HashMap<>();
-
-        beginDateStr = in.readString();
-        beginTimeStr = in.readString();
-        endDateStr = in.readString();
-        endTimeStr = in.readString();
-        enabledMap.put(DATE, in.readByte() != 0);
-
-        locationType = in.readString();
-        enabledMap.put(LOCATION_TYPE, in.readByte() != 0);
-
-        zip = (Integer) in.readValue(Integer.class.getClassLoader());
-        enabledMap.put(ZIP, in.readByte() != 0);
-
-        address = in.readString();
-        enabledMap.put(ADDRESS, in.readByte() != 0);
-
-        city = in.readString();
-        enabledMap.put(CITY, in.readByte() != 0);
-
-        borough = in.readString();
-        enabledMap.put(BOROUGH, in.readByte() != 0);
-
-        minLatitude = (Double) in.readValue(Double.class.getClassLoader());
-        maxLatitude = (Double) in.readValue(Double.class.getClassLoader());
-        enabledMap.put(LATITUDE, in.readByte() != 0);
-
-        minLongitude = (Double) in.readValue(Double.class.getClassLoader());
-        maxLongitude = (Double) in.readValue(Double.class.getClassLoader());
-        enabledMap.put(LONGITUDE, in.readByte() != 0);
-
-        buildAllPredicates();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(beginDateStr);
-        parcel.writeString(beginTimeStr);
-        parcel.writeString(endDateStr);
-        parcel.writeString(endTimeStr);
-        if ((enabledMap.get(DATE) != null) && enabledMap.get(DATE)) {
-            parcel.writeByte((byte) 1);
-        } else {
-            parcel.writeByte((byte) 0);
-        }
-
-        parcel.writeString(locationType);
-        if ((enabledMap.get(LOCATION_TYPE) != null) && enabledMap.get(LOCATION_TYPE)) {
-            parcel.writeByte((byte) 1);
-        } else {
-            parcel.writeByte((byte) 0);
-        }
-
-        parcel.writeValue(zip);
-        if ((enabledMap.get(ZIP) != null) && enabledMap.get(ZIP)) {
-            parcel.writeByte((byte) 1);
-        } else {
-            parcel.writeByte((byte) 0);
-        }
-
-        parcel.writeString(address);
-        if ((enabledMap.get(ADDRESS) != null) && enabledMap.get(ADDRESS)) {
-            parcel.writeByte((byte) 1);
-        } else {
-            parcel.writeByte((byte) 0);
-        }
-
-        parcel.writeString(city);
-        if ((enabledMap.get(CITY) != null) && enabledMap.get(CITY)) {
-            parcel.writeByte((byte) 1);
-        } else {
-            parcel.writeByte((byte) 0);
-        }
-
-        parcel.writeString(borough);
-        if ((enabledMap.get(BOROUGH) != null) && enabledMap.get(BOROUGH)) {
-            parcel.writeByte((byte) 1);
-        } else {
-            parcel.writeByte((byte) 0);
-        }
-
-        parcel.writeValue(minLatitude);
-        parcel.writeValue(maxLatitude);
-        if ((enabledMap.get(LATITUDE) != null) && enabledMap.get(LATITUDE)) {
-            parcel.writeByte((byte) 1);
-        } else {
-            parcel.writeByte((byte) 0);
-        }
-
-        parcel.writeValue(minLongitude);
-        parcel.writeValue(maxLongitude);
-        if ((enabledMap.get(LONGITUDE) != null) && enabledMap.get(LONGITUDE)) {
-            parcel.writeByte((byte) 1);
-        } else {
-            parcel.writeByte((byte) 0);
-        }
-    }
-
-    public static final Parcelable.Creator<RatFilter> CREATOR
-            = new Parcelable.Creator<RatFilter>() {
-        @Override
-        public RatFilter createFromParcel(Parcel in) {
-            return new RatFilter(in);
-        }
-
-        @Override
-        public RatFilter[] newArray(int size) {
-            return new RatFilter[size];
-        }
-    };
 }

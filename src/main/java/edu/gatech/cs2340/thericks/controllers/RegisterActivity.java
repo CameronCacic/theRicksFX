@@ -1,22 +1,21 @@
 package edu.gatech.cs2340.thericks.controllers;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import java.io.IOException;
 
-import edu.gatech.cs2340.thericks.R;
 import edu.gatech.cs2340.thericks.database.UserDatabase;
 import edu.gatech.cs2340.thericks.models.Privilege;
 import edu.gatech.cs2340.thericks.models.User;
+import edu.gatech.cs2340.thericks.utils.Log;
+import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import edu.gatech.cs2340.thericks.utils.Security;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 /**
  * Created by Ben Lashley on 9/19/2017.
@@ -26,80 +25,102 @@ import edu.gatech.cs2340.thericks.utils.Security;
  * be created the user is prompted with what field is insufficient
  * and what they need to add to fix it
  */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends VBox {
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
 
-    private EditText usernameEntry;
-    private EditText passwordEntry;
-    private EditText passwordReentry;
-    private RadioGroup privilege;
+    @FXML
+    private TextField usernameEntry;
+    
+    @FXML
+    private TextField passwordEntry;
+    
+    @FXML
+    private TextField passwordReentry;
+    
+    @FXML
+    private RadioButton normalPrivRadio;
+    
+    @FXML
+    private RadioButton adminPrivRadio;
 
-    private TextView invalidUsername;
-    private TextView invalidPassword;
-    private TextView passwordMismatch;
+    @FXML
+    private Text invalidUsername;
+    
+    @FXML
+    private Text invalidPassword;
+    
+    @FXML
+    private Text passwordMismatch;
+    
+    @FXML
+    private Button createAccount;
 
     private UserDatabase db;
+    private ResultObtainedCallback<User> callback;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
+    public RegisterActivity(ResultObtainedCallback<User> call) {
+    	callback = call;
+    	
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_registration.fxml"));
+    	loader.setController(this);
+    	loader.setRoot(this);
+		try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+    
+    @FXML
+    public void initialize() {
 
         db = new UserDatabase();
 
-        // Connect widgets
-        usernameEntry   = findViewById(R.id.registration_create_username_entry);
-        passwordEntry   = findViewById(R.id.registration_create_password_entry);
-        passwordReentry = findViewById(R.id.registration_reenter_password_entry);
-
-        privilege = findViewById(R.id.register_radio_group);
-
-        Button createAccount = findViewById(R.id.register_button);
-
-        invalidUsername  = findViewById(R.id.registration_invalid_username);
-        invalidPassword  = findViewById(R.id.registration_invalid_password);
-        passwordMismatch = findViewById(R.id.registration_password_mismatch);
-
         // Hide warning messages
-        invalidUsername.setVisibility(View.GONE);
-        invalidPassword.setVisibility(View.GONE);
-        passwordMismatch.setVisibility(View.GONE);
+        invalidUsername.setVisible(false);
+        invalidPassword.setVisible(false);
+        passwordMismatch.setVisible(false);
+        
+        ToggleGroup group = new ToggleGroup();
+        normalPrivRadio.setToggleGroup(group);
+        adminPrivRadio.setToggleGroup(group);
+        group.selectToggle(normalPrivRadio);
 
-        createAccount.setOnClickListener(v -> {
+        createAccount.setOnAction(e -> {
             Log.d(TAG, "Attempting to create new user account");
-            String username = usernameEntry.getText().toString();
-            String password = passwordEntry.getText().toString();
-            String reenteredPassword = passwordReentry.getText().toString();
+            String username = usernameEntry.getText();
+            String password = passwordEntry.getText();
+            String reenteredPassword = passwordReentry.getText();
             Privilege user_privilege = null;
             boolean usernameTaken = (db.getUserByUsername(username) != null);
             boolean validEntries = true;
 
             if (!Security.validateUsername(username) || usernameTaken) {
                 Log.d(TAG, "Username not valid");
-                invalidUsername.setVisibility(View.VISIBLE);
+                invalidUsername.setVisible(true);
                 validEntries = false;
             } else {
-                invalidUsername.setVisibility(View.GONE);
+                invalidUsername.setVisible(false);
             }
 
             if (!Security.validatePassword(password)) {
-                invalidPassword.setVisibility(View.VISIBLE);
+                invalidPassword.setVisible(true);
                 validEntries = false;
             } else {
-                invalidPassword.setVisibility(View.GONE);
+                invalidPassword.setVisible(false);
             }
 
             if (!password.equals(reenteredPassword)) {
-                passwordMismatch.setVisibility(View.VISIBLE);
+                passwordMismatch.setVisible(true);
                 validEntries = false;
             } else {
-                passwordMismatch.setVisibility(View.GONE);
+                passwordMismatch.setVisible(false);
             }
 
-            if (privilege.getCheckedRadioButtonId() == R.id.admin_radio) {
+            if (group.getSelectedToggle().equals(adminPrivRadio)) {
                 user_privilege = Privilege.ADMIN;
-            } else if (privilege.getCheckedRadioButtonId() == R.id.normal_radio) {
+            } else if (group.getSelectedToggle().equals(normalPrivRadio)) {
                 user_privilege = Privilege.NORMAL;
             } else {
                 // No privilege button selected
@@ -110,13 +131,9 @@ public class RegisterActivity extends AppCompatActivity {
                 db.createUser(username, password, user_privilege);
 
                 // User object to pass to dashboard activity.
-                Parcelable u = new User(username, password, user_privilege);
-
-                Context context = v.getContext();
-                Intent intent = new Intent(context, DashMapActivity.class);
-                intent.putExtra("edu.gatech.cs2340.thericks.User", u);
-                context.startActivity(intent);
-                finish();
+                User u = new User(username, password, user_privilege);
+                
+                callback.onResultObtained(u);
             }
         });
     }

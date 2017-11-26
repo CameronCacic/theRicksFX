@@ -1,47 +1,60 @@
 package edu.gatech.cs2340.thericks.controllers;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import java.io.IOException;
 
-import edu.gatech.cs2340.thericks.R;
 import edu.gatech.cs2340.thericks.database.UserDatabase;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.models.UserDataSource;
+import edu.gatech.cs2340.thericks.utils.Log;
+import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import edu.gatech.cs2340.thericks.utils.Security;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 /**
  * Provides a username and password field for the user to enter their
  * username and password into, then passes that data to Security and
  * the UserTable to provide a login function
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends VBox {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    private EditText username;
-    private EditText password;
-    private TextView error;
+    @FXML
+    private TextField username;
+    
+    @FXML
+    private TextField password;
+    
+    @FXML
+    private Button login;
+    
+    @FXML
+    private Text error;
+    
+    private ResultObtainedCallback<User> callback;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    public LoginActivity(ResultObtainedCallback<User> call) {
+    	callback = call;
+    	
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_login.fxml"));
+    	loader.setController(this);
+    	loader.setRoot(this);
+		try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace(
+    }
+    
+    public void initialize() {
 
-        username = findViewById(R.id.login_username_entry);
-        password = findViewById(R.id.login_password_entry);
-        Button login = findViewById(R.id.login_button);
-        error    = findViewById(R.id.incorrect_login_label);
+        error.setVisible(false);
 
-        error.setVisibility(View.GONE);
-
-        login.setOnClickListener((View v) -> {
+        login.setOnAction(e -> {
                 Log.d(TAG, "Attempt to log into account");
 
                 String enteredUsername = username.getText().toString();
@@ -50,20 +63,22 @@ public class LoginActivity extends AppCompatActivity {
                 UserDataSource db = new UserDatabase();
                 User u = db.getUserByUsername(enteredUsername);
                 if ((u != null) && (u.getLogin() != null)) {
+                	
                     Log.d(TAG, "Checking password for login: " + u.getLogin());
+                    
                     if (Security.checkPassword(enteredPassword, u.getLogin())) {
-                        Log.d(TAG, "Successfully logged into user account: " + u.getUsername());
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, DashMapActivity.class);
-                        intent.putExtra("edu.gatech.cs2340.thericks.User", u);
-                        context.startActivity(intent);
+                        
+                    	Log.d(TAG, "Successfully logged into user account: " + u.getUsername());
+                        
+                    	callback.onResultObtained(u);
+                    	
                     } else {
                         Log.d(TAG, "Incorrect password");
-                        error.setVisibility(View.VISIBLE);
+                        error.setVisible(true);
                     }
                 } else {
                     Log.d(TAG, "Incorrect username");
-                    error.setVisibility(View.VISIBLE);
+                    error.setVisible(true);
                 }
             }
         );

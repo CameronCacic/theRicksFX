@@ -1,8 +1,5 @@
 package edu.gatech.cs2340.thericks.models;
 
-import android.support.annotation.NonNull;
-
-import java.io.Serializable;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +9,7 @@ import java.util.regex.Pattern;
  * Holds a time and can read in a properly formatted time
  * from a String
  */
-public final class RatTime implements Comparable<RatTime>, Serializable{
+public final class RatTime implements Comparable<RatTime> {
 
     private static final int HOURS_IN_HALF_DAY = 12;
 
@@ -56,7 +53,7 @@ public final class RatTime implements Comparable<RatTime>, Serializable{
      * @param possibleTimeDef the String to pull a time from
      * @return the new RatTime
      */
-    public static RatTime forTime(@SuppressWarnings("TypeMayBeWeakened") String possibleTimeDef) {
+    public static RatTime forTime(String possibleTimeDef) {
         Pattern p = Pattern.compile("\\d\\d:\\d\\d:\\d\\d\\s[AP]M");
         Matcher m = p.matcher(possibleTimeDef);
         if (m.find()) {
@@ -84,7 +81,7 @@ public final class RatTime implements Comparable<RatTime>, Serializable{
      * @param possibleTimeDef the String to check
      * @return true if it contains a time, false otherwise
      */
-    public static boolean isTime(@SuppressWarnings("TypeMayBeWeakened") String possibleTimeDef) {
+    public static boolean isTime(String possibleTimeDef) {
         Pattern p = Pattern.compile("\\d\\d:\\d\\d:\\d\\d\\s[AP]M");
         Matcher m = p.matcher(possibleTimeDef);
         return m.find();
@@ -175,7 +172,7 @@ public final class RatTime implements Comparable<RatTime>, Serializable{
 // --Commented out by Inspection STOP (11/20/2017 12:52 PM)
 
     @Override
-    public int compareTo(@NonNull RatTime ratTime) {
+    public int compareTo(RatTime ratTime) {
         if (get24Hours() < ratTime.get24Hours()) {
             return -1;
         } else if (get24Hours() > ratTime.get24Hours()) {

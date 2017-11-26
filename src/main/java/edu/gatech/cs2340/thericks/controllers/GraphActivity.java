@@ -1,138 +1,116 @@
 package edu.gatech.cs2340.thericks.controllers;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import edu.gatech.cs2340.thericks.R;
 import edu.gatech.cs2340.thericks.database.RatDatabase;
 import edu.gatech.cs2340.thericks.models.Months;
 import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatFilter;
+import edu.gatech.cs2340.thericks.utils.DataLoadedCallback;
 import edu.gatech.cs2340.thericks.utils.DateUtility;
+import edu.gatech.cs2340.thericks.utils.Log;
+import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 
 /**
  * Created by Cameron on 11/3/2017.
  * Holds multiple different graphs for displaying rat data
  */
 
-public class GraphActivity extends AppCompatActivity {
+public class GraphActivity extends AnchorPane implements NewFilterCallback {
 
     private static final String TAG = GraphActivity.class.getSimpleName();
 
     private static final float X_LABEL_ROTATION = 60f;
 
-    private LineChart chart;
+    private List<RatData> loadedData;
+    
+    private RatFilter filter;
+    
+    private DataLoadedCallback dataCallback;
+    
+    private LineChart<String, Number> chart;
 
+    @FXML
     private ProgressBar progressBar;
 
-    private List<RatData> loadedData;
+    @FXML
+    private Text noDataText;
 
-    private RatFilter filter;
-
-    private Button applyFiltersButton;
-
-    private TextView noDataText;
-
-    @Override
-    public void onCreate(Bundle savedInstance) {
-        super.onCreate(savedInstance);
-        setContentView(R.layout.activity_graphs);
+    public GraphActivity(RatFilter f) {
+    	
+    	assert f != null;
+		filter = f;
+		
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_graph.fxml"));
+    	loader.setController(this);
+    	loader.setRoot(this);
+		try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+    
+    public void initialize() {
 
         Log.d(TAG, "Entered Graph Activity");
 
-        progressBar = findViewById(R.id.graph_progress_bar);
+        noDataText.setVisible(false);
 
-        noDataText = findViewById(R.id.no_data_graph_text);
-        noDataText.setVisibility(View.GONE);
-
-        chart = findViewById(R.id.chart);
-        chart.setVisibility(View.GONE);
-
-        filter = RatFilter.getDefaultInstance();
-
-        applyFiltersButton = findViewById(R.id.apply_filters_button_graph);
-        applyFiltersButton.setVisibility(View.GONE);
-        applyFiltersButton.setOnClickListener(v -> {
-            Context context = v.getContext();
-            Intent intent = new Intent(context, FilterActivity.class);
-            intent.putExtra(FilterActivity.FILTER, filter);
-            startActivityForResult(intent, FilterActivity.GET_FILTER);
-        });
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Month");
+        NumberAxis yAxis = new NumberAxis();
+        chart = new LineChart<>(xAxis, yAxis);
+        
+        chart.setVisible(false);
 
         loadedData = new ArrayList<>();
-        ArrayAdapter<RatData> tempAdapter
-                = new ArrayAdapter<RatData>(getApplicationContext(), ArrayAdapter.NO_SELECTION) {
-
-            @Override
-            public void notifyDataSetChanged() {
-                super.notifyDataSetChanged();
-                Log.d(TAG, "Notified that the data finished loading");
+        
+        dataCallback = new DataLoadedCallback() {
+			
+			@Override
+			public void notifyDataLoaded() {
+				Log.d(TAG, "Notified that the data finished loading");
                 displayGraph();
-            }
-        };
+			}
+		};
 
         RatDatabase db = new RatDatabase();
-        db.loadData(tempAdapter, loadedData, filter);
+        db.loadData(dataCallback, loadedData, filter);
     }
-
+    
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FilterActivity.GET_FILTER) {
-            if (resultCode == RESULT_OK) {
-                filter = data.getParcelableExtra(FilterActivity.FILTER);
-                applyFiltersButton.setEnabled(false);
-                ArrayAdapter<RatData> tempAdapter = new ArrayAdapter<RatData>(
-                        getApplicationContext(), ArrayAdapter.NO_SELECTION) {
-
-                    @Override
-                    public void notifyDataSetChanged() {
-                        super.notifyDataSetChanged();
-                        Log.d(TAG, "Notified that the data finished loading");
-                        displayGraph();
-                    }
-                };
-                progressBar.setVisibility(View.VISIBLE);
-                RatDatabase db = new RatDatabase();
-                db.loadData(tempAdapter, loadedData, filter);
-            }
-        }
-    }
+	public void notifyFilterUpdated() {
+        progressBar.setVisible(true);
+        RatDatabase db = new RatDatabase();
+        db.loadData(dataCallback, loadedData, filter);
+	}
 
     /**
      * Displays the graph, calculates the bounds for the specified date range,
      * and gets the needed data from the database
      */
     private void displayGraph() {
-        progressBar.setVisibility(View.VISIBLE);
-        chart.setVisibility(View.GONE);
-        noDataText.setVisibility(View.GONE);
-        applyFiltersButton.setEnabled(false);
+        progressBar.setVisible(true);
+        chart.setVisible(false);
+        noDataText.setVisible(false);
 
         Log.d(TAG, "Sorting data");
         loadedData.sort((ratData1, ratData2) -> {
-            Date date1 = DateUtility.parse(ratData1.getCreatedDateTime());
-            Date date2 = DateUtility.parse(ratData2.getCreatedDateTime());
+            LocalDateTime date1 = DateUtility.parse(ratData1.getCreatedDateTime());
+            LocalDateTime date2 = DateUtility.parse(ratData2.getCreatedDateTime());
             if ((date1 == null) && (date2 == null)) {
                 return 0;
             }
@@ -148,80 +126,40 @@ public class GraphActivity extends AppCompatActivity {
         Log.d(TAG, "Displaying graph");
 
         if (!loadedData.isEmpty()) {
-            Calendar cal = Calendar.getInstance();
-            cal.clear();
-            cal.setTime(DateUtility.parse(loadedData.get(0).getCreatedDateTime()));
-            int beginMonth = cal.get(Calendar.MONTH);
-            int beginYear = cal.get(Calendar.YEAR);
-            cal.clear();
 
-            cal.setTime(DateUtility.parse(
-                    loadedData.get(loadedData.size() - 1).getCreatedDateTime()));
-            int endMonth = cal.get(Calendar.MONTH);
-            int endYear = cal.get(Calendar.YEAR);
-            cal.clear();
+            LocalDateTime beginDateTime = DateUtility.parse(loadedData.get(0).getCreatedDateTime());
+            int beginMonth = beginDateTime.getMonthValue();
+            int beginYear = beginDateTime.getYear();
+            
+            LocalDateTime endDateTime = DateUtility.parse(
+            		loadedData.get(loadedData.size() - 1).getCreatedDateTime());
+            int endMonth = endDateTime.getMonthValue();
+            int endYear = endDateTime.getYear();
 
             int monthDif = (endMonth + (endYear * Months.values().length))
                     - (beginMonth + (beginYear * Months.values().length));
-            Date[] domainDates = new Date[monthDif];
-            for (int i = 0; i < domainDates.length; i++) {
-                int month = beginMonth + i;
-                int year = beginYear + ((month + 1) / Months.values().length);
-                month = ((month + 1) % Months.values().length) - 1;
-                cal.clear();
-                cal.set(Calendar.MONTH, month);
-                cal.set(Calendar.YEAR, year);
-                domainDates[i] = cal.getTime();
+
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            series.setName("Rat Data");
+            for (int i = 0; i < monthDif; i++) {
+            	LocalDateTime oneMoreMonth = beginDateTime.plusMonths(1);
+                series.getData().add(
+                		new XYChart.Data<String, Number>(formatLocalDateTime(oneMoreMonth),
+                				DateUtility.filterByDate(beginDateTime, oneMoreMonth, loadedData).size()));
+                beginDateTime = beginDateTime.plusMonths(1);
             }
 
-            List<Entry> entries = new ArrayList<>();
-            for (int i = 1; i < domainDates.length; i++) {
-                entries.add(new Entry(i, DateUtility.filterByDate(domainDates[i - 1],
-                        domainDates[i], loadedData).size()));
-            }
+            chart.getData().add(series);
 
-            LineDataSet dataSet = new LineDataSet(entries, "Rat Sightings");
-            LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setValueFormatter(new MyXAxisValueFormatter(domainDates));
-            xAxis.setLabelRotationAngle(X_LABEL_ROTATION);
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-            chart.invalidate();
-
-            chart.setVisibility(View.VISIBLE);
+            chart.setVisible(true);
         } else {
-            noDataText.setVisibility(View.VISIBLE);
+            noDataText.setVisible(true);
         }
 
-        progressBar.setVisibility(View.GONE);
-        applyFiltersButton.setVisibility(View.VISIBLE);
-        applyFiltersButton.setEnabled(true);
+        progressBar.setVisible(false);
     }
-
-    public class MyXAxisValueFormatter implements IAxisValueFormatter {
-
-        private final Date[] mValues;
-
-        MyXAxisValueFormatter(Date[] values) {
-            this.mValues = values.clone();
-        }
-
-        @Override
-        public String getFormattedValue(float value, AxisBase axis) {
-            // "value" represents the position of the label on the axis (x or y)
-            int intValue = (int) value;
-            if ((intValue < mValues.length) && (intValue >= 0)) {
-                Calendar c = Calendar.getInstance();
-                c.clear();
-                c.setTime(mValues[intValue]);
-                return Months.values()[c.get(Calendar.MONTH)].toString()
-                        + " " + c.get(Calendar.YEAR);
-            } else {
-                return intValue + "";
-            }
-        }
+    
+    private String formatLocalDateTime(LocalDateTime dateTime) {
+    	return Months.values()[dateTime.getMonthValue() - 1] + " " + dateTime.getYear();
     }
 }

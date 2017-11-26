@@ -1,11 +1,5 @@
 package edu.gatech.cs2340.thericks.database;
 
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,23 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import edu.gatech.cs2340.thericks.R;
 import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatFilter;
+import edu.gatech.cs2340.thericks.utils.DataLoadedCallback;
+import edu.gatech.cs2340.thericks.utils.Log;
 
 /**
  * Async task that loads in rat data from the csv file and inserts it into a SQLite database.
  *
  * Created by Ben Lashley on 10/18/2017.
  */
-
-class LoadRatDataTask extends AsyncTask<SQLiteDatabase, Void, Long> {
+class LoadRatDataTask extends Thread {
     private static final String TAG = LoadRatDataTask.class.getSimpleName();
 
     private static boolean isLoadingData = false;
     private static boolean doneLoading = false;
 
-    private ArrayAdapter adapter;
+    private DataLoadedCallback callback;
     private List<RatData> data;
     private List<Predicate<RatData>> filters;
 
@@ -47,17 +41,20 @@ class LoadRatDataTask extends AsyncTask<SQLiteDatabase, Void, Long> {
     private static final int LONGITUDE_NUMBER = 50;
 
     @Override
-    protected Long doInBackground(SQLiteDatabase ... dbs) {
+    public void run() {
+    	onPostExecute(doInBackground());
+    }
+    
+    private Long doInBackground() {
         isLoadingData = true;
-        SQLiteDatabase db = dbs[0];
-        db.beginTransaction();
         long lineCount = 0;
         try {
-            InputStream input = RatTrackerApplication.getAppContext().getResources()
-                    .openRawResource(R.raw.rat_data);
+            InputStream input = getClass().getResourceAsStream("rat_data.csv");
             BufferedReader br = new BufferedReader(new InputStreamReader(input,
                     StandardCharsets.UTF_8));
 
+            RatDataDAO dao = new RatDataDAO(DatabaseHandler.provideDatabaseConnection());
+           
             String line;
             br.readLine(); //get rid of header line
             line = br.readLine();
@@ -96,20 +93,13 @@ class LoadRatDataTask extends AsyncTask<SQLiteDatabase, Void, Long> {
                     longitude = 0;
                 }
                 // Add new rat data to database
-                RatDataDAO.createRatData(db, key, createdDateTime, locationType, incidentZip,
+                dao.createRatData(key, createdDateTime, locationType, incidentZip,
                         incidentAddress, city, borough, latitude, longitude);
                 line = br.readLine();
             }
             br.close();
-
-            db.setTransactionSuccessful();
         } catch (IOException e) {
             Log.e(TAG, "error reading rat data", e);
-        } catch (SQLException e) {
-            Log.e(TAG, "error inserting into database", e);
-        } finally {
-            // Let database know we are done inserting data
-            db.endTransaction();
         }
         return lineCount;
     }
@@ -118,18 +108,19 @@ class LoadRatDataTask extends AsyncTask<SQLiteDatabase, Void, Long> {
      * Mark that data is done loading and update any provided views
      * @param lineCount the number of loaded lines
      */
-    @Override
-    protected void onPostExecute(Long lineCount) {
+    public void onPostExecute(Long lineCount) {
         Log.d(TAG, "Loaded " + lineCount + " rat data entries");
         // Done loading data
         doneLoading = true;
         isLoadingData = false;
         // Update passed in UI
-        if ((data != null) && (adapter != null)) {
+        if (data != null) {
             data.clear();
             RatDatabase db = new RatDatabase();
             data.addAll(db.getFilteredRatData(new RatFilter(filters)));
-            adapter.notifyDataSetChanged();
+            if (callback != null) {
+            	callback.notifyDataLoaded();
+            }
         }
     }
 
@@ -148,8 +139,8 @@ class LoadRatDataTask extends AsyncTask<SQLiteDatabase, Void, Long> {
      * @param data the list of RatData Objects whose views will be added
      * @param filter the filters used to select certain RatData Objects
      */
-    void attachViews(ArrayAdapter a, List<RatData> data, RatFilter filter) {
-        adapter = a;
+    void attachViews(DataLoadedCallback callback, List<RatData> data, RatFilter filter) {
+        this.callback = callback;
         this.data = new ArrayList<>(data);
         this.filters = new ArrayList<>(filter.getPredicates());
     }

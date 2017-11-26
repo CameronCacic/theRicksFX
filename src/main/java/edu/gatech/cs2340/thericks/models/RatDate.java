@@ -1,8 +1,5 @@
 package edu.gatech.cs2340.thericks.models;
 
-import android.support.annotation.Nullable;
-
-import java.io.Serializable;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +9,7 @@ import java.util.regex.Pattern;
  * Holds a date and can read properly formatted Strings
  * as dates
  */
-public final class RatDate implements Comparable<RatDate>, Serializable{
+public final class RatDate implements Comparable<RatDate> {
 
     private final int year;
     private final int month;
@@ -48,7 +45,7 @@ public final class RatDate implements Comparable<RatDate>, Serializable{
      * @param possibleDateDef the String to pull a date from
      * @return the new RatDate
      */
-    public static RatDate forDate(@SuppressWarnings("TypeMayBeWeakened") String possibleDateDef) {
+    public static RatDate forDate(String possibleDateDef) {
         Pattern p = Pattern.compile("\\d\\d/\\d\\d/\\d\\d\\d\\d");
         Matcher m = p.matcher(possibleDateDef);
         if (m.find()) {
@@ -76,7 +73,7 @@ public final class RatDate implements Comparable<RatDate>, Serializable{
      * @param possibleDateDef the String to check
      * @return true if it contains a date, false otherwise
      */
-    public static boolean isDate(@SuppressWarnings("TypeMayBeWeakened") String possibleDateDef) {
+    public static boolean isDate(String possibleDateDef) {
         Pattern p = Pattern.compile("\\d\\d/\\d\\d/\\d\\d\\d\\d");
         Matcher m = p.matcher(possibleDateDef);
         return m.find();
@@ -137,7 +134,7 @@ public final class RatDate implements Comparable<RatDate>, Serializable{
 // --Commented out by Inspection STOP (11/20/2017 12:52 PM)
 
     @Override
-    public int compareTo(@Nullable RatDate ratDate) {
+    public int compareTo(RatDate ratDate) {
         if (ratDate == null) {
             return 1;
         }

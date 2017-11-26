@@ -1,204 +1,144 @@
 package edu.gatech.cs2340.thericks.controllers;
 
-import android.os.Bundle;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.widget.EditText;
-import android.widget.Button;
-import android.view.View;
-
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
 
-import edu.gatech.cs2340.thericks.R;
 import edu.gatech.cs2340.thericks.database.RatDatabase;
 import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatDataSource;
+import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.DateUtility;
+import edu.gatech.cs2340.thericks.utils.Log;
+import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import tornadofx.control.DateTimePicker;
 
 /**
  * Created by Cameron on 10/6/2017.
  * Displays the data in a passed RatData through
  */
-public class RatEntryActivity extends AppCompatActivity {
+public class RatEntryActivity extends VBox {
 
     private static final String TAG = RatEntryActivity.class.getSimpleName();
 
-    private EditText key;
-    private EditText date;
-    private EditText locationType;
-    private EditText address;
-    private EditText zip;
-    private EditText borough;
-    private EditText city;
-    private EditText latitude;
-    private EditText longitude;
+    @FXML
+    private TextField key;
+    
+    @FXML
+    private DateTimePicker date;
+    
+    @FXML
+    private TextField locationType;
+    
+    @FXML
+    private TextField address;
+    
+    @FXML
+    private TextField zip;
+    
+    @FXML
+    private TextField borough;
+    
+    @FXML
+    private TextField city;
+    
+    @FXML
+    private TextField latitude;
+    
+    @FXML
+    private TextField longitude;
+    
+    @FXML
+    private Button saveButton;
+    
+    @FXML
+    private Button cancelButton;
+    
+    private User user;
+    private RatData ratData;
+    private ResultObtainedCallback<Integer> callback;
+    
+    public RatEntryActivity(User u, RatData r, ResultObtainedCallback<Integer> call) {
+    	user = u;
+    	ratData = r;
+    	callback = call;
+    	
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_rat_entry.fxml"));
+    	loader.setController(this);
+    	loader.setRoot(this);
+		try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rat_entry);
+    public void initialize() {
 
-        key = findViewById(R.id.rat_data_key_entry);
-        date = findViewById(R.id.rat_data_date_entry);
-        locationType = findViewById(R.id.rat_data_location_type_entry);
-        address = findViewById(R.id.rat_data_incident_address_entry);
-        zip = findViewById(R.id.rat_data_incident_zip_entry);
-        borough = findViewById(R.id.rat_data_borough_entry);
-        city = findViewById(R.id.rat_data_city_entry);
-        latitude = findViewById(R.id.rat_data_latitude_entry);
-        longitude = findViewById(R.id.rat_data_longitude_entry);
-
-        Button saveButton = findViewById(R.id.rat_data_save_entry_button);
-        Button cancelButton = findViewById(R.id.rat_data_cancel_entry_button);
-
-        Bundle b = getIntent().getExtras();
-        if (b != null) {
-            RatData ratData = b.getParcelable("edu.gatech.cs2340.thericks.RatData");
-            if (ratData != null) {
-                key.setText(String.valueOf(ratData.getKey()));
-                date.setText(ratData.getCreatedDateTime());
-                locationType.setText(ratData.getLocationType());
-                address.setText(ratData.getIncidentAddress());
-                zip.setText(String.valueOf(ratData.getIncidentZip()));
-                borough.setText(ratData.getBorough());
-                city.setText(ratData.getCity());
-                latitude.setText(String.format(Locale.ENGLISH, "%8f", ratData.getLatitude()));
-                longitude.setText(String.format(Locale.ENGLISH, "%8f", ratData.getLongitude()));
-            } else {
-                Log.d(TAG, "No rat data passed in.");
-            }
+        if (ratData != null) {
+            key.setText(String.valueOf(ratData.getKey()));
+            date.setDateTimeValue(DateUtility.parse(ratData.getCreatedDateTime()));
+            locationType.setText(ratData.getLocationType());
+            address.setText(ratData.getIncidentAddress());
+            zip.setText(String.valueOf(ratData.getIncidentZip()));
+            borough.setText(ratData.getBorough());
+            city.setText(ratData.getCity());
+            latitude.setText(String.format(Locale.ENGLISH, "%8f", ratData.getLatitude()));
+            longitude.setText(String.format(Locale.ENGLISH, "%8f", ratData.getLongitude()));
+        } else {
+            Log.d(TAG, "No rat data passed in.");
         }
 
-        key.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        key.textProperty().addListener((observable, oldValue, newValue) -> {
+            Scanner intTest = new Scanner(newValue);
+            if (intTest.hasNextInt()) {
+            	key.setStyle("-fx-text-inner-color: black;");
+            } else {
+            	key.setStyle("-fx-text-inner-color: red;");
             }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String text = charSequence.toString();
-                Scanner intTest = new Scanner(text);
-                if (intTest.hasNextInt()) {
-                    key.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorBlack,
-                            null));
-                } else {
-                    Log.d(TAG, "Improperly formatted input detected: " + text);
-                    key.setTextColor(ResourcesCompat.getColor(getResources(), R.color.errorPrimary,
-                            null));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            intTest.close();
         });
 
-        date.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        zip.textProperty().addListener((observable, oldValue, newValue) -> {
+            Scanner intTest = new Scanner(newValue);
+            if (intTest.hasNextInt()) {
+            	zip.setStyle("-fx-text-inner-color: black;");
+            } else {
+            	zip.setStyle("-fx-text-inner-color: red;");
             }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String text = charSequence.toString();
-                if (DateUtility.parse(text) != null) {
-                    date.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorBlack,
-                            null));
-                } else {
-                    Log.d(TAG, "Improperly formatted input detected: " + text);
-                    date.setTextColor(ResourcesCompat.getColor(getResources(), R.color.errorPrimary,
-                            null));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            intTest.close();
         });
 
-        zip.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        latitude.textProperty().addListener((observable, oldValue, newValue) -> {
+            Scanner doubleTest = new Scanner(newValue);
+            if (doubleTest.hasNextDouble()) {
+            	latitude.setStyle("-fx-text-inner-color: black;");
+            } else {
+            	latitude.setStyle("-fx-text-inner-color: red;");
             }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String text = charSequence.toString();
-                Scanner intTest = new Scanner(text);
-                if (intTest.hasNextInt()) {
-                    zip.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorBlack,
-                            null));
-                } else {
-                    Log.d(TAG, "Improperly formatted input detected: " + text);
-                    zip.setTextColor(ResourcesCompat.getColor(getResources(), R.color.errorPrimary,
-                            null));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            doubleTest.close();
         });
 
-        latitude.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        longitude.textProperty().addListener((observable, oldValue, newValue) -> {
+            Scanner doubleTest = new Scanner(newValue);
+            if (doubleTest.hasNextDouble()) {
+            	longitude.setStyle("-fx-text-inner-color: black;");
+            } else {
+            	longitude.setStyle("-fx-text-inner-color: red;");
             }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String text = charSequence.toString();
-                Scanner doubleTest = new Scanner(text);
-                if (doubleTest.hasNextDouble()) {
-                    latitude.setTextColor(ResourcesCompat.getColor(getResources(),
-                            R.color.colorBlack, null));
-                } else {
-                    Log.d(TAG, "Improperly formatted input detected: " + text);
-                    latitude.setTextColor(ResourcesCompat.getColor(getResources(),
-                            R.color.errorPrimary, null));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            doubleTest.close();
         });
 
-        longitude.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String text = charSequence.toString();
-                Scanner doubleTest = new Scanner(text);
-                if (doubleTest.hasNextDouble()){
-                    longitude.setTextColor(ResourcesCompat.getColor(getResources(),
-                            R.color.colorBlack, null));
-                } else {
-                    Log.d(TAG, "Improperly formatted input detected: " + text);
-                    longitude.setTextColor(ResourcesCompat.getColor(getResources(),
-                            R.color.errorPrimary, null));
-                }
-            }
-
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
+        cancelButton.setOnAction(e -> {
+            callback.onResultObtained(ResultObtainedCallback.RESULT_CANCELED);
         });
 
-        cancelButton.setOnClickListener((View v) -> {
-            setResult(RESULT_CANCELED);
-            finish();
-        });
-
-        saveButton.setOnClickListener((View v) -> {
+        saveButton.setOnAction(e -> {
             int iKey;
             int iZip;
             double dLatitude;
@@ -207,31 +147,26 @@ public class RatEntryActivity extends AppCompatActivity {
             Log.d(TAG, "Confirming rat data is valid");
             try {
                 iKey = Integer.parseInt(key.getText().toString());
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ex) {
                 Log.d(TAG, "Improperly formatted input detected in the key");
-                return;
-            }
-            if (DateUtility.parse(date.getText().toString()) == null) {
-                Log.d(TAG, "Improperly formatted input detected in the date time");
                 return;
             }
             try {
                 iZip = Integer.parseInt(zip.getText().toString());
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ex) {
                 Log.d(TAG, "Improperly formatted input detected in the zip");
                 return;
             }
             try {
                 dLatitude = Double.parseDouble(latitude.getText().toString());
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ex) {
                 Log.d(TAG, "Improperly formatted input detected in the latitude");
                 return;
             }
             try {
                 dLongitude = Double.parseDouble(longitude.getText().toString());
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ex) {
                 Log.d(TAG, "Improperly formatted input detected in the longitude");
-                e.printStackTrace();
                 return;
             }
 
@@ -239,7 +174,7 @@ public class RatEntryActivity extends AppCompatActivity {
             RatDataSource database = new RatDatabase();
 
             database.createRatData(iKey,
-                    date.getText().toString(),
+                    DateUtility.DATE_TIME_FORMAT.format(date.getDateTimeValue()),
                     locationType.getText().toString(),
                     iZip,
                     address.getText().toString(),
@@ -247,8 +182,7 @@ public class RatEntryActivity extends AppCompatActivity {
                     borough.getText().toString(),
                     dLatitude,
                     dLongitude);
-            setResult(RESULT_OK);
-            finish();
+            callback.onResultObtained(ResultObtainedCallback.RESULT_OK);
         });
     }
 }

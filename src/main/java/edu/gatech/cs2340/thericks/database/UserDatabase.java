@@ -1,13 +1,12 @@
 package edu.gatech.cs2340.thericks.database;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
+import java.sql.Connection;
 import java.util.List;
 
 import edu.gatech.cs2340.thericks.models.Privilege;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.models.UserDataSource;
+import edu.gatech.cs2340.thericks.utils.Log;
 
 /**
  * Class representing a database of users.  This class is used as an interface between the user
@@ -18,40 +17,39 @@ import edu.gatech.cs2340.thericks.models.UserDataSource;
 
 public class UserDatabase implements UserDataSource {
     private static final String TAG = UserDatabase.class.getSimpleName();
-    private SQLiteDatabase db;
+    
+    private Connection connection;
+    private UserDAO dao;
 
     /**
      * Constructor that initializes SQLite Database to a UserDatabaseHandler
      */
     public UserDatabase() {
-        open();
-    }
-
-    private void open() {
-        db = UserDatabaseHandler.provideWritableDatabase();
+        connection = DatabaseHandler.provideDatabaseConnection();
+        dao = new UserDAO(connection);
     }
 
     @Override
     public void createUser(String username, String password, Privilege privilege) {
         Log.d(TAG, "Creating user");
-        UserDAO.createUser(db, username, password, privilege);
+        dao.createUser(username, password, privilege);
     }
 
     @Override
     public void deleteUser(String username) {
-        UserDAO.deleteUser(db, username);
+        dao.deleteUser(connection, username);
     }
 
 
     @Override
     public User getUserByUsername(String username) {
-        return UserDAO.getUserByUsername(db, username);
+        return dao.getUserByUsername(connection, username);
     }
 
 
     @Override
     public List<User> getAllUsers() {
-        return UserDAO.getAllUsers(db);
+        return dao.getAllUsers(connection);
     }
 
 }

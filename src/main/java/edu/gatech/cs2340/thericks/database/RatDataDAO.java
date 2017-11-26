@@ -234,9 +234,10 @@ class RatDataDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-
+		}
         return ratDataList;
     }
+}
 
 // --Commented out by Inspection START (11/13/2017 1:30 AM):
 //    /**
@@ -251,4 +252,4 @@ class RatDataDAO {
 //        return fullList.stream().filter(allPredicates).collect(Collectors.toList());
 //    }
 // --Commented out by Inspection STOP (11/13/2017 1:30 AM)
-}
+

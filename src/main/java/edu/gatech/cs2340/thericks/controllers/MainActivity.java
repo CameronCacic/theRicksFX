@@ -1,5 +1,6 @@
 package edu.gatech.cs2340.thericks.controllers;
 
+import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
@@ -59,6 +60,18 @@ public class MainActivity extends Application {
 			
 		};
 		
+		ResultObtainedCallback<RatData> ratDataListResult = new ResultObtainedCallback<RatData>() {
+
+			@Override
+			public void onResultObtained(RatData result) {
+				if (result != null) {
+					RatEntryActivity ratEntryActivity = new RatEntryActivity(user[0], result, ratReportResult);
+					mainPane.setRight(ratEntryActivity);
+				}
+			}
+			
+		};
+		
     	ResultObtainedCallback<Integer> dashboardResult = new ResultObtainedCallback<Integer>() {
 
 			@Override
@@ -75,6 +88,9 @@ public class MainActivity extends Application {
 					mainPane.setCenter(graphActivity);
 					break;
 				case RESULT_DATA_LIST:
+					RatDataListActivity ratDataListActivity = new RatDataListActivity(filter, ratDataListResult);
+					filterCallback[0] = ratDataListActivity;
+					mainPane.setCenter(ratDataListActivity);
 					break;
 				case RESULT_PROFILE:
 					break;

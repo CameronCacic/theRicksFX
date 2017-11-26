@@ -1,5 +1,6 @@
 package edu.gatech.cs2340.thericks.controllers;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -11,6 +12,7 @@ import edu.gatech.cs2340.thericks.utils.DateUtility;
 import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -65,6 +67,15 @@ public class RatEntryActivity extends VBox {
     	user = u;
     	ratData = r;
     	callback = call;
+    	
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_rat_entry.fxml"));
+    	loader.setController(this);
+    	loader.setRoot(this);
+		try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     public void initialize() {

@@ -46,6 +46,19 @@ public class MainActivity extends Application {
 			
 		};
 		
+		ResultObtainedCallback<Integer> ratReportResult = new ResultObtainedCallback<Integer>() {
+
+			@Override
+			public void onResultObtained(Integer result) {
+				if (result == RESULT_OK) {
+					if (filterCallback[0] != null) {
+						filterCallback[0].notifyFilterUpdated();
+					}
+				}
+			}
+			
+		};
+		
     	ResultObtainedCallback<Integer> dashboardResult = new ResultObtainedCallback<Integer>() {
 
 			@Override
@@ -68,6 +81,8 @@ public class MainActivity extends Application {
 				case RESULT_SETTINGS:
 					break;
 				case RESULT_REPORT:
+					RatEntryActivity ratEntryActivity = new RatEntryActivity(user[0], null, ratReportResult);
+					mainPane.setRight(ratEntryActivity);
 					break;
 				case RESULT_LOGOUT:
 					start(primaryStage);

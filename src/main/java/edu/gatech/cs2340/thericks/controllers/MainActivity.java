@@ -70,14 +70,7 @@ public class MainActivity extends Application {
 				case RESULT_REPORT:
 					break;
 				case RESULT_LOGOUT:
-					filterCallback[0] = null;
-					user[0] = null;
-					// filter.reset();
-					mainPane = new BorderPane();
-					user[0] = loginSequence();
-					if (user[0] != null) {
-						mainPane.setLeft(new DashboardActivity(user[0], dashboardResult));
-					}
+					start(primaryStage);
 					break;
 				case RESULT_FILTER:
 					FilterActivity filterActivity = new FilterActivity(filter, user[0], filterResult);
@@ -88,27 +81,23 @@ public class MainActivity extends Application {
 			
 		};
 		
-		user[0] = loginSequence();
-		if (user[0] != null) {
-			mainPane.setLeft(new DashboardActivity(user[0], dashboardResult));
-		}
-	}
-	
-	public static User loginSequence() {
 		Stage stage = new Stage();
     	stage.setHeight(POPUP_HEIGHT);
     	stage.setWidth(POPUP_WIDTH);
     	stage.initModality(Modality.APPLICATION_MODAL);
     	stage.initOwner(primaryStage);
-    	
-    	User[] user = new User[1];
-    	
+		
     	ResultObtainedCallback<User> getUserResult = new ResultObtainedCallback<User>() {
 
 			@Override
 			public void onResultObtained(User result) {
-				user[0] = result;
-				stage.close();
+				if (result != null) {
+					user[0] = result;
+					stage.close();
+					mainPane.setLeft(new DashboardActivity(user[0], dashboardResult));
+				} else {
+					primaryStage.close();
+				}
 			}
 			
 		};
@@ -138,7 +127,6 @@ public class MainActivity extends Application {
 		});
 		stage.setScene(new Scene(welcomeActivity));
 		stage.showAndWait();
-		return user[0];
 	}
 	
 	public static void main(String[] args) {

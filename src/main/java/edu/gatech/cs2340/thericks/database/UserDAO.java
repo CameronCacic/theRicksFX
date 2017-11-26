@@ -98,8 +98,7 @@ class UserDAO {
     		return new User(username, password, salt, privilege);
     	} catch (SQLException e) {
 			e.printStackTrace();
-		}
-        
+      }
         return rtnUser;
     }
 
@@ -172,8 +171,7 @@ class UserDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-        
+	
         return userList;
     }
 }

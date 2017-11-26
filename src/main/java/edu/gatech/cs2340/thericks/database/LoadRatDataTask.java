@@ -19,7 +19,6 @@ import edu.gatech.cs2340.thericks.utils.Log;
  *
  * Created by Ben Lashley on 10/18/2017.
  */
-
 class LoadRatDataTask extends Thread {
     private static final String TAG = LoadRatDataTask.class.getSimpleName();
 
@@ -55,7 +54,7 @@ class LoadRatDataTask extends Thread {
                     StandardCharsets.UTF_8));
 
             RatDataDAO dao = new RatDataDAO(DatabaseHandler.provideDatabaseConnection());
-            
+           
             String line;
             br.readLine(); //get rid of header line
             line = br.readLine();
@@ -102,7 +101,6 @@ class LoadRatDataTask extends Thread {
         } catch (IOException e) {
             Log.e(TAG, "error reading rat data", e);
         }
-
         return lineCount;
     }
 

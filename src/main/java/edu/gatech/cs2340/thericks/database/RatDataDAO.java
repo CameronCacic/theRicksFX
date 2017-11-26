@@ -138,8 +138,6 @@ class RatDataDAO {
         return rtnData;
     }
 
-
-
     /**
      * Removes all rat data with the provided key
      * @param connection the connection to the database where the RatData Object will be deleted
@@ -236,8 +234,7 @@ class RatDataDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
-        
+
         return ratDataList;
     }
 

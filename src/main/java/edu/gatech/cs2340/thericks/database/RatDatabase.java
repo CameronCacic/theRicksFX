@@ -1,6 +1,5 @@
 package edu.gatech.cs2340.thericks.database;
 
-
 import java.sql.Connection;
 import java.util.List;
 
@@ -31,7 +30,6 @@ public class RatDatabase implements RatDataSource {
     	connection = DatabaseHandler.provideDatabaseConnection();
     	dao = new RatDataDAO(connection);
     }
-
 
     /**
      * Loads in a list of RatData Objects

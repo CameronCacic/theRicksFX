@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
  *
  * Screen that appears when app starts. Allows user to login or register for an account.
  */
-
 public class WelcomeActivity extends VBox {
 	
 	@FXML

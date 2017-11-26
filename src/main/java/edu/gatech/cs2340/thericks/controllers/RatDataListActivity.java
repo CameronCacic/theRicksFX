@@ -56,7 +56,7 @@ public class RatDataListActivity extends VBox implements NewFilterCallback {
 			loader.load();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+    }
     }
 
     public void initialize() {

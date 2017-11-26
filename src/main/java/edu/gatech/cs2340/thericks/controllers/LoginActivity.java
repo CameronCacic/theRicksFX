@@ -47,8 +47,7 @@ public class LoginActivity extends VBox {
 		try {
 			loader.load();
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			e.printStackTrace(
     }
     
     public void initialize() {

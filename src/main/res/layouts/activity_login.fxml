@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="VBox" spacing="5.0">
+	<children>
+		<Text text="Login"/>
+		<TextField fx:id="username"/>
+		<TextField fx:id="password"/>
+		<Text fx:id="error" text="Password or username is incorrect" visible="false"/>
+		<Button fx:id="login" text="Login"/>
+	</children>
+</fx:root>
+

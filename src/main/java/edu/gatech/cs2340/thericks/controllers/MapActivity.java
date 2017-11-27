@@ -19,7 +19,7 @@ import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 
 public class MapActivity extends AnchorPane implements MapComponentInitializedListener, NewFilterCallback {
@@ -38,7 +38,7 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
     private GoogleMapView mapView;
     
     @FXML
-    private ProgressBar progressBar;
+    private ProgressIndicator progressIndicator;
     
     public MapActivity(RatFilter f) {
     	
@@ -71,7 +71,7 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
      * re-enabling all map widgets
      */
     private void loadFilteredMapMarkers() {
-        progressBar.setVisible(true);
+        progressIndicator.setVisible(true);
         map.clearMarkers();
         
         Thread thread = new Thread() {
@@ -88,7 +88,7 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
     	            markerList.add(new Marker(markerOptions));
     	        }
     	        map.addMarkers(markerList);
-    	        progressBar.setVisible(false);
+    	        progressIndicator.setVisible(false);
         	}
         	
         };

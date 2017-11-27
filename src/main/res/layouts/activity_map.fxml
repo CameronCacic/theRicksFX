@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import com.lynden.gmapsfx.GoogleMapView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ProgressIndicator?>
+
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="AnchorPane">
+	<children>
+		<GoogleMapView fx:id="mapView" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"/>
+		<HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+			<children>
+				<ProgressIndicator fx:id="progressIndicator"/>
+			</children>
+		</HBox>
+	</children>
+</fx:root>
+

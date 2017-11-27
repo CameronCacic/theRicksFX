@@ -5,6 +5,7 @@ import java.io.IOException;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -26,7 +27,10 @@ public class WelcomeActivity extends VBox {
 	public WelcomeActivity(ResultObtainedCallback<Integer> call) {
 		callback = call;
 		
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_welcome.fxml"));
+		setSpacing(15);
+		setAlignment(Pos.CENTER);
+		
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_welcome.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 		try {

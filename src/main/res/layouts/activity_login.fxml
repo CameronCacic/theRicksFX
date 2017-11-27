@@ -4,6 +4,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
 
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="VBox" spacing="5.0">
 	<children>
@@ -11,7 +12,12 @@
 		<TextField fx:id="username"/>
 		<TextField fx:id="password"/>
 		<Text fx:id="error" text="Password or username is incorrect" visible="false"/>
-		<Button fx:id="login" text="Login"/>
+		<HBox>
+			<children>
+				<Button fx:id="login" text="Login"/>
+				<Button fx:id="cancel" text="Cancel"/>
+			</children>
+		</HBox>
 	</children>
 </fx:root>
 

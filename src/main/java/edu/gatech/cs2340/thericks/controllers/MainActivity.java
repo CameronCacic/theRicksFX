@@ -142,11 +142,13 @@ public class MainActivity extends Application {
 					
 					LoginActivity loginActivity = new LoginActivity(getUserResult);
 					stage.setScene(new Scene(loginActivity));
+					stage.sizeToScene();
 					
 				} else if (result == RESULT_REGISTER) {
 					
 					RegisterActivity registerActivity = new RegisterActivity(getUserResult);
 					stage.setScene(new Scene(registerActivity));
+					stage.sizeToScene();
 					
 				} else {
 					

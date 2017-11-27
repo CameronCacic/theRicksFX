@@ -139,7 +139,7 @@ class UserDAO {
         		user = cursorToUser(result);
         	}
         } catch (SQLException e) {
-        	e.printStackTrace();
+        	Log.e(TAG, "Exception occured while fetching user");
         }
         
         if (user != null) {

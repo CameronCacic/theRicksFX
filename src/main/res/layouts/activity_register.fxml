@@ -18,7 +18,7 @@
 		<Text text="Re-enter Password"/>
 		<TextField fx:id="passwordReentry"/>
 		<Text fx:id="passwordMismatch" text="Passwords do not match"/>
-		<HBox spacing="5.0">
+		<HBox spacing="5.0" alignment="CENTER">
 			<children>
 				<RadioButton fx:id="normalPrivRadio" text="Normal"/>
 				<RadioButton fx:id="adminPrivRadio" text="Admin"/>

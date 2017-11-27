@@ -10,6 +10,8 @@ import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import edu.gatech.cs2340.thericks.utils.Security;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -41,7 +43,11 @@ public class LoginActivity extends VBox {
     public LoginActivity(ResultObtainedCallback<User> call) {
     	callback = call;
     	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_login.fxml"));
+    	setPadding(new Insets(5));
+    	setSpacing(5);
+    	setAlignment(Pos.CENTER);
+    	
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_login.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {

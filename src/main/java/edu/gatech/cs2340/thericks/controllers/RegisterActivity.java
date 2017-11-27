@@ -10,6 +10,7 @@ import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import edu.gatech.cs2340.thericks.utils.Security;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -62,7 +63,10 @@ public class RegisterActivity extends VBox {
     public RegisterActivity(ResultObtainedCallback<User> call) {
     	callback = call;
     	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_register.fxml"));
+    	setSpacing(5);
+    	setAlignment(Pos.CENTER);
+    	
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_register.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {

@@ -62,7 +62,7 @@ public class RegisterActivity extends VBox {
     public RegisterActivity(ResultObtainedCallback<User> call) {
     	callback = call;
     	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_registration.fxml"));
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_register.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {

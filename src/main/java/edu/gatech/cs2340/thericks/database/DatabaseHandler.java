@@ -12,9 +12,9 @@ import java.sql.SQLException;
  * Created by Ben Lashley on 10/9/2017.
  */
 
-final class DatabaseHandler {
+public final class DatabaseHandler {
     //private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "rat_data.db";
+    private static final String DATABASE_NAME = "rat_tracker_database.db";
 
     private static final DatabaseHandler instance =
             new DatabaseHandler();
@@ -40,4 +40,12 @@ final class DatabaseHandler {
     public Connection getDatabaseConnection() {
     	return connection;
     }
-}
+    
+    public static void closeInstance() {
+    	try {
+			instance.connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    }
+ }

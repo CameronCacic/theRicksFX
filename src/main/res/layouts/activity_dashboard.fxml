@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="VBox">
+	<children>
+		<Button fx:id="mapButton" text="Map"/>
+		<Button fx:id="graphButton" text="Graph"/>
+		<Button fx:id="listRatDataButton" text="Rat Data"/>
+		<Button fx:id="profileButton" text="Profile"/>
+		<Button fx:id="settingsButton" text="Settings"/>
+		<Button fx:id="reportRatButton" text="Report a Rat"/>
+		<Button fx:id="logoutButton" text="Logout"/>
+	</children>
+</fx:root>
+

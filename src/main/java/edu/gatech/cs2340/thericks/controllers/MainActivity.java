@@ -1,5 +1,6 @@
 package edu.gatech.cs2340.thericks.controllers;
 
+import edu.gatech.cs2340.thericks.database.DatabaseHandler;
 import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
@@ -160,6 +161,11 @@ public class MainActivity extends Application {
 		});
 		stage.setScene(new Scene(welcomeActivity));
 		stage.showAndWait();
+	}
+	
+	@Override
+	public void stop() {
+		DatabaseHandler.closeInstance();
 	}
 	
 	public static void main(String[] args) {

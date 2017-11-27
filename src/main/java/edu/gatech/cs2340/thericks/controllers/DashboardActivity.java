@@ -7,9 +7,13 @@ import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 /**
  * Created by Cameron on 10/6/2017.
@@ -17,7 +21,7 @@ import javafx.scene.layout.AnchorPane;
  * to engage in. Defaults to dash mode, upon selecting map, dash-map switches to map mode,
  * where users can view rat data displayed on a Google Map, filtered by date
  */
-public class DashboardActivity extends AnchorPane {
+public class DashboardActivity extends VBox {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -46,14 +50,15 @@ public class DashboardActivity extends AnchorPane {
     @FXML
     private Button logoutButton;
 
-    @FXML
-    private ProgressBar progressBar;
-
     public DashboardActivity(User u, ResultObtainedCallback<Integer> call) {
     	callback = call;
     	user = u;
     	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_dashboard.fxml"));
+    	setPadding(new Insets(5));
+    	setSpacing(5);
+    	setAlignment(Pos.CENTER_LEFT);
+    	
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_dashboard.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {

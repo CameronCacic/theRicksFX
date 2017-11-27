@@ -10,6 +10,7 @@ import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import edu.gatech.cs2340.thericks.utils.Security;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -63,6 +64,7 @@ public class RegisterActivity extends VBox {
     public RegisterActivity(ResultObtainedCallback<User> call) {
     	callback = call;
     	
+    	setPadding(new Insets(5));
     	setSpacing(5);
     	setAlignment(Pos.CENTER);
     	

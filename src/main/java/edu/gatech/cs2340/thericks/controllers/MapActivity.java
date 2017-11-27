@@ -24,11 +24,10 @@ import javafx.scene.layout.AnchorPane;
 
 public class MapActivity extends AnchorPane implements MapComponentInitializedListener, NewFilterCallback {
 	
-	private static final LatLong POSITION = new LatLong(40.776278, -73.99086);
+	private static final double LAT = 40.776278;
+	private static final double LONG = -73.99086;
     private static final double ZOOM = 12;
     private static final double BEARING = 30;
-
-    private MapOptions engagedMapOptions;
     
     private GoogleMap map;
     
@@ -44,17 +43,7 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
     	
     	filter = f;
     	
-    	engagedMapOptions.center(POSITION)
-				.mapType(MapTypeIdEnum.ROADMAP)
-				.overviewMapControl(true)
-				.panControl(true)
-				.rotateControl(true)
-				.scaleControl(false)
-				.streetViewControl(false)
-				.zoomControl(true)
-				.zoom(ZOOM);
-    	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_map.fxml"));
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_map.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {
@@ -97,6 +86,17 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
 
 	@Override
 	public void mapInitialized() {
+		MapOptions engagedMapOptions = new MapOptions();
+    	engagedMapOptions.center(new LatLong(LAT, LONG))
+				.mapType(MapTypeIdEnum.ROADMAP)
+				.overviewMapControl(true)
+				.panControl(true)
+				.rotateControl(true)
+				.scaleControl(false)
+				.streetViewControl(false)
+				.zoomControl(true)
+				.zoom(ZOOM);
+    	
 		map = mapView.createMap(engagedMapOptions);
 		map.setHeading(BEARING);
 		loadFilteredMapMarkers();

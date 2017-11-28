@@ -40,14 +40,6 @@ public class RatDatabase implements RatDataSource {
     public void loadData(DataLoadedCallback callback, List<RatData> data, RatFilter filter) {
         if (!LoadRatDataTask.isReady()) {
             Log.d(TAG, "LoadRatDataTask was not ready to load data or data was already loaded");
-            if (data != null) {
-                data.clear();
-                data.addAll(getFilteredRatData(filter));
-                if (callback != null) {
-                	callback.notifyDataLoaded();
-                }
-            }
-            return;
         }
         Log.d(TAG, "Creating new LoadRatDataTask");
         LoadRatDataTask loadData = new LoadRatDataTask();
@@ -79,7 +71,7 @@ public class RatDatabase implements RatDataSource {
      * @param filter the filters used to select certain RatData Objects
      * @return a list of filtered RatData Objects
      */
-    public List<RatData> getFilteredRatData(RatFilter filter) {
+    List<RatData> getFilteredRatData(RatFilter filter) {
         // return RatDataDAO.applyFilters(RatDataDAO.getAllRatData(db), filters);
         return dao.getFilteredRatData(connection, filter.getPredicates());
     }

@@ -33,7 +33,7 @@ public class MainActivity extends Application {
     	RatFilter filter = RatFilter.getDefaultInstance();
     	User[] user = new User[1];
     	
-    	NewFilterCallback[] filterCallback = new NewFilterCallback[0];
+    	NewFilterCallback[] filterCallback = new NewFilterCallback[1];
     	
     	ResultObtainedCallback<Integer> filterResult = new ResultObtainedCallback<Integer>() {
 

@@ -212,6 +212,8 @@ class RatDataDAO {
 
     List<RatData> getFilteredRatData(Connection connection,
                                             Collection<Predicate<RatData>> filters) {
+    	Log.d(TAG, "Loading filtered rat data");
+    	
         List<RatData> ratDataList = new ArrayList<>(INITIAL_CAPACITY);
         String selectAllQuery = "SELECT * FROM " + TABLE_RAT_DATA;
 
@@ -232,7 +234,6 @@ class RatDataDAO {
 			    }
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         return ratDataList;

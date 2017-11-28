@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Button?>
@@ -13,10 +14,10 @@
 		<TextField fx:id="usernameEntry"/>
 		<Text fx:id="invalidUsername" text="Username is invalid"/>
 		<Text text="Password"/>
-		<TextField fx:id="passwordEntry"/>
+		<PasswordField fx:id="passwordEntry"/>
 		<Text fx:id="invalidPassword" text="Password is invalid"/>
 		<Text text="Re-enter Password"/>
-		<TextField fx:id="passwordReentry"/>
+		<PasswordField fx:id="passwordReentry"/>
 		<Text fx:id="passwordMismatch" text="Passwords do not match"/>
 		<HBox spacing="5.0" alignment="CENTER">
 			<children>

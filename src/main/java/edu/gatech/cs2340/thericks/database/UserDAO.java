@@ -129,7 +129,7 @@ class UserDAO {
      */
     User getUserByUsername(Connection connection, String username) {
         User user = null;
-        String query = "SELECT FROM " + TABLE_USERS
+        String query = "SELECT * FROM " + TABLE_USERS
         		+ " WHERE " + COLUMN_USERNAME + " = '" + username + "'";
         
         try {
@@ -139,7 +139,7 @@ class UserDAO {
         		user = cursorToUser(result);
         	}
         } catch (SQLException e) {
-        	Log.e(TAG, "Exception occured while fetching user");
+        	Log.e(TAG, "Exception occured while fetching user", e);
         }
         
         if (user != null) {

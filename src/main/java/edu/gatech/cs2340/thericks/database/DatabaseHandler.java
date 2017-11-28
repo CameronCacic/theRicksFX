@@ -25,7 +25,7 @@ public final class DatabaseHandler {
      * Creates and/or opens a database that will be used for reading and writing
      * @return writable database
      */
-    static synchronized Connection provideDatabaseConnection() {
+    static Connection provideDatabaseConnection() {
         return instance.getDatabaseConnection();
     }
 

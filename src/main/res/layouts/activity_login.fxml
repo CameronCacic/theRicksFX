@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -12,7 +13,7 @@
 	<children>
 		<Text text="Login"/>
 		<TextField fx:id="username"/>
-		<TextField fx:id="password"/>
+		<PasswordField fx:id="password"/>
 		<Text fx:id="error" text="Password or username is incorrect" visible="false"/>
 		<HBox alignment="CENTER">
 			<padding>

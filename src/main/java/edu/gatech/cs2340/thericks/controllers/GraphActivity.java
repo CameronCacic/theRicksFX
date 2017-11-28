@@ -19,7 +19,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
@@ -43,7 +43,7 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
     private LineChart<String, Number> chart;
 
     @FXML
-    private ProgressBar progressBar;
+    private ProgressIndicator progressIndicator;
 
     @FXML
     private Text noDataText;
@@ -71,8 +71,14 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
 
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Month");
+        xAxis.setTickLabelRotation(X_LABEL_ROTATION);
         NumberAxis yAxis = new NumberAxis();
         chart = new LineChart<>(xAxis, yAxis);
+        getChildren().add(chart);
+        setTopAnchor(chart, 0d);
+        setBottomAnchor(chart, 0d);
+        setRightAnchor(chart, 0d);
+        setLeftAnchor(chart, 0d);
         
         chart.setVisible(false);
 
@@ -93,7 +99,7 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
     
     @Override
 	public void notifyFilterUpdated() {
-        progressBar.setVisible(true);
+        progressIndicator.setVisible(true);
         RatDatabase db = new RatDatabase();
         db.loadData(dataCallback, loadedData, filter);
 	}
@@ -103,7 +109,7 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
      * and gets the needed data from the database
      */
     private void displayGraph() {
-        progressBar.setVisible(true);
+        progressIndicator.setVisible(true);
         chart.setVisible(false);
         noDataText.setVisible(false);
 
@@ -156,7 +162,7 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
             noDataText.setVisible(true);
         }
 
-        progressBar.setVisible(false);
+        progressIndicator.setVisible(false);
     }
     
     private String formatLocalDateTime(LocalDateTime dateTime) {

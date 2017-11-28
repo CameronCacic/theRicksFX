@@ -8,7 +8,7 @@
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="AnchorPane">
 	<children>
 		<GoogleMapView fx:id="mapView" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"/>
-		<HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+		<HBox alignment="CENTER" mouseTransparent="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
 			<children>
 				<ProgressIndicator fx:id="progressIndicator"/>
 			</children>

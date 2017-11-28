@@ -17,7 +17,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -29,7 +30,7 @@ import javafx.util.Callback;
  * Created by Cameron on 10/5/2017.
  * Displays the rat data from the database in a list format
  */
-public class RatDataListActivity extends VBox implements NewFilterCallback {
+public class RatDataListActivity extends AnchorPane implements NewFilterCallback {
 
     private static final String TAG = RatDataListActivity.class.getSimpleName();
 
@@ -43,13 +44,13 @@ public class RatDataListActivity extends VBox implements NewFilterCallback {
     private ListView<RatData> ratDataListView;
     
     @FXML
-    private ProgressBar progressBar;
+    private ProgressIndicator progressIndicator;
     
     public RatDataListActivity(RatFilter f, ResultObtainedCallback<RatData> call) {
     	filter = f;
     	callback = call;
     	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_rat_data_list.fxml"));
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_rat_data_list.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {
@@ -112,12 +113,12 @@ public class RatDataListActivity extends VBox implements NewFilterCallback {
 		Log.d(TAG, "Calling the RatDatabase to load the data");
 		
 		RatDatabase database = new RatDatabase();
-        progressBar.setVisible(true);
+        progressIndicator.setVisible(true);
         database.loadData(new DataLoadedCallback() {
 			
 			@Override
 			public void notifyDataLoaded() {
-				progressBar.setVisible(false);
+				progressIndicator.setVisible(false);
 				Log.d(TAG, "Data loaded");
 			}
 			

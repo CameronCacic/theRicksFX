@@ -4,6 +4,8 @@ import edu.gatech.cs2340.thericks.database.DatabaseHandler;
 import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
+import edu.gatech.cs2340.thericks.utils.Log;
+import edu.gatech.cs2340.thericks.utils.Log.LogLevel;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.application.Application;
@@ -169,6 +171,7 @@ public class MainActivity extends Application {
 	}
 	
 	public static void main(String[] args) {
+		Log.setLevel(LogLevel.DEBUG);
     	launch(args);
     }
 }

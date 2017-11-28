@@ -72,33 +72,25 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
         progressIndicator.setVisible(true);
         map.clearMarkers();
         
-        Thread thread = new Thread() {
-        	
-        	@Override
-        	public void run() {
-        		Log.d(TAG, "Attempting to load rat data and populate the map");
-        		List<RatData> filteredList = new ArrayList<RatData>();
-        		RatDatabase database = new RatDatabase();
-        		database.loadData(new DataLoadedCallback() {
-					
-					@Override
-					public void notifyDataLoaded() {
-						List<Marker> markerList = new ArrayList<>();
-		    	        for (RatData r: filteredList) {
-		    	            MarkerOptions markerOptions = new MarkerOptions();
-		    	            markerOptions.position(new LatLong(r.getLatitude(), r.getLongitude()));
-		    	            markerOptions.title(r.getKey() + "");
-		    	            markerOptions.label(r.getIncidentAddress() + "\n" + r.getCreatedDateTime());
-		    	            markerList.add(new Marker(markerOptions));
-		    	        }
-		    	        map.addMarkers(markerList);
-		    	        progressIndicator.setVisible(false);
-					}
-				}, filteredList, filter);;
-        	}
-        	
-        };
-        thread.start();
+		Log.d(TAG, "Attempting to load rat data and populate the map");
+		List<RatData> filteredList = new ArrayList<RatData>();
+		RatDatabase database = new RatDatabase();
+		database.loadData(new DataLoadedCallback() {
+			
+			@Override
+			public void notifyDataLoaded() {
+				List<Marker> markerList = new ArrayList<>();
+    	        for (RatData r: filteredList) {
+    	            MarkerOptions markerOptions = new MarkerOptions();
+    	            markerOptions.position(new LatLong(r.getLatitude(), r.getLongitude()));
+    	            markerOptions.title(r.getKey() + "");
+    	            markerOptions.label(r.getIncidentAddress() + "\n" + r.getCreatedDateTime());
+    	            markerList.add(new Marker(markerOptions));
+    	        }
+    	        map.addMarkers(markerList);
+    	        progressIndicator.setVisible(false);
+			}
+		}, filteredList, filter);;
     }
 
 	@Override

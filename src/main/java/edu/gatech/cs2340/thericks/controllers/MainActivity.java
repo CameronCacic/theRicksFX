@@ -11,13 +11,11 @@ import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MainActivity extends Application {
 	
-	private static final int POPUP_HEIGHT = 200;
-	private static final int POPUP_WIDTH = 300;
+	private static final int MAX_LOGIN_WIDTH = 150;
 	
 	private static Stage primaryStage;
 	private static BorderPane mainPane;
@@ -27,10 +25,6 @@ public class MainActivity extends Application {
 		primaryStage = pStage;
 		
 		mainPane = new BorderPane();
-		
-		primaryStage.setScene(new Scene(mainPane));
-		primaryStage.setMaximized(true);
-		primaryStage.show();
     	
     	RatFilter filter = RatFilter.getDefaultInstance();
     	User[] user = new User[1];
@@ -45,6 +39,8 @@ public class MainActivity extends Application {
 					if (filterCallback[0] != null) {
 						filterCallback[0].notifyFilterUpdated();
 					}
+				} else {
+					mainPane.setRight(null);
 				}
 			}
 			
@@ -59,6 +55,7 @@ public class MainActivity extends Application {
 						filterCallback[0].notifyFilterUpdated();
 					}
 				}
+				mainPane.setRight(null);
 			}
 			
 		};
@@ -115,20 +112,14 @@ public class MainActivity extends Application {
 			
 		};
 		
-		Stage stage = new Stage();
-    	stage.setHeight(POPUP_HEIGHT);
-    	stage.setWidth(POPUP_WIDTH);
-    	stage.initModality(Modality.APPLICATION_MODAL);
-    	stage.initOwner(primaryStage);
-		
     	ResultObtainedCallback<User> getUserResult = new ResultObtainedCallback<User>() {
 
 			@Override
 			public void onResultObtained(User result) {
 				if (result != null) {
 					user[0] = result;
-					stage.close();
 					mainPane.setLeft(new DashboardActivity(user[0], dashboardResult));
+					mainPane.setCenter(null);
 				} else {
 					primaryStage.close();
 				}
@@ -144,14 +135,14 @@ public class MainActivity extends Application {
 				if (result == RESULT_LOGIN) {
 					
 					LoginActivity loginActivity = new LoginActivity(getUserResult);
-					stage.setScene(new Scene(loginActivity));
-					stage.sizeToScene();
+					loginActivity.setMaxWidth(MAX_LOGIN_WIDTH);
+					mainPane.setCenter(loginActivity);
 					
 				} else if (result == RESULT_REGISTER) {
 					
 					RegisterActivity registerActivity = new RegisterActivity(getUserResult);
-					stage.setScene(new Scene(registerActivity));
-					stage.sizeToScene();
+					registerActivity.setMaxWidth(MAX_LOGIN_WIDTH);
+					mainPane.setCenter(registerActivity);
 					
 				} else {
 					
@@ -161,8 +152,12 @@ public class MainActivity extends Application {
 			}
 			
 		});
-		stage.setScene(new Scene(welcomeActivity));
-		stage.showAndWait();
+		welcomeActivity.setMaxWidth(MAX_LOGIN_WIDTH);
+		mainPane.setCenter(welcomeActivity);
+		
+		primaryStage.setScene(new Scene(mainPane));
+		primaryStage.setMaximized(true);
+		primaryStage.show();
 	}
 	
 	@Override

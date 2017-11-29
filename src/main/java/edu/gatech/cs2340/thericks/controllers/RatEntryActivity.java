@@ -1,6 +1,7 @@
 package edu.gatech.cs2340.thericks.controllers;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -13,6 +14,8 @@ import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -68,7 +71,11 @@ public class RatEntryActivity extends VBox {
     	ratData = r;
     	callback = call;
     	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_rat_entry.fxml"));
+    	setSpacing(5);
+    	setPadding(new Insets(5));
+    	setAlignment(Pos.TOP_LEFT);
+    	
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_rat_entry.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {
@@ -81,6 +88,7 @@ public class RatEntryActivity extends VBox {
     public void initialize() {
 
         if (ratData != null) {
+        	Log.d(TAG, "Rat data passed in, populating fields with its data");
             key.setText(String.valueOf(ratData.getKey()));
             date.setDateTimeValue(DateUtility.parse(ratData.getCreatedDateTime()));
             locationType.setText(ratData.getLocationType());
@@ -91,7 +99,9 @@ public class RatEntryActivity extends VBox {
             latitude.setText(String.format(Locale.ENGLISH, "%8f", ratData.getLatitude()));
             longitude.setText(String.format(Locale.ENGLISH, "%8f", ratData.getLongitude()));
         } else {
-            Log.d(TAG, "No rat data passed in.");
+            Log.d(TAG, "No rat data passed in, populating with current default data");
+            date.setDateTimeValue(LocalDateTime.now());
+            //set location but don't know how to access windows location services
         }
 
         key.textProperty().addListener((observable, oldValue, newValue) -> {

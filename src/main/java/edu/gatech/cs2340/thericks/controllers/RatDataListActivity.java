@@ -9,6 +9,7 @@ import edu.gatech.cs2340.thericks.utils.DataLoadedCallback;
 import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -102,8 +103,18 @@ public class RatDataListActivity extends AnchorPane implements NewFilterCallback
     			subBox.getChildren().addAll(address, spacer, dateTime);
     			
     			mainBox.getChildren().addAll(city, subBox);
-    			
-    			setGraphic(mainBox);
+    			if (Platform.isFxApplicationThread()) {
+    				setGraphic(mainBox);
+    			} else {
+    				Platform.runLater(new Runnable() {
+						
+						@Override
+						public void run() {
+							setGraphic(mainBox);
+						}
+						
+					});
+    			}
     		}
     	}
     }

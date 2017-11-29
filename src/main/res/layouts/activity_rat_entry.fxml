@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import tornadofx.control.DateTimePicker?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="VBox">
+	<children>
+		<Text text="Key"/>
+		<TextField fx:id="key"/>
+		<Text text="Date and Time"/>
+		<DateTimePicker fx:id="date"/>
+		<Text text="Location Type"/>
+		<TextField fx:id="locationType"/>
+		<Text text="Address"/>
+		<TextField fx:id="address"/>
+		<Text text="Zip Code"/>
+		<TextField fx:id="zip"/>
+		<Text text="Borough"/>
+		<TextField fx:id="borough"/>
+		<Text text="City"/>
+		<TextField fx:id="city"/>
+		<Text text="Latitude"/>
+		<TextField fx:id="latitude"/>
+		<Text text="Longitude"/>
+		<TextField fx:id="longitude"/>
+		<HBox>
+			<children>
+				<Button fx:id="saveButton" text="Save"/>
+				<Pane HBox.hgrow="ALWAYS"/>
+				<Button fx:id="cancelButton" text="Cancel"/>
+			</children>
+		</HBox>
+	</children>
+</fx:root>
+

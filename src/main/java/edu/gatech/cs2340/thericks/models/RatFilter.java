@@ -2,8 +2,6 @@ package edu.gatech.cs2340.thericks.models;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -427,6 +425,7 @@ public class RatFilter {
         RatFilter filter = new RatFilter();
         filter.setBeginDate(DateUtility.getLastMonth());
         filter.setEndDate(LocalDateTime.now());
+        filter.setPredicateEnabled(DATE, true);
         return filter;
     }
 }

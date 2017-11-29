@@ -6,7 +6,11 @@ import java.util.List;
 
 import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.event.UIEventHandler;
+import com.lynden.gmapsfx.javascript.event.UIEventType;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.InfoWindow;
+import com.lynden.gmapsfx.javascript.object.InfoWindowOptions;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
 import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
@@ -23,6 +27,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 
 public class MapActivity extends AnchorPane implements MapComponentInitializedListener, NewFilterCallback {
 	
@@ -79,15 +84,29 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
 			
 			@Override
 			public void notifyDataLoaded() {
-				List<Marker> markerList = new ArrayList<>();
+				Log.d(TAG, "Populating the map");
     	        for (RatData r: filteredList) {
     	            MarkerOptions markerOptions = new MarkerOptions();
     	            markerOptions.position(new LatLong(r.getLatitude(), r.getLongitude()));
-    	            markerOptions.title(r.getKey() + "");
-    	            markerOptions.label(r.getIncidentAddress() + "\n" + r.getCreatedDateTime());
-    	            markerList.add(new Marker(markerOptions));
+    	            List<Marker> markerHolder = new ArrayList<Marker>();
+    	            markerHolder.add(new Marker(markerOptions));
+    	            map.addMarkers(markerHolder, UIEventType.click, new Callback<Marker, UIEventHandler>() {
+    					
+    					@Override
+    					public UIEventHandler call(Marker marker) {
+    						InfoWindowOptions infoWindowOptions = new InfoWindowOptions();
+    				        infoWindowOptions.content("<h2>" + r.getCity() + "</h2>"
+    				                                + r.getIncidentAddress() + "<br>"
+    				                                + r.getCreatedDateTime() );
+
+    				        InfoWindow infoWindow = new InfoWindow(infoWindowOptions);
+    				        infoWindow.open(map, marker);
+
+    						return null;
+    					}
+    					
+    				});
     	        }
-    	        map.addMarkers(markerList);
     	        progressIndicator.setVisible(false);
 			}
 		}, filteredList, filter);;

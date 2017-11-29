@@ -1,6 +1,5 @@
 package edu.gatech.cs2340.thericks.controllers;
 
-import java.awt.Checkbox;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -10,9 +9,11 @@ import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.DateUtility;
 import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import tornadofx.control.DateTimePicker;
@@ -30,28 +31,28 @@ public class FilterActivity extends VBox {
     public static final String FILTER = "FILTER";
 
     @FXML
-    private Checkbox dateAndTimeCheck;
+    private CheckBox dateAndTimeCheck;
     
     @FXML
-    private Checkbox locationTypeCheck;
+    private CheckBox locationTypeCheck;
     
     @FXML
-    private Checkbox zipCheck;
+    private CheckBox zipCheck;
     
     @FXML
-    private Checkbox addressCheck;
+    private CheckBox addressCheck;
     
     @FXML
-    private Checkbox cityCheck;
+    private CheckBox cityCheck;
     
     @FXML
-    private Checkbox boroughCheck;
+    private CheckBox boroughCheck;
     
     @FXML
-    private Checkbox latitudeCheck;
+    private CheckBox latitudeCheck;
     
     @FXML
-    private Checkbox longitudeCheck;
+    private CheckBox longitudeCheck;
 
     @FXML
     private DateTimePicker dateTimePickerBegin;
@@ -85,6 +86,9 @@ public class FilterActivity extends VBox {
     
     @FXML
     private TextField maxLongitudeEdit;
+    
+    @FXML
+    private Text dateSeparator;
 
     @FXML
     private Text latSeparator;
@@ -107,7 +111,7 @@ public class FilterActivity extends VBox {
     	assert u != null;
     	user = u;
     	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_filter.fxml"));
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_filter.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {
@@ -117,51 +121,61 @@ public class FilterActivity extends VBox {
 		}
 	}
     
-    @FXML
     public void initialize() {
         Log.d(TAG, "Entered Filter Activity");
 
         if (filter.hasPredicate(RatFilter.DATE)) {
         	LocalDateTime dateTimeBegin = LocalDateTime.parse(filter.getBeginDateStr()
         			+ " " + filter.getBeginTimeStr(), DateUtility.DATE_TIME_FORMAT);
+        	LocalDateTime dateTimeEnd = LocalDateTime.parse(filter.getEndDateStr()
+        			+ " " + filter.getEndTimeStr(), DateUtility.DATE_TIME_FORMAT);
             dateTimePickerBegin.setDateTimeValue(dateTimeBegin);
+            dateTimePickerEnd.setDateTimeValue(dateTimeEnd);
+            dateTimePickerBegin.setFormat(DateUtility.DATE_TIME_PATTERN);
+            dateTimePickerEnd.setFormat(DateUtility.DATE_TIME_PATTERN);
             if (filter.isPredicateEnabled(RatFilter.DATE)) {
-                dateAndTimeCheck.setState(true);
+            	dateAndTimeCheck.setSelected(true);
+                onDateAndTimeCheckClicked(null);
             }
         }
 
         if (filter.hasPredicate(RatFilter.LOCATION_TYPE)) {
             locationTypeEdit.setText(filter.getLocationType());
             if (filter.isPredicateEnabled(RatFilter.LOCATION_TYPE)) {
-                locationTypeCheck.setState(true);
+            	locationTypeCheck.setSelected(true);
+                onLocationTypeCheckClicked(null);
             }
         }
 
         if (filter.hasPredicate(RatFilter.ZIP)) {
             zipEdit.setText(String.format(Locale.ENGLISH, "%d", filter.getZip()));
             if (filter.isPredicateEnabled(RatFilter.ZIP)) {
-                zipCheck.setState(true);
+            	zipCheck.setSelected(true);
+                onZipCheckClicked(null);
             }
         }
 
         if (filter.hasPredicate(RatFilter.ADDRESS)) {
             addressEdit.setText(filter.getAddress());
             if (filter.isPredicateEnabled(RatFilter.ADDRESS)) {
-                addressCheck.setState(true);
+            	addressCheck.setSelected(true);
+                onAddressCheckClicked(null);
             }
         }
 
         if (filter.hasPredicate(RatFilter.CITY)) {
             cityEdit.setText(filter.getCity());
             if (filter.isPredicateEnabled(RatFilter.CITY)) {
-                cityCheck.setState(true);
+            	cityCheck.setSelected(true);
+                onCityCheckClicked(null);
             }
         }
 
         if (filter.hasPredicate(RatFilter.BOROUGH)) {
             boroughEdit.setText(filter.getBorough());
             if (filter.isPredicateEnabled(RatFilter.BOROUGH)) {
-                boroughCheck.setState(true);
+            	boroughCheck.setSelected(true);
+                onBoroughCheckClicked(null);
             }
         }
 
@@ -171,7 +185,8 @@ public class FilterActivity extends VBox {
             maxLatitudeEdit.setText(
             		String.format(Locale.ENGLISH, "%f", filter.getMaxLatitude()));
             if (filter.isPredicateEnabled(RatFilter.LATITUDE)) {
-                latitudeCheck.setState(true);
+            	latitudeCheck.setSelected(true);
+                onLatitudeCheckClicked(null);
             }
         }
 
@@ -181,7 +196,8 @@ public class FilterActivity extends VBox {
             maxLongitudeEdit.setText(
                     String.format(Locale.ENGLISH, "%f", filter.getMaxLongitude()));
             if (filter.isPredicateEnabled(RatFilter.LONGITUDE)) {
-                longitudeCheck.setState(true);
+            	longitudeCheck.setSelected(true);
+                onLongitudeCheckClicked(null);
             }
         }
     }
@@ -191,53 +207,54 @@ public class FilterActivity extends VBox {
      * activity into the RatFilter object
      * @param v the clicked view
      */
-    public void onApplyButtonClicked() {
+    @FXML
+    public void onApplyButtonClicked(ActionEvent e) {
         filter.setBeginDate(dateTimePickerBegin.getDateTimeValue());
         filter.setEndDate(dateTimePickerEnd.getDateTimeValue());
-        filter.setPredicateEnabled(RatFilter.DATE, dateAndTimeCheck.getState());
+        filter.setPredicateEnabled(RatFilter.DATE, dateAndTimeCheck.isSelected());
 
         filter.setLocationType(locationTypeEdit.getText().toString());
-        filter.setPredicateEnabled(RatFilter.LOCATION_TYPE, locationTypeCheck.getState());
+        filter.setPredicateEnabled(RatFilter.LOCATION_TYPE, locationTypeCheck.isSelected());
 
         try {
             filter.setZip(Integer.parseInt(zipEdit.getText().toString()));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e1) {
             filter.setZip(null);
         }
-        filter.setPredicateEnabled(RatFilter.ZIP, zipCheck.getState());
+        filter.setPredicateEnabled(RatFilter.ZIP, zipCheck.isSelected());
 
         filter.setAddress(addressEdit.getText().toString());
-        filter.setPredicateEnabled(RatFilter.ADDRESS, addressCheck.getState());
+        filter.setPredicateEnabled(RatFilter.ADDRESS, addressCheck.isSelected());
 
         filter.setCity(cityEdit.getText().toString());
-        filter.setPredicateEnabled(RatFilter.CITY, cityCheck.getState());
+        filter.setPredicateEnabled(RatFilter.CITY, cityCheck.isSelected());
 
         filter.setBorough(boroughEdit.getText().toString());
-        filter.setPredicateEnabled(RatFilter.BOROUGH, boroughCheck.getState());
+        filter.setPredicateEnabled(RatFilter.BOROUGH, boroughCheck.isSelected());
 
         try {
             filter.setMinLatitude(Double.parseDouble(minLatitudeEdit.getText().toString()));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e1) {
             filter.setMinLatitude(null);
         }
         try {
             filter.setMaxLatitude(Double.parseDouble(maxLatitudeEdit.getText().toString()));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e1) {
             filter.setMaxLatitude(null);
         }
-        filter.setPredicateEnabled(RatFilter.LATITUDE, latitudeCheck.getState());
+        filter.setPredicateEnabled(RatFilter.LATITUDE, latitudeCheck.isSelected());
 
         try {
             filter.setMinLongitude(Double.parseDouble(minLongitudeEdit.getText().toString()));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e1) {
             filter.setMinLongitude(null);
         }
         try {
             filter.setMaxLongitude(Double.parseDouble(maxLongitudeEdit.getText().toString()));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e1) {
             filter.setMaxLongitude(null);
         }
-        filter.setPredicateEnabled(RatFilter.LONGITUDE, longitudeCheck.getState());
+        filter.setPredicateEnabled(RatFilter.LONGITUDE, longitudeCheck.isSelected());
 
         callback.onResultObtained(ResultObtainedCallback.RESULT_OK);
     }
@@ -246,7 +263,8 @@ public class FilterActivity extends VBox {
      * Handles the cancel button being clicked. Cancels the result
      * @param v the clicked view
      */
-    public void onCancelButtonClicked() {
+    @FXML
+    public void onCancelButtonClicked(ActionEvent e) {
     	callback.onResultObtained(ResultObtainedCallback.RESULT_CANCELED);
     }
 
@@ -254,15 +272,16 @@ public class FilterActivity extends VBox {
      * Handles the clear button being pressed. Un-checks all filters
      * @param v the clicked view
      */
-    public void onClearButtonClicked() {
-        dateAndTimeCheck.setState(false);
-        locationTypeCheck.setState(false);
-        zipCheck.setState(false);
-        addressCheck.setState(false);
-        cityCheck.setState(false);
-        boroughCheck.setState(false);
-        latitudeCheck.setState(false);
-        longitudeCheck.setState(false);
+    @FXML
+    public void onClearButtonClicked(ActionEvent e) {
+        dateAndTimeCheck.setSelected(false);
+        locationTypeCheck.setSelected(false);
+        zipCheck.setSelected(false);
+        addressCheck.setSelected(false);
+        cityCheck.setSelected(false);
+        boroughCheck.setSelected(false);
+        latitudeCheck.setSelected(false);
+        longitudeCheck.setSelected(false);
         filter.disableAllPredicates();
     }
 
@@ -270,13 +289,22 @@ public class FilterActivity extends VBox {
      * Toggles the date and time filter views
      * @param v the clicked view
      */
-    public void onDateAndTimeCheckClicked() {
-        if (dateAndTimeCheck.getState()) {
+    @FXML
+    public void onDateAndTimeCheckClicked(ActionEvent e) {
+        if (dateAndTimeCheck.isSelected()) {
             dateTimePickerBegin.setVisible(true);
+            dateTimePickerBegin.setManaged(true);
+            dateSeparator.setVisible(true);
+            dateSeparator.setManaged(true);
             dateTimePickerEnd.setVisible(true);
+            dateTimePickerEnd.setManaged(true);
         } else {
             dateTimePickerBegin.setVisible(false);
+            dateTimePickerBegin.setManaged(false);
+            dateSeparator.setVisible(false);
+            dateSeparator.setManaged(false);
             dateTimePickerEnd.setVisible(false);
+            dateTimePickerEnd.setManaged(false);
         }
     }
 
@@ -284,12 +312,14 @@ public class FilterActivity extends VBox {
      * Toggles location type filter view
      * @param v the clicked view
      */
-    public void onLocationTypeCheckClicked() {
-        if (locationTypeCheck.getState()) {
+    @FXML
+    public void onLocationTypeCheckClicked(ActionEvent e) {
+        if (!locationTypeCheck.isSelected()) {
             locationTypeEdit.setVisible(false);
+            locationTypeEdit.setManaged(false);
         } else {
-            locationTypeCheck.setState(true);
             locationTypeEdit.setVisible(true);
+            locationTypeEdit.setManaged(true);
         }
     }
 
@@ -297,11 +327,14 @@ public class FilterActivity extends VBox {
      * Toggles zip code filter views
      * @param v the clicked view
      */
-    public void onZipCheckClicked() {
-        if (zipCheck.getState()) {
+    @FXML
+    public void onZipCheckClicked(ActionEvent e) {
+        if (!zipCheck.isSelected()) {
             zipEdit.setVisible(false);
+            zipEdit.setManaged(false);
         } else {
             zipEdit.setVisible(true);
+            zipEdit.setManaged(true);
         }
     }
 
@@ -309,11 +342,14 @@ public class FilterActivity extends VBox {
      * Toggles the address filter views
      * @param v the clicked view
      */
-    public void onAddressCheckClicked() {
-        if (addressCheck.getState()) {
+    @FXML
+    public void onAddressCheckClicked(ActionEvent e) {
+        if (!addressCheck.isSelected()) {
             addressEdit.setVisible(false);
+            addressEdit.setManaged(false);
         } else {
             addressEdit.setVisible(true);
+            addressEdit.setManaged(true);
         }
     }
 
@@ -321,11 +357,14 @@ public class FilterActivity extends VBox {
      * Toggles the city filter views
      * @param v the clicked view
      */
-    public void onCityCheckClicked() {
-        if (cityCheck.getState()) {
+    @FXML
+    public void onCityCheckClicked(ActionEvent e) {
+        if (!cityCheck.isSelected()) {
             cityEdit.setVisible(false);
+            cityEdit.setManaged(false);
         } else {
             cityEdit.setVisible(true);
+            cityEdit.setManaged(true);
         }
     }
 
@@ -333,11 +372,14 @@ public class FilterActivity extends VBox {
      * Toggles the borough filter views
      * @param v the clicked view
      */
-    public void onBoroughCheckClicked() {
-        if (boroughCheck.getState()) {
+    @FXML
+    public void onBoroughCheckClicked(ActionEvent e) {
+        if (!boroughCheck.isSelected()) {
             boroughEdit.setVisible(false);
+            boroughEdit.setManaged(false);
         } else {
             boroughEdit.setVisible(true);
+            boroughEdit.setManaged(true);
         }
     }
 
@@ -345,15 +387,22 @@ public class FilterActivity extends VBox {
      * Toggles the latitude filter views
      * @param v the clicked view
      */
-    public void onLatitudeCheckClicked() {
-        if (latitudeCheck.getState()) {
+    @FXML
+    public void onLatitudeCheckClicked(ActionEvent e) {
+        if (!latitudeCheck.isSelected()) {
             minLatitudeEdit.setVisible(false);
+            minLatitudeEdit.setManaged(false);
             maxLatitudeEdit.setVisible(false);
+            maxLatitudeEdit.setManaged(false);
             latSeparator.setVisible(false);
+            latSeparator.setManaged(false);
         } else {
             minLatitudeEdit.setVisible(true);
+            minLatitudeEdit.setManaged(true);
             maxLatitudeEdit.setVisible(true);
+            maxLatitudeEdit.setManaged(true);
             latSeparator.setVisible(true);
+            latSeparator.setManaged(true);
         }
     }
 
@@ -361,15 +410,22 @@ public class FilterActivity extends VBox {
      * Toggles the longitude filter views
      * @param v the clicked view
      */
-    public void onLongitudeCheckClicked() {
-        if (longitudeCheck.getState()) {
+    @FXML
+    public void onLongitudeCheckClicked(ActionEvent e) {
+        if (longitudeCheck.isSelected()) {
             minLongitudeEdit.setVisible(false);
+            minLongitudeEdit.setManaged(false);
             maxLongitudeEdit.setVisible(false);
+            maxLongitudeEdit.setManaged(false);
             longSeparator.setVisible(false);
+            longSeparator.setManaged(false);
         } else {
             minLongitudeEdit.setVisible(true);
+            minLongitudeEdit.setManaged(true);
             maxLongitudeEdit.setVisible(true);
+            maxLongitudeEdit.setManaged(true);
             longSeparator.setVisible(true);
+            longSeparator.setManaged(true);
         }
     }
 }

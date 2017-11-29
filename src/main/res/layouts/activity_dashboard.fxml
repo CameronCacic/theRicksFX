@@ -12,6 +12,7 @@
 		<Button fx:id="settingsButton" text="Settings"/>
 		<Button fx:id="reportRatButton" text="Report a Rat"/>
 		<Button fx:id="logoutButton" text="Logout"/>
+		<Button fx:id="filterButton" text="Edit Filters"/>
 	</children>
 </fx:root>
 

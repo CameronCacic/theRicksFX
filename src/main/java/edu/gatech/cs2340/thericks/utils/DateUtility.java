@@ -21,12 +21,15 @@ import edu.gatech.cs2340.thericks.models.RatData;
  */
 
 public class DateUtility {
+	public static final String DATE_TIME_PATTERN = "MM/dd/yyyy hh:mm:ss a";
     public static final DateTimeFormatter DATE_TIME_FORMAT 
-    		= DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
+    		= DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, Locale.ENGLISH);
+    public static final String TIME_PATTERN = "hh:mm:ss a";
     public static final DateTimeFormatter TIME_FORMAT
-    		= DateTimeFormatter.ofPattern("hh:mm:ss a", Locale.ENGLISH);
+    		= DateTimeFormatter.ofPattern(TIME_PATTERN, Locale.ENGLISH);
+    public static final String DATE_PATTERN = "MM/dd/yyyy";
     public static final DateTimeFormatter DATE_FORMAT
-    		= DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
+    		= DateTimeFormatter.ofPattern(DATE_PATTERN, Locale.ENGLISH);
 
     /**
      * Returns a Date object containing the date exactly one month from today
@@ -34,8 +37,7 @@ public class DateUtility {
      */
     public static LocalDateTime getLastMonth() {
         LocalDateTime dateTime = LocalDateTime.now();
-        dateTime.minusMonths(1);
-        return dateTime;
+        return dateTime.minusMonths(1);
     }
 
     /**

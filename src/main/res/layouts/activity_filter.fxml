@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.Pane?>
+<?import tornadofx.control.DateTimePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="VBox">
+	<children>
+		<HBox alignment="CENTER_LEFT" spacing="5.0">
+			<padding>
+				<Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<Button text="Apply" onAction="#onApplyButtonClicked"/>
+				<Button text="Cancel" onAction="#onCancelButtonClicked"/>
+				<Pane HBox.hgrow="ALWAYS"/>
+				<Button text="Clear" onAction="#onClearButtonClicked"/>
+			</children>
+		</HBox>
+		<HBox alignment="CENTER_LEFT">
+			<padding>
+				<Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<Text text="Date and Time"/>
+				<Pane HBox.hgrow="ALWAYS"/>
+				<CheckBox fx:id="dateAndTimeCheck" onAction="#onDateAndTimeCheckClicked"/>
+			</children>
+		</HBox>
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<DateTimePicker fx:id="dateTimePickerBegin" visible="false" managed="false"/>
+				<Text fx:id="dateSeparator" text="to" visible="false" managed="false"/>
+				<DateTimePicker fx:id="dateTimePickerEnd" visible="false" managed="false"/>
+			</children>
+		</VBox>
+		<HBox alignment="CENTER_LEFT">
+			<padding>
+				<Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<Text text="Location Type"/>
+				<Pane HBox.hgrow="ALWAYS"/>
+				<CheckBox fx:id="locationTypeCheck" onAction="#onLocationTypeCheckClicked"/>
+			</children>
+		</HBox>
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<TextField fx:id="locationTypeEdit" visible="false" managed="false"/>
+			</children>
+		</VBox>
+		<HBox alignment="CENTER_LEFT">
+			<padding>
+				<Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<Text text="Zip Code"/>
+				<Pane HBox.hgrow="ALWAYS"/>
+				<CheckBox fx:id="zipCheck" onAction="#onZipCheckClicked"/>
+			</children>
+		</HBox>
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<TextField fx:id="zipEdit" visible="false" managed="false"/>
+			</children>
+		</VBox>
+		<HBox alignment="CENTER_LEFT">
+			<padding>
+				<Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<Text text="Address"/>
+				<Pane HBox.hgrow="ALWAYS"/>
+				<CheckBox fx:id="addressCheck" onAction="#onAddressCheckClicked"/>
+			</children>
+		</HBox>
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<TextField fx:id="addressEdit" visible="false" managed="false"/>
+			</children>
+		</VBox>
+		<HBox alignment="CENTER_LEFT">
+			<padding>
+				<Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<Text text="City"/>
+				<Pane HBox.hgrow="ALWAYS"/>
+				<CheckBox fx:id="cityCheck" onAction="#onCityCheckClicked"/>
+			</children>
+		</HBox>
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<TextField fx:id="cityEdit" visible="false" managed="false"/>
+			</children>
+		</VBox>
+		<HBox alignment="CENTER_LEFT">
+			<padding>
+				<Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<Text text="Borough"/>
+				<Pane HBox.hgrow="ALWAYS"/>
+				<CheckBox fx:id="boroughCheck" onAction="#onBoroughCheckClicked"/>
+			</children>
+		</HBox>
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<TextField fx:id="boroughEdit" visible="false" managed="false"/>
+			</children>
+		</VBox>
+		<HBox alignment="CENTER_LEFT">
+			<padding>
+				<Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<Text text="Latitude"/>
+				<Pane HBox.hgrow="ALWAYS"/>
+				<CheckBox fx:id="latitudeCheck" onAction="#onLatitudeCheckClicked"/>
+			</children>
+		</HBox>
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<TextField fx:id="minLatitudeEdit" visible="false" managed="false"/>
+				<Text fx:id="latSeparator" text="to" visible="false" managed="false"/>
+				<TextField fx:id="maxLatitudeEdit" visible="false" managed="false"/>
+			</children>
+		</VBox>
+		<HBox alignment="CENTER_LEFT">
+			<padding>
+				<Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<Text text="Longitude"/>
+				<Pane HBox.hgrow="ALWAYS"/>
+				<CheckBox fx:id="longitudeCheck" onAction="#onLongitudeCheckClicked"/>
+			</children>
+		</HBox>
+		<VBox alignment="CENTER" spacing="5.0">
+			<padding>
+				<Insets left="5.0" right="5.0"/>
+			</padding>
+			<children>
+				<TextField fx:id="minLongitudeEdit" visible="false" managed="false"/>
+				<Text fx:id="longSeparator" text="to" visible="false" managed="false"/>
+				<TextField fx:id="maxLongitudeEdit" visible="false" managed="false"/>
+			</children>
+		</VBox>
+	</children>
+</fx:root>
+

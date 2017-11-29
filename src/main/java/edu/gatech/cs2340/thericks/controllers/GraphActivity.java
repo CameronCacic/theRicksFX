@@ -53,7 +53,7 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
     	assert f != null;
 		filter = f;
 		
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("activity_graph.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_graph.fxml"));
     	loader.setController(this);
     	loader.setRoot(this);
 		try {

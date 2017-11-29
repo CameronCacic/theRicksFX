@@ -5,6 +5,7 @@ import java.io.IOException;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -49,6 +50,9 @@ public class DashboardActivity extends VBox {
     
     @FXML
     private Button logoutButton;
+    
+    @FXML
+    private Button filterButton;
 
     public DashboardActivity(User u, ResultObtainedCallback<Integer> call) {
     	callback = call;
@@ -106,6 +110,11 @@ public class DashboardActivity extends VBox {
             user.logout();
             Log.d(TAG, "Logout button pressed");
             callback.onResultObtained(ResultObtainedCallback.RESULT_LOGOUT);
+        });
+        
+        filterButton.setOnAction(e -> {
+        	Log.d(TAG, "Filter button pressed");
+        	callback.onResultObtained(ResultObtainedCallback.RESULT_FILTER);
         });
     }
 }

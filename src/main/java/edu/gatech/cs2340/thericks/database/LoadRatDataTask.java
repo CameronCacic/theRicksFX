@@ -14,13 +14,14 @@ import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.utils.DataLoadedCallback;
 import edu.gatech.cs2340.thericks.utils.Log;
+import javafx.concurrent.Task;
 
 /**
  * Async task that loads in rat data from the csv file and inserts it into a SQLite database.
  *
  * Created by Ben Lashley on 10/18/2017.
  */
-public class LoadRatDataTask extends Thread {
+public class LoadRatDataTask extends Task<Long> {
     private static final String TAG = LoadRatDataTask.class.getSimpleName();
 
     private static boolean isLoadingData = false;
@@ -41,13 +42,30 @@ public class LoadRatDataTask extends Thread {
     private static final int LATITUDE_NUMBER = 49;
     private static final int LONGITUDE_NUMBER = 50;
 
-    @Override
-    public void run() {
-    	onPostExecute(doInBackground());
+    /**
+     * Returns true if data is ready to start loading into the database for the first time
+     * @return true/false is data is ready
+     */
+    static boolean isReady() {
+        return !isLoadingData;
     }
-    
-    private Long doInBackground() {
-        isLoadingData = true;
+
+    /**
+     * Provides views from an activity calling the task, allowing for the UI to be asynchronously
+     * updated in onPostExecute
+     * @param a the ArrayAdapter that returns the views for each RatData Object
+     * @param data the list of RatData Objects whose views will be added
+     * @param filter the filters used to select certain RatData Objects
+     */
+    LoadRatDataTask(DataLoadedCallback callback, List<RatData> data, RatFilter filter) {
+        this.callback = callback;
+        this.data = data;
+        this.filters = new ArrayList<>(filter.getPredicates());
+    }
+
+	@Override
+	protected Long call() throws Exception {
+		isLoadingData = true;
         long lineCount = 0;
         if (!doneLoading) {
 			try {
@@ -117,16 +135,14 @@ public class LoadRatDataTask extends Thread {
             RatDatabase db = new RatDatabase();
             data.addAll(db.getFilteredRatData(new RatFilter(filters)));
         }
-        
-        return lineCount;
-    }
-
-    /**
-     * Mark that data is done loading and update any provided views
-     * @param lineCount the number of loaded lines
-     */
-    public void onPostExecute(Long lineCount) {
-        Log.d(TAG, "Loaded " + lineCount + " rat data entries");
+		
+		return lineCount;
+	}
+	
+	@Override
+	protected void succeeded() {
+		super.succeeded();
+		Log.d(TAG, "Loaded " + getValue() + " rat data entries");
         // Done loading data
         isLoadingData = false;
         // Update passed in UI
@@ -134,26 +150,5 @@ public class LoadRatDataTask extends Thread {
         if (callback != null) {
         	callback.notifyDataLoaded();
         }
-    }
-
-    /**
-     * Returns true if data is ready to start loading into the database for the first time
-     * @return true/false is data is ready
-     */
-    static boolean isReady() {
-        return !isLoadingData;
-    }
-
-    /**
-     * Provides views from an activity calling the task, allowing for the UI to be asynchronously
-     * updated in onPostExecute
-     * @param a the ArrayAdapter that returns the views for each RatData Object
-     * @param data the list of RatData Objects whose views will be added
-     * @param filter the filters used to select certain RatData Objects
-     */
-    void attachViews(DataLoadedCallback callback, List<RatData> data, RatFilter filter) {
-        this.callback = callback;
-        this.data = data;
-        this.filters = new ArrayList<>(filter.getPredicates());
-    }
+	}
 }

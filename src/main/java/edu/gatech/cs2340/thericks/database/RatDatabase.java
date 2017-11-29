@@ -42,9 +42,8 @@ public class RatDatabase implements RatDataSource {
             Log.d(TAG, "LoadRatDataTask was not ready to load data or data was already loaded");
         }
         Log.d(TAG, "Creating new LoadRatDataTask");
-        LoadRatDataTask loadData = new LoadRatDataTask();
-        loadData.attachViews(callback, data, filter);
-        loadData.start();;
+        LoadRatDataTask loadData = new LoadRatDataTask(callback, data, filter);
+        new Thread(loadData).start();
     }
 
     @Override

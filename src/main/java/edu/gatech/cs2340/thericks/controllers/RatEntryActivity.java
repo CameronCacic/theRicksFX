@@ -72,7 +72,7 @@ public class RatEntryActivity extends VBox {
     	callback = call;
     	
     	setSpacing(5);
-    	setPadding(new Insets(5));
+    	setPadding(new Insets(5, 5, 5, 20));
     	setAlignment(Pos.TOP_LEFT);
     	
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_rat_entry.fxml"));
@@ -101,6 +101,7 @@ public class RatEntryActivity extends VBox {
         } else {
             Log.d(TAG, "No rat data passed in, populating with current default data");
             date.setDateTimeValue(LocalDateTime.now());
+            saveButton.setText("Create");
             //set location but don't know how to access windows location services
         }
 

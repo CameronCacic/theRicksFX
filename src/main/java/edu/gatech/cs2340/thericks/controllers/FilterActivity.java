@@ -14,6 +14,7 @@ import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
@@ -29,7 +30,7 @@ public class FilterActivity extends VBox {
 
     private static final String TAG = FilterActivity.class.getSimpleName();
 
-    private static final double WIDTH = 400;
+    private static final double WIDTH = 420;
 
     @FXML
     private CheckBox dateAndTimeCheck;
@@ -114,6 +115,7 @@ public class FilterActivity extends VBox {
     	
     	setPrefWidth(WIDTH);
     	setMaxWidth(WIDTH);
+    	setPadding(new Insets(0, 0, 0, 15));
     	
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_filter.fxml"));
     	loader.setController(this);
@@ -279,13 +281,21 @@ public class FilterActivity extends VBox {
     @FXML
     public void onClearButtonClicked(ActionEvent e) {
         dateAndTimeCheck.setSelected(false);
+        onDateAndTimeCheckClicked(null);
         locationTypeCheck.setSelected(false);
+        onLocationTypeCheckClicked(null);
         zipCheck.setSelected(false);
+        onZipCheckClicked(null);
         addressCheck.setSelected(false);
+        onAddressCheckClicked(null);
         cityCheck.setSelected(false);
+        onCityCheckClicked(null);
         boroughCheck.setSelected(false);
+        onBoroughCheckClicked(null);
         latitudeCheck.setSelected(false);
+        onLatitudeCheckClicked(null);
         longitudeCheck.setSelected(false);
+        onLongitudeCheckClicked(null);
         filter.disableAllPredicates();
     }
 

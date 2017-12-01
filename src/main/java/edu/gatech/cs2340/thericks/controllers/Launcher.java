@@ -61,8 +61,6 @@ public class Launcher extends Application {
 		}
 		
 		primaryStage.setScene(scene);
-//		primaryStage.sizeToScene();
-//		primaryStage.setMaximized(false);
 		primaryStage.setMaximized(true);
 		if (!primaryStage.isShowing()) {
 			primaryStage.show();
@@ -72,5 +70,6 @@ public class Launcher extends Application {
 	@Override
 	public void stop() {
 		DatabaseHandler.closeInstance();
+		Log.d(TAG, "Shutting down cleanly");
 	}
 }

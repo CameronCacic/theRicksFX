@@ -61,7 +61,7 @@ public class DashboardActivity extends VBox {
     	callback = call;
     	user = u;
     	
-    	setPadding(new Insets(5));
+    	setPadding(new Insets(5, 20, 5, 5));
     	setSpacing(20);
     	setAlignment(Pos.CENTER_LEFT);
     	setStyle("-fx-font-size: 32pt;");

@@ -4,3 +4,7 @@
     -fx-base: rgb(188, 192, 211);
     -fx-background: rgb(118, 132, 207);
 }
+
+.chart {
+	-fx-background: derive(#ececec,26.4%);
+}

@@ -5,12 +5,33 @@ import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
+import javafx.geometry.Side;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 public class MainActivity extends BorderPane {
 	
 	private static final double MAX_LOGIN_WIDTH = 200;
 	private static final double MAX_REGISTER_WIDTH = 400;
+	
+	private static final HBox TOP_BORDER = new HBox();
+	static {
+		TOP_BORDER.setPrefHeight(20);
+		TOP_BORDER.setMinHeight(TOP_BORDER.getPrefHeight());
+		TOP_BORDER.setMaxHeight(TOP_BORDER.getPrefHeight());
+	}
+	private static final HBox BOTTOM_BORDER = new HBox();
+	static {
+		BOTTOM_BORDER.setPrefHeight(20);
+		BOTTOM_BORDER.setMinHeight(BOTTOM_BORDER.getPrefHeight());
+		BOTTOM_BORDER.setMaxHeight(BOTTOM_BORDER.getPrefHeight());
+	}
+	private static final HBox SIDE_BORDER = new HBox();
+	static {
+		SIDE_BORDER.setPrefWidth(20);
+		SIDE_BORDER.setMinWidth(SIDE_BORDER.getPrefHeight());
+		SIDE_BORDER.setMaxWidth(SIDE_BORDER.getPrefHeight());
+	}
 	
 	private ResultObtainedCallback<Integer> callback;
 	
@@ -19,6 +40,10 @@ public class MainActivity extends BorderPane {
 	}
 
 	public void initialize() {
+		
+		setRight(SIDE_BORDER);
+		setTop(TOP_BORDER);
+		setBottom(BOTTOM_BORDER);
     	
     	RatFilter filter = RatFilter.getDefaultInstance();
     	User[] user = new User[1];
@@ -34,7 +59,7 @@ public class MainActivity extends BorderPane {
 						filterCallback[0].notifyFilterUpdated();
 					}
 				} else {
-					setRight(null);
+					setRight(SIDE_BORDER);
 				}
 			}
 			
@@ -49,7 +74,7 @@ public class MainActivity extends BorderPane {
 						filterCallback[0].notifyFilterUpdated();
 					}
 				}
-				setRight(null);
+				setRight(SIDE_BORDER);
 			}
 			
 		};

@@ -25,6 +25,7 @@ import edu.gatech.cs2340.thericks.utils.DataLoadedCallback;
 import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import edu.gatech.cs2340.thericks.utils.RunningAverage;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
@@ -89,37 +90,45 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
 			public void notifyDataLoaded() {
 				Log.d(TAG, "Populating the map");
 				
-				RunningAverage latAverage = new RunningAverage();
-				RunningAverage longAverage = new RunningAverage();
-    	        for (RatData r: filteredList) {
-    	            MarkerOptions markerOptions = new MarkerOptions();
-    	            LatLong position = new LatLong(r.getLatitude(), r.getLongitude());
-    	            markerOptions.position(position);
-    	            Marker marker = new Marker(markerOptions);
-    	            
-    	            latAverage.add(position.getLatitude());
-    	            longAverage.add(position.getLongitude());
+				Platform.runLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						RunningAverage latAverage = new RunningAverage();
+						RunningAverage longAverage = new RunningAverage();
+		    	        for (RatData r: filteredList) {
+		    	            MarkerOptions markerOptions = new MarkerOptions();
+		    	            LatLong position = new LatLong(r.getLatitude(), r.getLongitude());
+		    	            markerOptions.position(position);//.icon(
+//		    	            		getClass().getResource("/drawable/ratbackgroundiconALPHA.png").toExternalForm());
+		    	            Marker marker = new Marker(markerOptions);
+		    	            
+		    	            latAverage.add(position.getLatitude());
+		    	            longAverage.add(position.getLongitude());
 
-    	            map.addMarker(marker);
-    	            map.addUIEventHandler(marker, UIEventType.click, new UIEventHandler() {
-						
-						@Override
-						public void handle(JSObject arg0) {
-							InfoWindowOptions infoWindowOptions = new InfoWindowOptions();
-    				        infoWindowOptions.content("<h2>" + r.getCity() + "</h2>"
-    				                                + r.getIncidentAddress() + "<br>"
-    				                                + r.getCreatedDateTime() );
-    				        InfoWindow infoWindow = new InfoWindow(infoWindowOptions);
-    				        infoWindow.open(map, marker);
-    				        map.panTo(position);
-						}
-						
-					});
-    	        }
-    	        progressIndicator.setVisible(false);
-    	        if (latAverage.hasAverage() && longAverage.hasAverage()) {
-    	        	map.panTo(new LatLong(latAverage.getCurrentAverage(), longAverage.getCurrentAverage()));
-    	        }
+		    	            map.addMarker(marker);
+		    	            map.addUIEventHandler(marker, UIEventType.click, new UIEventHandler() {
+								
+								@Override
+								public void handle(JSObject arg0) {
+									InfoWindowOptions infoWindowOptions = new InfoWindowOptions();
+		    				        infoWindowOptions.content("<h2>" + r.getCity() + "</h2>"
+		    				                                + r.getIncidentAddress() + "<br>"
+		    				                                + r.getCreatedDateTime() );
+		    				        InfoWindow infoWindow = new InfoWindow(infoWindowOptions);
+		    				        infoWindow.open(map, marker);
+		    				        map.panTo(position);
+								}
+								
+							});
+		    	        }
+		    	        progressIndicator.setVisible(false);
+		    	        if (latAverage.hasAverage() && longAverage.hasAverage()) {
+		    	        	map.panTo(new LatLong(latAverage.getCurrentAverage(), longAverage.getCurrentAverage()));
+		    	        }
+					}
+				});
+				
 			}
 		}, filteredList, filter);;
     }

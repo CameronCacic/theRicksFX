@@ -1,38 +1,24 @@
 package edu.gatech.cs2340.thericks.controllers;
 
-import edu.gatech.cs2340.thericks.database.DatabaseHandler;
 import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
-import edu.gatech.cs2340.thericks.utils.Log;
-import edu.gatech.cs2340.thericks.utils.Log.LogLevel;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
-public class MainActivity extends Application {
+public class MainActivity extends BorderPane {
 	
 	private static final double MAX_LOGIN_WIDTH = 200;
+	private static final double MAX_REGISTER_WIDTH = 400;
 	
-	private static Stage primaryStage;
-	private static BorderPane mainPane;
+	private ResultObtainedCallback<Integer> callback;
+	
+	public MainActivity(ResultObtainedCallback<Integer> call) {
+		callback = call;
+	}
 
-	@Override
-	public void start(Stage pStage) {
-		primaryStage = pStage;
-		
-		primaryStage.setTitle("Rat Tracker");
-		primaryStage.getIcons().clear();
-		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/drawable/ratbackgroundiconALPHA.png")));
-//		primaryStage.getIcons().addAll(new Image(getClass().getResourceAsStream("/drawable/ratbackgroundicon16.jpg")),
-//				new Image(getClass().getResourceAsStream("/drawable/ratbackgroundicon32.jpg")),
-//				new Image(getClass().getResourceAsStream("/drawable/ratbackgroundicon64.jpg")));
-		
-		mainPane = new BorderPane();
+	public void initialize() {
     	
     	RatFilter filter = RatFilter.getDefaultInstance();
     	User[] user = new User[1];
@@ -48,7 +34,7 @@ public class MainActivity extends Application {
 						filterCallback[0].notifyFilterUpdated();
 					}
 				} else {
-					mainPane.setRight(null);
+					setRight(null);
 				}
 			}
 			
@@ -63,7 +49,7 @@ public class MainActivity extends Application {
 						filterCallback[0].notifyFilterUpdated();
 					}
 				}
-				mainPane.setRight(null);
+				setRight(null);
 			}
 			
 		};
@@ -74,7 +60,7 @@ public class MainActivity extends Application {
 			public void onResultObtained(RatData result) {
 				if (result != null) {
 					RatEntryActivity ratEntryActivity = new RatEntryActivity(user[0], result, ratReportResult);
-					mainPane.setRight(ratEntryActivity);
+					setRight(ratEntryActivity);
 				}
 			}
 			
@@ -88,17 +74,17 @@ public class MainActivity extends Application {
 				case RESULT_MAP:
 					MapActivity mapActivity = new MapActivity(filter);
 					filterCallback[0] = mapActivity;
-					mainPane.setCenter(mapActivity);
+					setCenter(mapActivity);
 					break;
 				case RESULT_GRAPH:
 					GraphActivity graphActivity = new GraphActivity(filter);
 					filterCallback[0] = graphActivity;
-					mainPane.setCenter(graphActivity);
+					setCenter(graphActivity);
 					break;
 				case RESULT_DATA_LIST:
 					RatDataListActivity ratDataListActivity = new RatDataListActivity(filter, ratDataListResult);
 					filterCallback[0] = ratDataListActivity;
-					mainPane.setCenter(ratDataListActivity);
+					setCenter(ratDataListActivity);
 					break;
 				case RESULT_PROFILE:
 					break;
@@ -106,14 +92,14 @@ public class MainActivity extends Application {
 					break;
 				case RESULT_REPORT:
 					RatEntryActivity ratEntryActivity = new RatEntryActivity(user[0], null, ratReportResult);
-					mainPane.setRight(ratEntryActivity);
+					setRight(ratEntryActivity);
 					break;
 				case RESULT_LOGOUT:
-					start(primaryStage);
+					callback.onResultObtained(RESULT_RESTART);
 					break;
 				case RESULT_FILTER:
 					FilterActivity filterActivity = new FilterActivity(filter, user[0], filterResult);
-					mainPane.setRight(filterActivity);
+					setRight(filterActivity);
 					break;
 				}
 			}
@@ -126,12 +112,12 @@ public class MainActivity extends Application {
 			public void onResultObtained(User result) {
 				if (result != null) {
 					user[0] = result;
-					mainPane.setLeft(new DashboardActivity(user[0], dashboardResult));
+					setLeft(new DashboardActivity(user[0], dashboardResult));
 					MapActivity mapActivity = new MapActivity(filter);
 					filterCallback[0] = mapActivity;
-					mainPane.setCenter(mapActivity);
+					setCenter(mapActivity);
 				} else {
-					primaryStage.close();
+					callback.onResultObtained(RESULT_RESTART);
 				}
 			}
 			
@@ -146,43 +132,23 @@ public class MainActivity extends Application {
 					
 					LoginActivity loginActivity = new LoginActivity(getUserResult);
 					loginActivity.setMaxWidth(MAX_LOGIN_WIDTH);
-					mainPane.setCenter(loginActivity);
+					setCenter(loginActivity);
 					
 				} else if (result == RESULT_REGISTER) {
 					
 					RegisterActivity registerActivity = new RegisterActivity(getUserResult);
-					registerActivity.setMaxWidth(MAX_LOGIN_WIDTH);
-					mainPane.setCenter(registerActivity);
+					registerActivity.setMaxWidth(MAX_REGISTER_WIDTH);
+					setCenter(registerActivity);
 					
 				} else {
 					
-					primaryStage.close();
+					callback.onResultObtained(RESULT_STOP);
 					
 				}
 			}
 			
 		});
 		welcomeActivity.setMaxWidth(MAX_LOGIN_WIDTH);
-		mainPane.setCenter(welcomeActivity);
-		
-		Scene scene = new Scene(mainPane);
-		scene.getStylesheets().add(getClass().getResource("/styles/rat_tracker.css").toExternalForm());
-		primaryStage.setScene(scene);
-		if (!primaryStage.isMaximized()) {
-			primaryStage.setMaximized(true);
-		}
-		if (!primaryStage.isShowing()) {
-			primaryStage.show();
-		}
+		setCenter(welcomeActivity);
 	}
-	
-	@Override
-	public void stop() {
-		DatabaseHandler.closeInstance();
-	}
-	
-	public static void main(String[] args) {
-		Log.setLevel(LogLevel.DEBUG);
-		launch(args);
-    }
 }

@@ -36,6 +36,9 @@ public class LoginActivity extends VBox {
     private Button login;
     
     @FXML
+    private Button cancel;
+    
+    @FXML
     private Text error;
     
     private ResultObtainedCallback<User> callback;
@@ -89,5 +92,12 @@ public class LoginActivity extends VBox {
                 }
             }
         );
+        
+        cancel.setOnAction(e -> {
+        	
+        	Log.d(TAG, "Canceling login");
+        	callback.onResultObtained(null);
+        	
+        });
     }
 }

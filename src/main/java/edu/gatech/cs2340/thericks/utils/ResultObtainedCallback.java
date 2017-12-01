@@ -14,6 +14,8 @@ public interface ResultObtainedCallback<T> {
 	static final int RESULT_REPORT = 8;
 	static final int RESULT_LOGOUT = 9;
 	static final int RESULT_FILTER = 10;
+	static final int RESULT_RESTART = 11;
+	static final int RESULT_STOP = 12;
 	
 	void onResultObtained(T result);
 }

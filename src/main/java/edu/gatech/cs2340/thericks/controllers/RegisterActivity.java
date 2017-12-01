@@ -57,6 +57,9 @@ public class RegisterActivity extends VBox {
     
     @FXML
     private Button createAccount;
+    
+    @FXML
+    private Button cancelAccount;
 
     private UserDatabase db;
     private ResultObtainedCallback<User> callback;
@@ -66,7 +69,7 @@ public class RegisterActivity extends VBox {
     	
     	setPadding(new Insets(5));
     	setSpacing(5);
-    	setAlignment(Pos.CENTER);
+    	setAlignment(Pos.CENTER_LEFT);
     	
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_register.fxml"));
     	loader.setController(this);
@@ -141,6 +144,9 @@ public class RegisterActivity extends VBox {
                 
                 callback.onResultObtained(u);
             }
+        });
+        cancelAccount.setOnAction(e -> {
+        	callback.onResultObtained(null);
         });
     }
 }

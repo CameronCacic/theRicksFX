@@ -5,7 +5,6 @@ import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
-import javafx.geometry.Side;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 

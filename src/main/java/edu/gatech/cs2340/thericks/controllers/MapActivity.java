@@ -28,6 +28,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import netscape.javascript.JSObject;
 
 public class MapActivity extends AnchorPane implements MapComponentInitializedListener, NewFilterCallback {
 	
@@ -88,24 +89,22 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
     	        for (RatData r: filteredList) {
     	            MarkerOptions markerOptions = new MarkerOptions();
     	            markerOptions.position(new LatLong(r.getLatitude(), r.getLongitude()));
-    	            List<Marker> markerHolder = new ArrayList<Marker>();
-    	            markerHolder.add(new Marker(markerOptions));
-    	            map.addMarkers(markerHolder, UIEventType.click, new Callback<Marker, UIEventHandler>() {
-    					
-    					@Override
-    					public UIEventHandler call(Marker marker) {
-    						InfoWindowOptions infoWindowOptions = new InfoWindowOptions();
+    	            Marker marker = new Marker(markerOptions);
+
+    	            map.addMarker(marker);
+    	            map.addUIEventHandler(marker, UIEventType.click, new UIEventHandler() {
+						
+						@Override
+						public void handle(JSObject arg0) {
+							InfoWindowOptions infoWindowOptions = new InfoWindowOptions();
     				        infoWindowOptions.content("<h2>" + r.getCity() + "</h2>"
     				                                + r.getIncidentAddress() + "<br>"
     				                                + r.getCreatedDateTime() );
-
     				        InfoWindow infoWindow = new InfoWindow(infoWindowOptions);
     				        infoWindow.open(map, marker);
-
-    						return null;
-    					}
-    					
-    				});
+						}
+						
+					});
     	        }
     	        progressIndicator.setVisible(false);
 			}

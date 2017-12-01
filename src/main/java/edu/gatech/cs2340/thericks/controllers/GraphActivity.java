@@ -13,6 +13,7 @@ import edu.gatech.cs2340.thericks.utils.DataLoadedCallback;
 import edu.gatech.cs2340.thericks.utils.DateUtility;
 import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.chart.CategoryAxis;
@@ -31,8 +32,6 @@ import javafx.scene.text.Text;
 public class GraphActivity extends AnchorPane implements NewFilterCallback {
 
     private static final String TAG = GraphActivity.class.getSimpleName();
-
-    private static final float X_LABEL_ROTATION = 60f;
 
     private List<RatData> loadedData;
     
@@ -71,7 +70,6 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
 
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Month");
-        xAxis.setTickLabelRotation(X_LABEL_ROTATION);
         NumberAxis yAxis = new NumberAxis();
         chart = new LineChart<>(xAxis, yAxis);
         getChildren().add(chart);
@@ -89,7 +87,14 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
 			@Override
 			public void notifyDataLoaded() {
 				Log.d(TAG, "Notified that the data finished loading");
-                displayGraph();
+				Platform.runLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						displayGraph();
+					}
+					
+				});
 			}
 		};
 
@@ -99,7 +104,9 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
     
     @Override
 	public void notifyFilterUpdated() {
+    	Log.d(TAG, "Notified of a filter change");
         progressIndicator.setVisible(true);
+        chart.setVisible(false);
         RatDatabase db = new RatDatabase();
         db.loadData(dataCallback, loadedData, filter);
 	}
@@ -109,8 +116,6 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
      * and gets the needed data from the database
      */
     private void displayGraph() {
-        progressIndicator.setVisible(true);
-        chart.setVisible(false);
         noDataText.setVisible(false);
 
         Log.d(TAG, "Sorting data");
@@ -154,6 +159,8 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
                 				DateUtility.filterByDate(beginDateTime, oneMoreMonth, loadedData).size()));
                 beginDateTime = beginDateTime.plusMonths(1);
             }
+            
+            chart.getData().clear();
 
             chart.getData().add(series);
 

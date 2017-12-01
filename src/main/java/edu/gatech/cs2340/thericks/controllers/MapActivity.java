@@ -117,7 +117,9 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
 					});
     	        }
     	        progressIndicator.setVisible(false);
-    	        map.panTo(new LatLong(latAverage.getCurrentAverage(), longAverage.getCurrentAverage()));
+    	        if (latAverage.hasAverage() && longAverage.hasAverage()) {
+    	        	map.panTo(new LatLong(latAverage.getCurrentAverage(), longAverage.getCurrentAverage()));
+    	        }
 			}
 		}, filteredList, filter);;
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.PasswordField?>
@@ -11,8 +12,26 @@
 
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="VBox" spacing="5.0">
 	<children>
-		<Text text="Login"/>
-		<TextField fx:id="username"/>
+		<Text text="Login" style="-fx-font-size: 48pt;">
+			<VBox.margin>
+				<Insets bottom="20"/>
+			</VBox.margin>
+		</Text>
+		<HBox alignment="CENTER_LEFT">
+			<children>
+				<Text text="Username"/>
+			</children>
+		</HBox>
+		<TextField fx:id="username">
+			<VBox.margin>
+				<Insets bottom="10"/>
+			</VBox.margin>
+		</TextField>
+		<HBox alignment="CENTER_LEFT">
+			<children>
+				<Text text="Password"/>
+			</children>
+		</HBox>
 		<PasswordField fx:id="password"/>
 		<Text fx:id="error" text="Password or username is incorrect" visible="false"/>
 		<HBox alignment="CENTER">

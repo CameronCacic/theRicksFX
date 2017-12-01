@@ -10,7 +10,7 @@
 
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="VBox" spacing="5.0">
 	<children>
-		<Text text="Username"/>
+		<Text text="Username" style="-fx-font-size: 32pt;"/>
 		<TextField fx:id="usernameEntry"/>
 		<Text fx:id="invalidUsername" text="Username is invalid"/>
 		<Text text="Password"/>

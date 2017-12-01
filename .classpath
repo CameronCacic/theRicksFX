@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="src/main/res/plugins/tornadofx-controls-1.0.6.jar"/>
 	<classpathentry kind="lib" path="src/main/res/plugins/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="src/main/res/plugins/slf4j-simple-1.7.25.jar"/>
+	<classpathentry kind="lib" path="src/main/res/plugins/flatter-0.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

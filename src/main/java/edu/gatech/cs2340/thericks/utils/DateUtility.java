@@ -39,6 +39,15 @@ public class DateUtility {
         LocalDateTime dateTime = LocalDateTime.now();
         return dateTime.minusMonths(1);
     }
+    
+    /**
+     * Returns a Date object containing the date yesterday
+     * @return the Date yesterday
+     */
+    public static LocalDateTime getYesterday() {
+        LocalDateTime dateTime = LocalDateTime.now();
+        return dateTime.minusDays(1);
+    }
 
     /**
      * Parses the input String using the static DATE_TIME_FORMAT DateFormat object

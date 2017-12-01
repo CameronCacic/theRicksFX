@@ -423,7 +423,7 @@ public class RatFilter {
      */
     public static RatFilter getDefaultInstance() {
         RatFilter filter = new RatFilter();
-        filter.setBeginDate(DateUtility.getLastMonth());
+        filter.setBeginDate(DateUtility.getYesterday());
         filter.setEndDate(LocalDateTime.now());
         filter.setPredicateEnabled(DATE, true);
         return filter;

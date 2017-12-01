@@ -25,6 +25,9 @@ import javafx.scene.layout.VBox;
 public class DashboardActivity extends VBox {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    
+    private static final double BUTTON_WIDTH = 300;
+    private static final double BUTTON_HEIGHT = 75;
 
     private User user;
     
@@ -59,8 +62,9 @@ public class DashboardActivity extends VBox {
     	user = u;
     	
     	setPadding(new Insets(5));
-    	setSpacing(5);
+    	setSpacing(20);
     	setAlignment(Pos.CENTER_LEFT);
+    	setStyle("-fx-font-size: 32pt;");
     	
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_dashboard.fxml"));
     	loader.setController(this);
@@ -81,37 +85,58 @@ public class DashboardActivity extends VBox {
         user.login();
         Log.d(TAG, user.getUsername() + " is logged in = " + user.isLoggedIn());
         
+        mapButton.setPrefWidth(BUTTON_WIDTH);
+        mapButton.setPrefHeight(BUTTON_HEIGHT);
         mapButton.setOnAction(e -> {
             Log.d(TAG, "Rat Map Button pressed");
             callback.onResultObtained(ResultObtainedCallback.RESULT_MAP);
         });
 
+        graphButton.setPrefWidth(BUTTON_WIDTH);
+        graphButton.setPrefHeight(BUTTON_HEIGHT);
         graphButton.setOnAction(e ->  {
             Log.d(TAG, "Graph button pressed");
             callback.onResultObtained(ResultObtainedCallback.RESULT_GRAPH);
         });
 
+        listRatDataButton.setPrefWidth(BUTTON_WIDTH);
+        listRatDataButton.setPrefHeight(BUTTON_HEIGHT);
         listRatDataButton.setOnAction(e -> {
             Log.d(TAG, "Rat Data List button pressed");
             callback.onResultObtained(ResultObtainedCallback.RESULT_DATA_LIST);
         });
 
+        profileButton.setPrefWidth(BUTTON_WIDTH);
+        profileButton.setPrefHeight(BUTTON_HEIGHT);
         profileButton.setOnAction(e -> {
             Log.d(TAG, "Profile button pressed");
             callback.onResultObtained(ResultObtainedCallback.RESULT_PROFILE);
         });
+        
+        settingsButton.setPrefWidth(BUTTON_WIDTH);
+        settingsButton.setPrefHeight(BUTTON_HEIGHT);
+        settingsButton.setOnAction(e -> {
+        	Log.d(TAG, "Settings button pressed");
+        	callback.onResultObtained(ResultObtainedCallback.RESULT_SETTINGS);
+        });
 
+        reportRatButton.setPrefWidth(BUTTON_WIDTH);
+        reportRatButton.setPrefHeight(BUTTON_HEIGHT);
         reportRatButton.setOnAction(e -> {
             Log.d(TAG, "Report a Rat button pushed");
             callback.onResultObtained(ResultObtainedCallback.RESULT_REPORT);
         });
 
+        logoutButton.setPrefWidth(BUTTON_WIDTH);
+        logoutButton.setPrefHeight(BUTTON_HEIGHT);
         logoutButton.setOnAction(e -> {
             user.logout();
             Log.d(TAG, "Logout button pressed");
             callback.onResultObtained(ResultObtainedCallback.RESULT_LOGOUT);
         });
-        
+
+        filterButton.setPrefWidth(BUTTON_WIDTH);
+        filterButton.setPrefHeight(BUTTON_HEIGHT);
         filterButton.setOnAction(e -> {
         	Log.d(TAG, "Filter button pressed");
         	callback.onResultObtained(ResultObtainedCallback.RESULT_FILTER);

@@ -47,4 +47,12 @@ public class RunningAverage {
 	public double getCurrentAverage() {
 		return currAvg;
 	}
+	
+	/**
+	 * Indicates if the RunningAverage has an avrage to return
+	 * @return true if it has an average
+	 */
+	public boolean hasAverage() {
+		return numElements > 0;
+	}
 }

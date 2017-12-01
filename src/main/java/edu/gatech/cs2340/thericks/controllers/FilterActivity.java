@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
+import com.sun.javafx.stage.WindowEventDispatcher;
+
 import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.DateUtility;
@@ -27,8 +29,7 @@ public class FilterActivity extends VBox {
 
     private static final String TAG = FilterActivity.class.getSimpleName();
 
-    public static final int GET_FILTER = 700;
-    public static final String FILTER = "FILTER";
+    private static final double WIDTH = 400;
 
     @FXML
     private CheckBox dateAndTimeCheck;
@@ -110,6 +111,9 @@ public class FilterActivity extends VBox {
     	
     	assert u != null;
     	user = u;
+    	
+    	setPrefWidth(WIDTH);
+    	setMaxWidth(WIDTH);
     	
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/activity_filter.fxml"));
     	loader.setController(this);
@@ -412,7 +416,7 @@ public class FilterActivity extends VBox {
      */
     @FXML
     public void onLongitudeCheckClicked(ActionEvent e) {
-        if (longitudeCheck.isSelected()) {
+        if (!longitudeCheck.isSelected()) {
             minLongitudeEdit.setVisible(false);
             minLongitudeEdit.setManaged(false);
             maxLongitudeEdit.setVisible(false);

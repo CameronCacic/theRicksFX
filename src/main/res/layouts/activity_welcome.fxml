@@ -3,10 +3,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
 
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="VBox">
 	<children>
-		<Text text="Welcome"/>
+		<Text text="Welcome" style="-fx-font-size: 48pt;">
+			<VBox.margin>
+				<Insets bottom="20"/>
+			</VBox.margin>
+		</Text>
 		<Button fx:id="login" text="Login"/>
 		<Button fx:id="register" text="Register"/>
 	</children>

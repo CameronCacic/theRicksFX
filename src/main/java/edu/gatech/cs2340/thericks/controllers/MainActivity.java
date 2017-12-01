@@ -10,12 +10,13 @@ import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class MainActivity extends Application {
 	
-	private static final int MAX_LOGIN_WIDTH = 150;
+	private static final double MAX_LOGIN_WIDTH = 200;
 	
 	private static Stage primaryStage;
 	private static BorderPane mainPane;
@@ -23,6 +24,13 @@ public class MainActivity extends Application {
 	@Override
 	public void start(Stage pStage) {
 		primaryStage = pStage;
+		
+		primaryStage.setTitle("Rat Tracker");
+		primaryStage.getIcons().clear();
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/drawable/ratbackgroundiconALPHA.png")));
+//		primaryStage.getIcons().addAll(new Image(getClass().getResourceAsStream("/drawable/ratbackgroundicon16.jpg")),
+//				new Image(getClass().getResourceAsStream("/drawable/ratbackgroundicon32.jpg")),
+//				new Image(getClass().getResourceAsStream("/drawable/ratbackgroundicon64.jpg")));
 		
 		mainPane = new BorderPane();
     	
@@ -119,7 +127,9 @@ public class MainActivity extends Application {
 				if (result != null) {
 					user[0] = result;
 					mainPane.setLeft(new DashboardActivity(user[0], dashboardResult));
-					mainPane.setCenter(null);
+					MapActivity mapActivity = new MapActivity(filter);
+					filterCallback[0] = mapActivity;
+					mainPane.setCenter(mapActivity);
 				} else {
 					primaryStage.close();
 				}
@@ -155,9 +165,15 @@ public class MainActivity extends Application {
 		welcomeActivity.setMaxWidth(MAX_LOGIN_WIDTH);
 		mainPane.setCenter(welcomeActivity);
 		
-		primaryStage.setScene(new Scene(mainPane));
-		primaryStage.setMaximized(true);
-		primaryStage.show();
+		Scene scene = new Scene(mainPane);
+		scene.getStylesheets().add(getClass().getResource("/styles/rat_tracker.css").toExternalForm());
+		primaryStage.setScene(scene);
+		if (!primaryStage.isMaximized()) {
+			primaryStage.setMaximized(true);
+		}
+		if (!primaryStage.isShowing()) {
+			primaryStage.show();
+		}
 	}
 	
 	@Override
@@ -167,6 +183,6 @@ public class MainActivity extends Application {
 	
 	public static void main(String[] args) {
 		Log.setLevel(LogLevel.DEBUG);
-    	launch(args);
+		launch(args);
     }
 }

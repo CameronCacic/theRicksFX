@@ -1,6 +1,8 @@
 package edu.gatech.cs2340.thericks.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.gatech.cs2340.thericks.database.RatDatabase;
 import edu.gatech.cs2340.thericks.models.RatData;
@@ -139,14 +141,19 @@ public class RatDataListActivity extends AnchorPane implements NewFilterCallback
 		
 		RatDatabase database = new RatDatabase();
         progressIndicator.setVisible(true);
+        List<RatData> tempList = new ArrayList<>();
         database.loadData(new DataLoadedCallback() {
 			
 			@Override
 			public void notifyDataLoaded() {
 				progressIndicator.setVisible(false);
 				Log.d(TAG, "Data loaded");
+				ratDataList = FXCollections.observableArrayList(tempList);
+				ratDataListView.getItems().clear();
+		        ratDataListView.setItems(ratDataList);
+		        ratDataListView.refresh();
 			}
 			
-		}, ratDataList, filter);
+		}, tempList, filter);
 	}
 }

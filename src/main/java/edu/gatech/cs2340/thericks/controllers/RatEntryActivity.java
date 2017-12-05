@@ -129,6 +129,11 @@ public class RatEntryActivity extends VBox {
             
             longitude.setText(String.format(Locale.ENGLISH, "%8f", ratData.getLongitude()));
             longitude.setEditable(privilege);
+            
+            saveButton.setVisible(privilege);
+            if (!privilege) {
+            	cancelButton.setText("Close");
+            }
         } else {
             Log.d(TAG, "No rat data passed in, populating with current default data");
             

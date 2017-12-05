@@ -57,6 +57,10 @@ public class User {
             return "";
         }
     }
+    
+    public Privilege getPrivilege() {
+    	return privilege;
+    }
 
     /**
      * Logs user in

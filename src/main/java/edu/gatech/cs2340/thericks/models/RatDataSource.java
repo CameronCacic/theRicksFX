@@ -37,12 +37,10 @@ public interface RatDataSource {
      */
     List<RatData> getAllRatData();
 
-// --Commented out by Inspection START (11/13/2017 1:30 AM):
-//    /**
-//     * Gets a ratData Object by its unique key
-//     * @param key the ratData Object's key
-//     * @return the ratData Object
-//     */
-//    RatData findRatDataByKey(int key);
-// --Commented out by Inspection STOP (11/13/2017 1:30 AM)
+    /**
+     * Gets a ratData Object by its unique key
+     * @param key the ratData Object's key
+     * @return the ratData Object
+     */
+    RatData findRatDataByKey(int key);
 }

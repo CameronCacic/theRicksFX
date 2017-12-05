@@ -154,34 +154,34 @@ class RatDataDAO {
 
 
 
-// --Commented out by Inspection START (11/13/2017 1:35 AM):
-//    /**
-//     * Get single piece of rat data by key; returns null if data is not found
-//     * @param db the SQLiteDatabase where the RatData Object will be searched for
-//     * @param key the RatData Object's unique key
-//     * @return data the RatDat Object with the associated unique key
-//     */
-//    static RatData findRatDataByKey(SQLiteDatabase db, int key) {
-//
-//        // Query the table for entries with the given key
-//        // NOTE: there should be at most one such entry, since each key is unique.
-//        //       In the event of multiple such entries, this method uses the first.
-//        Cursor cursor = db.query(TABLE_RAT_DATA, COLUMNS , COLUMN_KEY + "=?",
-//                new String[] { String.valueOf(key) }, null, null,
-//                null, null);
-//
-//        RatData data = null;
-//        // Check if the query returned any entries
-//        if (cursor != null) {    // Entry found
-//            cursor.moveToFirst();
-//            // Create and return new rat data using values in the entry
-//            data = cursorToRatData(cursor);
-//            // Free up cursor
-//            cursor.close();
-//        }
-//        return data;
-//    }
-// --Commented out by Inspection STOP (11/13/2017 1:35 AM)
+    /**
+     * Get single piece of rat data by key; returns null if data is not found
+     * @param db the SQLiteDatabase where the RatData Object will be searched for
+     * @param key the RatData Object's unique key
+     * @return data the RatDat Object with the associated unique key
+     */
+    RatData findRatDataByKey(Connection connection, int key) {
+
+        // Query the table for entries with the given key
+        // NOTE: there should be at most one such entry, since each key is unique.
+        //       In the event of multiple such entries, this method uses the first.
+    	String selectMatchingKey = "SELECT 1 FROM " + TABLE_RAT_DATA + " WHERE " + COLUMN_KEY + " LIKE " + key;
+        RatData data = null;
+        
+        try {
+        	Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(selectMatchingKey);
+        	// Check if the query returned any entries
+            if (result.next()) {    // Entry found
+                // Create and return new rat data using values in the entry
+                data = cursorToRatData(result);
+            }
+        } catch (SQLException e) {
+			e.printStackTrace();
+		} 
+        
+        return data;
+    }
 
     /**
      * Get all rat data as a list

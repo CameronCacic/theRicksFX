@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 import edu.gatech.cs2340.thericks.database.RatDatabase;
+import edu.gatech.cs2340.thericks.models.Privilege;
 import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.models.RatDataSource;
 import edu.gatech.cs2340.thericks.models.User;
@@ -100,9 +102,22 @@ public class RatEntryActivity extends VBox {
             longitude.setText(String.format(Locale.ENGLISH, "%8f", ratData.getLongitude()));
         } else {
             Log.d(TAG, "No rat data passed in, populating with current default data");
+            
+            RatDatabase db = new RatDatabase();
+            int randKey;
+            do {
+            	randKey = ThreadLocalRandom.current().nextInt(0, 100000000);
+            } while (db.findRatDataByKey(randKey) != null);
+            key.setText(String.format("%08d", randKey));
             date.setDateTimeValue(LocalDateTime.now());
             saveButton.setText("Create");
             //set location but don't know how to access windows location services
+        }
+        
+        if (user != null && user.getPrivilege().equals(Privilege.ADMIN)) {
+        	key.setEditable(true);
+        } else {
+        	key.setEditable(false);
         }
 
         key.textProperty().addListener((observable, oldValue, newValue) -> {

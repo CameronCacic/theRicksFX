@@ -5,8 +5,13 @@ import edu.gatech.cs2340.thericks.models.RatFilter;
 import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.NewFilterCallback;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class MainActivity extends BorderPane {
 	
@@ -122,7 +127,7 @@ public class MainActivity extends BorderPane {
 					callback.onResultObtained(RESULT_RESTART);
 					break;
 				case RESULT_FILTER:
-					FilterActivity filterActivity = new FilterActivity(filter, user[0], filterResult);
+					FilterActivity filterActivity = new FilterActivity(filter, filterResult);
 					setRight(filterActivity);
 					break;
 				}
@@ -137,9 +142,16 @@ public class MainActivity extends BorderPane {
 				if (result != null) {
 					user[0] = result;
 					setLeft(new DashboardActivity(user[0], dashboardResult));
-					MapActivity mapActivity = new MapActivity(filter);
-					filterCallback[0] = mapActivity;
-					setCenter(mapActivity);
+					VBox centerBox = new VBox();
+					centerBox.setAlignment(Pos.BOTTOM_CENTER);
+					centerBox.setPadding(new Insets(100));
+					Image centerImg = new Image(getClass().getResourceAsStream("/drawable/ratbackgroundiconALPHA.png"));
+					ImageView imageView = new ImageView(centerImg);
+					imageView.setSmooth(true);
+					imageView.setPreserveRatio(true);
+					imageView.setFitHeight(200);
+					centerBox.getChildren().add(imageView);
+					setCenter(centerBox);
 				} else {
 					callback.onResultObtained(RESULT_RESTART);
 				}

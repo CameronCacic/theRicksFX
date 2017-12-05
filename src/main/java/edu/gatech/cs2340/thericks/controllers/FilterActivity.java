@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
-import com.sun.javafx.stage.WindowEventDispatcher;
-
 import edu.gatech.cs2340.thericks.models.RatFilter;
-import edu.gatech.cs2340.thericks.models.User;
 import edu.gatech.cs2340.thericks.utils.DateUtility;
 import edu.gatech.cs2340.thericks.utils.Log;
 import edu.gatech.cs2340.thericks.utils.ResultObtainedCallback;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +29,7 @@ public class FilterActivity extends VBox {
 
     private static final String TAG = FilterActivity.class.getSimpleName();
 
-    private static final double WIDTH = 420;
+    private static final double WIDTH = 480;
 
     @FXML
     private CheckBox dateAndTimeCheck;
@@ -99,19 +98,15 @@ public class FilterActivity extends VBox {
     private Text longSeparator;
 
     private RatFilter filter;
-    private User user;
     private ResultObtainedCallback<Integer> callback;
 
-    public FilterActivity(RatFilter f, User u, ResultObtainedCallback<Integer> call) {
+    public FilterActivity(RatFilter f, ResultObtainedCallback<Integer> call) {
     	
     	assert f != null;
     	filter = f;
     	
     	assert call != null;
     	callback = call;
-    	
-    	assert u != null;
-    	user = u;
     	
     	setPrefWidth(WIDTH);
     	setMaxWidth(WIDTH);
@@ -130,6 +125,53 @@ public class FilterActivity extends VBox {
     public void initialize() {
         Log.d(TAG, "Entered Filter Activity");
 
+        // enforce numeric values
+        zipEdit.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    zipEdit.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        minLatitudeEdit.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("(-{0,1}(?!0))\\d{0,2}([\\.]\\d{0,7})?") && !"".equals(newValue)) {
+                    minLatitudeEdit.setText(oldValue);
+                }
+            }
+        });
+        maxLatitudeEdit.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("(-{0,1}(?!0))\\d{0,2}([\\.]\\d{0,7})?") && !"".equals(newValue)) {
+                    minLatitudeEdit.setText(oldValue);
+                }
+            }
+        });
+        minLongitudeEdit.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("(-{0,1}(?!0))\\d{0,3}([\\.]\\d{0,7})?") && !"".equals(newValue)) {
+                    minLatitudeEdit.setText(oldValue);
+                }
+            }
+        });
+        maxLongitudeEdit.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("(-{0,1}(?!0))\\d{0,2}([\\.]\\d{0,7})?") && !"".equals(newValue)) {
+                    minLatitudeEdit.setText(oldValue);
+                }
+            }
+        });
+        
         if (filter.hasPredicate(RatFilter.DATE)) {
         	LocalDateTime dateTimeBegin = LocalDateTime.parse(filter.getBeginDateStr()
         			+ " " + filter.getBeginTimeStr(), DateUtility.DATE_TIME_FORMAT);

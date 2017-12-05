@@ -110,6 +110,8 @@ public class DashboardActivity extends VBox {
 
         profileButton.setPrefWidth(BUTTON_WIDTH);
         profileButton.setPrefHeight(BUTTON_HEIGHT);
+        profileButton.setManaged(false);
+        profileButton.setVisible(false);
         profileButton.setOnAction(e -> {
             Log.d(TAG, "Profile button pressed");
             callback.onResultObtained(ResultObtainedCallback.RESULT_PROFILE);
@@ -117,6 +119,8 @@ public class DashboardActivity extends VBox {
         
         settingsButton.setPrefWidth(BUTTON_WIDTH);
         settingsButton.setPrefHeight(BUTTON_HEIGHT);
+        settingsButton.setManaged(false);
+        profileButton.setManaged(false);
         settingsButton.setOnAction(e -> {
         	Log.d(TAG, "Settings button pressed");
         	callback.onResultObtained(ResultObtainedCallback.RESULT_SETTINGS);

@@ -25,7 +25,7 @@ public class LoadRatDataTask extends Task<Long> {
     private static final String TAG = LoadRatDataTask.class.getSimpleName();
 
     private static boolean isLoadingData = false;
-    private static boolean doneLoading = false;
+    private static boolean doneLoading = true;
 
     private DataLoadedCallback callback;
     private List<RatData> data;

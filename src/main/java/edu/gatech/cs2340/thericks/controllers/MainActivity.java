@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 /**
  * Main activity that coordinates the displaying of other activities within its children
@@ -157,14 +158,16 @@ public class MainActivity extends BorderPane {
 					user[0] = result;
 					setLeft(new DashboardActivity(user[0], dashboardResult));
 					VBox centerBox = new VBox();
-					centerBox.setAlignment(Pos.BOTTOM_CENTER);
-					centerBox.setPadding(new Insets(100));
-					Image centerImg = new Image(getClass().getResourceAsStream("/drawable/ratbackgroundiconALPHA.png"));
-					ImageView imageView = new ImageView(centerImg);
-					imageView.setSmooth(true);
-					imageView.setPreserveRatio(true);
-					imageView.setFitHeight(200);
-					centerBox.getChildren().add(imageView);
+//					centerBox.setAlignment(Pos.BOTTOM_CENTER);
+//					centerBox.setPadding(new Insets(100));
+//					Image centerImg = new Image(getClass().getResourceAsStream("/drawable/ratbackgroundiconALPHA.png"));
+//					ImageView imageView = new ImageView(centerImg);
+//					imageView.setSmooth(true);
+//					imageView.setPreserveRatio(true);
+//					imageView.setFitHeight(200);
+//					centerBox.getChildren().add(imageView);
+					centerBox.setAlignment(Pos.CENTER);
+					centerBox.getChildren().add(new Text("No activity selected"));
 					setCenter(centerBox);
 				} else {
 					callback.onResultObtained(RESULT_RESTART);

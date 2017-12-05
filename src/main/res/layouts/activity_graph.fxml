@@ -14,7 +14,7 @@
 		</HBox>
 		<HBox alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="5.0">
 			<children>
-				<Text fx:id="noDataText"/>
+				<Text fx:id="noDataText" text="No data loaded, try different filters"/>
 			</children>
 		</HBox>
 	</children>

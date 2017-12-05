@@ -10,6 +10,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 /**
@@ -50,6 +52,9 @@ public class DashboardActivity extends VBox {
     
     @FXML
     private Button filterButton;
+    
+    @FXML
+    private ImageView imageView;
 
     /**
      * Creates a new Dashboard activity and loads the FXML
@@ -147,5 +152,10 @@ public class DashboardActivity extends VBox {
         	Log.d(TAG, "Filter button pressed");
         	callback.onResultObtained(ResultObtainedCallback.RESULT_FILTER);
         });
+        
+        imageView.setImage(new Image(getClass().getResourceAsStream("/drawable/ratbackgroundiconALPHA.png")));
+        imageView.setSmooth(true);
+		imageView.setPreserveRatio(true);
+		imageView.setFitWidth(BUTTON_WIDTH);
     }
 }

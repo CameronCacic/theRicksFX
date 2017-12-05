@@ -25,7 +25,7 @@ import tornadofx.control.DateTimePicker;
 
 /**
  * Created by Cameron on 10/6/2017.
- * Displays the data in a passed RatData through
+ * Displays the data in a passed RatData
  */
 public class RatEntryActivity extends VBox {
 
@@ -68,6 +68,12 @@ public class RatEntryActivity extends VBox {
     private RatData ratData;
     private ResultObtainedCallback<Integer> callback;
     
+    /**
+     * Creates a new RatEntry activity
+     * @param u the user to determine editing privileges from
+     * @param r the RatData to populate field with, or create new RatData if null
+     * @param call callback to notify if ratdata was changed or canceled
+     */
     public RatEntryActivity(User u, RatData r, ResultObtainedCallback<Integer> call) {
     	user = u;
     	ratData = r;
@@ -87,19 +93,42 @@ public class RatEntryActivity extends VBox {
 		}
     }
 
+    /**
+     * Initializes the ratentry activity
+     * SHOULD ONLY BE REFLECTIVELY CALLED BY AN FXMLLOADER
+     */
     public void initialize() {
 
+    	boolean privilege = user != null && user.getPrivilege().equals(Privilege.ADMIN);
         if (ratData != null) {
         	Log.d(TAG, "Rat data passed in, populating fields with its data");
+        	
             key.setText(String.valueOf(ratData.getKey()));
+            key.setEditable(privilege);
+            
             date.setDateTimeValue(DateUtility.parse(ratData.getCreatedDateTime()));
+            date.setEditable(privilege);
+            
             locationType.setText(ratData.getLocationType());
+            locationType.setEditable(privilege);
+            
             address.setText(ratData.getIncidentAddress());
+            address.setEditable(privilege);
+            
             zip.setText(String.valueOf(ratData.getIncidentZip()));
+            zip.setEditable(privilege);
+            
             borough.setText(ratData.getBorough());
+            borough.setEditable(privilege);
+            
             city.setText(ratData.getCity());
+            city.setEditable(privilege);
+            
             latitude.setText(String.format(Locale.ENGLISH, "%8f", ratData.getLatitude()));
+            latitude.setEditable(privilege);
+            
             longitude.setText(String.format(Locale.ENGLISH, "%8f", ratData.getLongitude()));
+            longitude.setEditable(privilege);
         } else {
             Log.d(TAG, "No rat data passed in, populating with current default data");
             
@@ -109,15 +138,11 @@ public class RatEntryActivity extends VBox {
             	randKey = ThreadLocalRandom.current().nextInt(0, 100000000);
             } while (db.findRatDataByKey(randKey) != null);
             key.setText(String.format("%08d", randKey));
+            key.setEditable(privilege);
+            
             date.setDateTimeValue(LocalDateTime.now());
             saveButton.setText("Create");
             //set location but don't know how to access windows location services
-        }
-        
-        if (user != null && user.getPrivilege().equals(Privilege.ADMIN)) {
-        	key.setEditable(true);
-        } else {
-        	key.setEditable(false);
         }
 
         key.textProperty().addListener((observable, oldValue, newValue) -> {

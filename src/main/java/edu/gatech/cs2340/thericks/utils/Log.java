@@ -1,7 +1,17 @@
 package edu.gatech.cs2340.thericks.utils;
 
+/**
+ * Class to mimic Android logging for easier library conversion
+ * @author Cameron
+ *
+ */
 public class Log {
 	
+	/**
+	 * Enum representing the different levels of logging
+	 * @author Cameron
+	 *
+	 */
 	public static enum LogLevel {
 		VERBOSE,
 		DEBUG,
@@ -10,6 +20,10 @@ public class Log {
 	
 	private static LogLevel level = LogLevel.VERBOSE;
 	
+	/**
+	 * Sets the logging level to the specified value
+	 * @param lvl
+	 */
 	public static void setLevel(LogLevel lvl) {
 		level = lvl;
 	}

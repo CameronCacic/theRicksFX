@@ -24,6 +24,10 @@ public class WelcomeActivity extends VBox {
 	
 	private ResultObtainedCallback<Integer> callback;
 	
+	/**
+	 * Creates a new Welcome activity
+	 * @param call the callback to return the user's selection to
+	 */
 	public WelcomeActivity(ResultObtainedCallback<Integer> call) {
 		callback = call;
 		
@@ -40,7 +44,10 @@ public class WelcomeActivity extends VBox {
 		}
 	}
     
-    @FXML
+	/**
+     * Initializes the welcome activity
+     * SHOULD ONLY BE REFLECTIVELY CALLED BY AN FXMLLOADER
+     */
     public void initialize() {
     	
     	login.setOnAction(e -> {

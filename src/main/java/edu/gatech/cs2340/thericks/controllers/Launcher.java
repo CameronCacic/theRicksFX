@@ -9,6 +9,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+/**
+ * Class for launching the app
+ * @author Cameron
+ *
+ */
 public class Launcher extends Application {
 	
 	private static final String TAG = Launcher.class.getSimpleName();
@@ -16,6 +21,10 @@ public class Launcher extends Application {
 	private Stage primaryStage;
 	private Scene scene;
 	
+	/**
+	 * Launches the app
+	 * @param args any command line arguments, not used
+	 */
 	public static void main(String[] args) {
 		Log.setLevel(LogLevel.DEBUG);
 		Log.d(TAG, "Launcher started");
@@ -50,6 +59,11 @@ public class Launcher extends Application {
 		setMainScene(mainActivity);
 	}
 	
+	/**
+	 * Puts the main scene into the stage, or switches the root for the given MainActivity
+	 * if the scene is already displaying to avoid a stage resizing bug
+	 * @param m
+	 */
 	private void setMainScene(MainActivity m) {
 		m.initialize();
 

@@ -13,6 +13,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * Main activity that coordinates the displaying of other activities within its children
+ * @author Cameron
+ *
+ */
 public class MainActivity extends BorderPane {
 	
 	private static final double MAX_LOGIN_WIDTH = 200;
@@ -39,10 +44,19 @@ public class MainActivity extends BorderPane {
 	
 	private ResultObtainedCallback<Integer> callback;
 	
+	/**
+	 * Creates a new Main activity
+	 * @param call the callback to notify when the user logs out or
+	 * cancels loggin in/registering
+	 */
 	public MainActivity(ResultObtainedCallback<Integer> call) {
 		callback = call;
 	}
 
+	 /**
+     * Initializes the main activity
+     * SHOULD ONLY BE REFLECTIVELY CALLED BY AN FXMLLOADER
+     */
 	public void initialize() {
 		
 		setRight(SIDE_BORDER);

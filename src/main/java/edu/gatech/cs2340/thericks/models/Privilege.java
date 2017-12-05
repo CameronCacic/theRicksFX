@@ -10,6 +10,10 @@ public enum Privilege {
 
     private final String label;
 
+    /**
+     * Creates a privilege with the specified label
+     * @param label the label
+     */
     Privilege(String label) {
         this.label = label;
     }

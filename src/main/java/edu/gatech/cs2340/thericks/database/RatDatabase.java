@@ -24,7 +24,7 @@ public class RatDatabase implements RatDataSource {
     private Connection connection;
 
     /**
-     * initializes the SQLite Database to a RatDatabaseHandler 
+     * initializes the database connection from a RatDatabaseHandler 
      */
     public RatDatabase() {
     	connection = DatabaseHandler.provideDatabaseConnection();
@@ -33,9 +33,9 @@ public class RatDatabase implements RatDataSource {
 
     /**
      * Loads in a list of RatData Objects
-     * @param a the ArrayAdapter that returns the views for each RatData Object
-     * @param data the list of RatData Objects whose views will be added
-     * @param filter the filters used to select certain RatData Objects
+     * @param callback callback to notify when finished
+     * @param data the List to load data into
+     * @param filter the filter to filter the data with
      */
     public void loadData(DataLoadedCallback callback, List<RatData> data, RatFilter filter) {
         if (!LoadRatDataTask.isReady()) {

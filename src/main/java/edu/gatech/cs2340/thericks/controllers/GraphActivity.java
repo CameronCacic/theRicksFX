@@ -28,7 +28,6 @@ import javafx.scene.text.Text;
  * Created by Cameron on 11/3/2017.
  * Holds multiple different graphs for displaying rat data
  */
-
 public class GraphActivity extends AnchorPane implements NewFilterCallback {
 
     private static final String TAG = GraphActivity.class.getSimpleName();
@@ -47,6 +46,10 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
     @FXML
     private Text noDataText;
 
+    /**
+     * Creates a new Graph activity
+     * @param f the filter for data loading
+     */
     public GraphActivity(RatFilter f) {
     	
     	assert f != null;
@@ -62,6 +65,10 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
 		}
 	}
     
+    /**
+     * Initializes the graph activity
+     * SHOULD ONLY BE REFLECTIVELY CALLED BY AN FXMLLOADER
+     */
     public void initialize() {
 
         Log.d(TAG, "Entered Graph Activity");
@@ -172,6 +179,11 @@ public class GraphActivity extends AnchorPane implements NewFilterCallback {
         progressIndicator.setVisible(false);
     }
     
+    /**
+     * Helper method for formating the axis values
+     * @param dateTime
+     * @return
+     */
     private String formatLocalDateTime(LocalDateTime dateTime) {
     	return Months.values()[dateTime.getMonthValue() - 1] + " " + dateTime.getYear();
     }

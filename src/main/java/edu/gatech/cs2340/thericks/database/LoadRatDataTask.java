@@ -52,10 +52,10 @@ public class LoadRatDataTask extends Task<Long> {
 
     /**
      * Provides views from an activity calling the task, allowing for the UI to be asynchronously
-     * updated in onPostExecute
-     * @param a the ArrayAdapter that returns the views for each RatData Object
-     * @param data the list of RatData Objects whose views will be added
-     * @param filter the filters used to select certain RatData Objects
+     * updated in succeeded
+     * @param callback the callback to notify when the data finishes loading
+     * @param data the List to fill with ratdata
+     * @param filter the filter to filter the ratdata with
      */
     LoadRatDataTask(DataLoadedCallback callback, List<RatData> data, RatFilter filter) {
         this.callback = callback;

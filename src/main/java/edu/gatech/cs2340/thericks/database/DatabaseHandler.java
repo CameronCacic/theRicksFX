@@ -29,6 +29,9 @@ public final class DatabaseHandler {
         return instance.getDatabaseConnection();
     }
 
+    /**
+     * Creates the singleton instance of DatabaseHandler
+     */
     private DatabaseHandler() {
         try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_NAME);
@@ -37,10 +40,17 @@ public final class DatabaseHandler {
 		}
     }
     
+    /**
+     * Gets a valid database connection
+     * @return database connection
+     */
     public Connection getDatabaseConnection() {
     	return connection;
     }
     
+    /**
+     * Closes the database connection
+     */
     public static void closeInstance() {
     	try {
 			instance.connection.close();

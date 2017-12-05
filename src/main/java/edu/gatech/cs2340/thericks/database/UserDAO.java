@@ -39,7 +39,7 @@ class UserDAO {
 
     /**
      * Create a user table in the database
-     * @param sqLiteDatabase Database where table is stored
+     * @param connection connection to Database where table is stored
      */
     UserDAO(Connection connection) {
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_USERS + "(" +
@@ -63,7 +63,10 @@ class UserDAO {
     /**
      * Insert new user into database if the user does not exist. If the user already exists,
      * replace the existing data.
-    */
+     * @param username the username
+     * @param password the password
+     * @param privilege the privilege
+     */
     void createUser(String username, String password, Privilege privilege) {
 
         if (insertOrReplaceStatement != null) {
@@ -123,7 +126,7 @@ class UserDAO {
 
     /**
      * Get single user by id; returns null if user is not found
-     * @param db database to search in
+     * @param connection the connection to the database to search in
      * @param username the username of the user to search for
      * @return user with specified id, null if none found
      */
@@ -151,7 +154,7 @@ class UserDAO {
     /**
      * Get all users as a list.
      *
-     * @param db the database to search in
+     * @param connection the connection to the database to search in
      * @return all users in a list
      */
     List<User> getAllUsers(Connection connection) {

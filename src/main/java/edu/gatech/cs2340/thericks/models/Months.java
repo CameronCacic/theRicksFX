@@ -2,7 +2,7 @@ package edu.gatech.cs2340.thericks.models;
 
 /**
  * Created by Cameron on 11/8/2017.
- * Holds the abbreviations for each of the months
+ * Holds the abbreviations for each of the months for graph display
  */
 public enum Months {
     Jan,

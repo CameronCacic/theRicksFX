@@ -64,6 +64,10 @@ public class RegisterActivity extends VBox {
     private UserDatabase db;
     private ResultObtainedCallback<User> callback;
 
+    /**
+     * Creates a new Register activity
+     * @param call the callback to return the newly created user to
+     */
     public RegisterActivity(ResultObtainedCallback<User> call) {
     	callback = call;
     	
@@ -81,7 +85,10 @@ public class RegisterActivity extends VBox {
 		}
 	}
     
-    @FXML
+    /**
+     * Initializes the register activity
+     * SHOULD ONLY BE REFLECTIVELY CALLED BY AN FXMLLOADER
+     */
     public void initialize() {
 
         db = new UserDatabase();

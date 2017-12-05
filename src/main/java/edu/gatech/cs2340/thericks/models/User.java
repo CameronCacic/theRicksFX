@@ -58,6 +58,10 @@ public class User {
         }
     }
     
+    /**
+     * Gets the privilege level
+     * @return privilege level
+     */
     public Privilege getPrivilege() {
     	return privilege;
     }

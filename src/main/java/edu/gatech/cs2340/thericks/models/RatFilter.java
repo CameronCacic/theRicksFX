@@ -49,6 +49,9 @@ public class RatFilter {
     private Double minLongitude;
     private Double maxLongitude;
 
+    /**
+     * Creates an empty ratfilter
+     */
     private RatFilter() {
         predicates = new HashMap<>();
         enabledMap = new HashMap<>();
@@ -74,69 +77,93 @@ public class RatFilter {
         }
     }
 
-    private void buildAllPredicates() {
-        if ((beginDateStr != null)
-                && (beginTimeStr != null)
-                && (endDateStr != null)
-                && (endTimeStr != null)) {
-            buildDatePredicate();
-        }
-        if (locationType != null) {
-            buildLocationTypePredicate();
-        }
-        if (zip != null) {
-            buildZipPredicate();
-        }
-        if (address != null) {
-            buildAddressPredicate();
-        }
-        if (city != null) {
-            buildCityPredicate();
-        }
-        if (borough != null ) {
-            buildBoroughPredicate();
-        }
-        if ((minLatitude != null) && (maxLatitude != null)) {
-            buildLatitudePredicate();
-        }
-        if ((minLongitude != null) && (maxLongitude != null)) {
-            buildLongitudePredicate();
-        }
-    }
+//    private void buildAllPredicates() {
+//        if ((beginDateStr != null)
+//                && (beginTimeStr != null)
+//                && (endDateStr != null)
+//                && (endTimeStr != null)) {
+//            buildDatePredicate();
+//        }
+//        if (locationType != null) {
+//            buildLocationTypePredicate();
+//        }
+//        if (zip != null) {
+//            buildZipPredicate();
+//        }
+//        if (address != null) {
+//            buildAddressPredicate();
+//        }
+//        if (city != null) {
+//            buildCityPredicate();
+//        }
+//        if (borough != null ) {
+//            buildBoroughPredicate();
+//        }
+//        if ((minLatitude != null) && (maxLatitude != null)) {
+//            buildLatitudePredicate();
+//        }
+//        if ((minLongitude != null) && (maxLongitude != null)) {
+//            buildLongitudePredicate();
+//        }
+//    }
 
+    /**
+     * Builds the date predicate
+     */
     private void buildDatePredicate() {
         predicates.put(DATE, DateUtility.createDateRangeFilter(
                 DateUtility.parse(beginDateStr + " " + beginTimeStr),
                 DateUtility.parse(endDateStr + " " + endTimeStr)));
     }
 
+    /**
+     * Builds the location type predicate
+     */
     private void buildLocationTypePredicate() {
         predicates.put(LOCATION_TYPE, ratData ->
                 ratData.getLocationType().equalsIgnoreCase(locationType));
     }
 
+    /**
+     * Builds the zip code predicate
+     */
     private void buildZipPredicate() {
         predicates.put(ZIP, ratData -> ratData.getIncidentZip() == zip);
     }
 
+    /**
+     * Builds the address predicate
+     */
     private void buildAddressPredicate() {
         predicates.put(ADDRESS, ratData ->
                 ratData.getIncidentAddress().toLowerCase().contains(address.toLowerCase()));
     }
 
+    /**
+     * Builds the city predicate
+     */
     private void buildCityPredicate() {
         predicates.put(CITY, ratData -> ratData.getCity().equalsIgnoreCase(city));
     }
 
+    /**
+     * Builds the borough predicate
+     */
     private void buildBoroughPredicate() {
         predicates.put(BOROUGH, ratData -> ratData.getBorough().equalsIgnoreCase(borough));
     }
 
+    /**
+     * Builds the latitude predicate
+     */
     private void buildLatitudePredicate() {
         predicates.put(LATITUDE, ratData -> (ratData.getLatitude() >= minLatitude)
                 && (ratData.getLatitude() <= maxLatitude));
     }
 
+    /**
+     * Builds the longitude predicate
+     */
     private void buildLongitudePredicate() {
         predicates.put(LONGITUDE, ratData -> (ratData.getLongitude() >= minLongitude)
                 && (ratData.getLongitude() <= maxLongitude));

@@ -22,7 +22,7 @@ public class UserDatabase implements UserDataSource {
     private UserDAO dao;
 
     /**
-     * Constructor that initializes SQLite Database to a UserDatabaseHandler
+     * Constructor that initializes the database connection to a UserDatabaseHandler
      */
     public UserDatabase() {
         connection = DatabaseHandler.provideDatabaseConnection();

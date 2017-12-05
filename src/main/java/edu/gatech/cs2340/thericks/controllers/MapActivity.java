@@ -12,7 +12,6 @@ import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.InfoWindow;
 import com.lynden.gmapsfx.javascript.object.InfoWindowOptions;
 import com.lynden.gmapsfx.javascript.object.LatLong;
-import com.lynden.gmapsfx.javascript.object.LatLongBounds;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
 import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 import com.lynden.gmapsfx.javascript.object.Marker;
@@ -30,9 +29,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Callback;
 import netscape.javascript.JSObject;
 
+/**
+ * Map activity that displays a Google Map with rat data
+ * @author Cameron
+ *
+ */
 public class MapActivity extends AnchorPane implements MapComponentInitializedListener, NewFilterCallback {
 	
 	private static final String TAG = MapActivity.class.getSimpleName();
@@ -51,6 +54,10 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
     @FXML
     private ProgressIndicator progressIndicator;
     
+    /**
+     * Creates a new Map activity
+     * @param f the filter to load data with
+     */
     public MapActivity(RatFilter f) {
     	
     	Log.d(TAG, "Entered Map Activity");
@@ -67,15 +74,17 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
 		}
     }
     
+    /**
+     * Initializes the map activity
+     * SHOULD ONLY BE REFLECTIVELY CALLED BY AN FXMLLOADER
+     */
     public void initialize() {
     	mapView.addMapInializedListener(this);
     }
     
     /**
-     * Clears the current markers on the map, disables all map widgets,
-     * then fetches rat data from the database, applying all current
-     * filters, and adds a marker to the map for each one before
-     * re-enabling all map widgets
+     * Clears the current markers on the map then fetches rat data from the database,
+     * applying the current filter, and adds a marker to the map for each one
      */
     private void loadFilteredMapMarkers() {
         progressIndicator.setVisible(true);
@@ -99,8 +108,7 @@ public class MapActivity extends AnchorPane implements MapComponentInitializedLi
 		    	        for (RatData r: filteredList) {
 		    	            MarkerOptions markerOptions = new MarkerOptions();
 		    	            LatLong position = new LatLong(r.getLatitude(), r.getLongitude());
-		    	            markerOptions.position(position);//.icon(
-//		    	            		getClass().getResource("/drawable/ratbackgroundiconALPHA.png").toExternalForm());
+		    	            markerOptions.position(position);
 		    	            Marker marker = new Marker(markerOptions);
 		    	            
 		    	            latAverage.add(position.getLatitude());

@@ -1,5 +1,13 @@
 package edu.gatech.cs2340.thericks.utils;
 
+/**
+ * Callback for obtaining a result and passing it to the callback owner.
+ * For state results, Integer should be used, as there are some predefined
+ * Integer states avalible to use
+ * @author Cameron
+ *
+ * @param <T> the data type of the result
+ */
 public interface ResultObtainedCallback<T> {
 	
 	static final int RESULT_CANCELED = -1;
@@ -17,5 +25,9 @@ public interface ResultObtainedCallback<T> {
 	static final int RESULT_RESTART = 11;
 	static final int RESULT_STOP = 12;
 	
+	/**
+	 * Called when a result has been obtained
+	 * @param result the result
+	 */
 	void onResultObtained(T result);
 }

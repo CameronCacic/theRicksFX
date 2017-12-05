@@ -14,9 +14,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * Created by Cameron on 10/6/2017.
- * Dash-map activity in dash mode provides numerous activity options for a logged in user
- * to engage in. Defaults to dash mode, upon selecting map, dash-map switches to map mode,
- * where users can view rat data displayed on a Google Map, filtered by date
+ * Dashboard activity for selecting what activity the user would like to engage in
  */
 public class DashboardActivity extends VBox {
 
@@ -53,6 +51,11 @@ public class DashboardActivity extends VBox {
     @FXML
     private Button filterButton;
 
+    /**
+     * Creates a new Dashboard activity and loads the FXML
+     * @param u the user to verify login on
+     * @param call the callback to pass the user's selection back to
+     */
     public DashboardActivity(User u, ResultObtainedCallback<Integer> call) {
     	callback = call;
     	user = u;
@@ -72,7 +75,10 @@ public class DashboardActivity extends VBox {
 		}
     }
     
-    @FXML
+    /**
+     * Initializes the dashboard
+     * SHOULD ONLY BE REFLECTIVELY CALLED BY AN FXMLLOADER
+     */
     public void initialize() {
 
         Log.d(TAG, "Entered dashboard activity");

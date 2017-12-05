@@ -10,7 +10,12 @@ import java.io.Serializable;
  */
 public class Login implements Serializable {
 
-    /** Username for login **/
+    /**
+	 * Serialized ID
+	 */
+	private static final long serialVersionUID = -1334176625972695133L;
+
+	/** Username for login **/
     private final String username;
 
     /** The hashed password for the login **/
@@ -20,6 +25,12 @@ public class Login implements Serializable {
     private final String salt;
 
 
+    /**
+     * Creates a new login
+     * @param username the username
+     * @param password the password
+     * @param salt the password salt
+     */
     Login(String username, String password, String salt) {
         this.username = username;
         this.salt = salt;

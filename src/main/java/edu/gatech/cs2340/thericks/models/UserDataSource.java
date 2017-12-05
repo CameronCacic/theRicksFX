@@ -15,7 +15,6 @@ public interface UserDataSource {
      * @param password user's password
      * @param privilege privilege for user
      */
-    @SuppressWarnings("unused")
     void createUser(String username, String password, Privilege privilege);
 
     /**

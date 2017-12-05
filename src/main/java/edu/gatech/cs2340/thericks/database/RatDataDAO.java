@@ -15,7 +15,7 @@ import edu.gatech.cs2340.thericks.models.RatData;
 import edu.gatech.cs2340.thericks.utils.Log;
 
 /**
- * Class handling direct access with the SQLite database.  Provides the low-level implementation of
+ * Class handling direct access with the database connection. Provides the low-level implementation of
  * RatDatabase's methods for adding, getting, and removing rat data.
  *
  * Created by Ben Lashley on 10/18/2017.
@@ -52,6 +52,10 @@ class RatDataDAO {
 
     private PreparedStatement insertOrReplaceStatement;
 
+    /**
+     * Creates a new RatDataDAO, initializing table in the database if it doesn't already exist
+     * @param connection the connection 
+     */
     RatDataDAO (Connection connection) {
         Log.d(TAG, "Creating database");
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_RAT_DATA + "(" +
@@ -80,7 +84,6 @@ class RatDataDAO {
     /**
      * Insert new rat data into database if key does not exist. If key already exists,
      * replace the existing data.
-     * @param db the SQLiteDatabase where the RatData Object will be inserted
      * @param key unique key
      * @param createdDateTime date and time of creation
      * @param locationType location
@@ -156,9 +159,9 @@ class RatDataDAO {
 
     /**
      * Get single piece of rat data by key; returns null if data is not found
-     * @param db the SQLiteDatabase where the RatData Object will be searched for
+     * @param connection the SQLiteDatabase where the RatData Object will be searched for
      * @param key the RatData Object's unique key
-     * @return data the RatDat Object with the associated unique key
+     * @return the RatDat Object with the associated unique key
      */
     RatData findRatDataByKey(Connection connection, int key) {
 
@@ -185,7 +188,7 @@ class RatDataDAO {
 
     /**
      * Get all rat data as a list
-     * @param db the SQLiteDatabase that houses all the RatData Objects
+     * @param connection the connection to the database that houses all the RatData Objects
      * @return a list of RatData Objects
      */
     List<RatData> getAllRatData(Connection connection) {
@@ -210,6 +213,12 @@ class RatDataDAO {
         return ratDataList;
     }
 
+    /**
+     * Get all ratdata with applied filter
+     * @param connection connection to the database
+     * @param filters the filters to filter with
+     * @return
+     */
     List<RatData> getFilteredRatData(Connection connection,
                                             Collection<Predicate<RatData>> filters) {
     	Log.d(TAG, "Loading filtered rat data");

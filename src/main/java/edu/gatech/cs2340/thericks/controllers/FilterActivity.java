@@ -22,8 +22,7 @@ import tornadofx.control.DateTimePicker;
 
 /**
  * Created by Cameron on 11/15/2017.
- * Activity to be started for result to obtain a single predicate to
- * filter with
+ * Edits the passed in filter with user selected conditions
  */
 public class FilterActivity extends VBox {
 
@@ -100,6 +99,11 @@ public class FilterActivity extends VBox {
     private RatFilter filter;
     private ResultObtainedCallback<Integer> callback;
 
+    /**
+     * Creates a new Filter activity
+     * @param f the filter to edit
+     * @param call the callback to notify when the filter has been edited or canceled
+     */
     public FilterActivity(RatFilter f, ResultObtainedCallback<Integer> call) {
     	
     	assert f != null;
@@ -122,6 +126,10 @@ public class FilterActivity extends VBox {
 		}
 	}
     
+    /**
+     * Initializes the filter activity
+     * SHOULD ONLY BE REFLECTIVELY CALLED BY AN FXMLLOADER
+     */
     public void initialize() {
         Log.d(TAG, "Entered Filter Activity");
 
@@ -253,7 +261,7 @@ public class FilterActivity extends VBox {
     /**
      * Handler method for when the apply filter button is pressed. Consolidates the data in the
      * activity into the RatFilter object
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onApplyButtonClicked(ActionEvent e) {
@@ -309,7 +317,7 @@ public class FilterActivity extends VBox {
 
     /**
      * Handles the cancel button being clicked. Cancels the result
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onCancelButtonClicked(ActionEvent e) {
@@ -318,7 +326,7 @@ public class FilterActivity extends VBox {
 
     /**
      * Handles the clear button being pressed. Un-checks all filters
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onClearButtonClicked(ActionEvent e) {
@@ -343,7 +351,7 @@ public class FilterActivity extends VBox {
 
     /**
      * Toggles the date and time filter views
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onDateAndTimeCheckClicked(ActionEvent e) {
@@ -366,7 +374,7 @@ public class FilterActivity extends VBox {
 
     /**
      * Toggles location type filter view
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onLocationTypeCheckClicked(ActionEvent e) {
@@ -381,7 +389,7 @@ public class FilterActivity extends VBox {
 
     /**
      * Toggles zip code filter views
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onZipCheckClicked(ActionEvent e) {
@@ -396,7 +404,7 @@ public class FilterActivity extends VBox {
 
     /**
      * Toggles the address filter views
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onAddressCheckClicked(ActionEvent e) {
@@ -411,7 +419,7 @@ public class FilterActivity extends VBox {
 
     /**
      * Toggles the city filter views
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onCityCheckClicked(ActionEvent e) {
@@ -426,7 +434,7 @@ public class FilterActivity extends VBox {
 
     /**
      * Toggles the borough filter views
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onBoroughCheckClicked(ActionEvent e) {
@@ -441,7 +449,7 @@ public class FilterActivity extends VBox {
 
     /**
      * Toggles the latitude filter views
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onLatitudeCheckClicked(ActionEvent e) {
@@ -464,7 +472,7 @@ public class FilterActivity extends VBox {
 
     /**
      * Toggles the longitude filter views
-     * @param v the clicked view
+     * @param e the action event
      */
     @FXML
     public void onLongitudeCheckClicked(ActionEvent e) {

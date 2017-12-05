@@ -43,6 +43,10 @@ public class LoginActivity extends VBox {
     
     private ResultObtainedCallback<User> callback;
 
+    /**
+     * Creates a new Login activity
+     * @param call
+     */
     public LoginActivity(ResultObtainedCallback<User> call) {
     	callback = call;
     	
@@ -60,6 +64,10 @@ public class LoginActivity extends VBox {
 		}
     }
     
+    /**
+     * Initializes the login activity
+     * SHOULD ONLY BE REFLECTIVELY CALLED BY AN FXMLLOADER
+     */
     public void initialize() {
 
         error.setVisible(false);

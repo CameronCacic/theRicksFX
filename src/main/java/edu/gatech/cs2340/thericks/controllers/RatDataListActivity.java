@@ -47,6 +47,11 @@ public class RatDataListActivity extends AnchorPane implements NewFilterCallback
     @FXML
     private ProgressIndicator progressIndicator;
     
+    /**
+     * Creates a new Ratdatalist acitivity
+     * @param f the filter to load data with
+     * @param call callback for returning a selected ratdata
+     */
     public RatDataListActivity(RatFilter f, ResultObtainedCallback<RatData> call) {
     	filter = f;
     	callback = call;
@@ -58,9 +63,13 @@ public class RatDataListActivity extends AnchorPane implements NewFilterCallback
 			loader.load();
 		} catch (IOException e) {
 			e.printStackTrace();
-    }
+		}
     }
 
+    /**
+     * Initializes the ratdatalist activity
+     * SHOULD ONLY BE REFLECTIVELY CALLED BY AN FXMLLOADER
+     */
     public void initialize() {
 
         ratDataListView.setCellFactory(new Callback<ListView<RatData>, ListCell<RatData>>() {
@@ -82,6 +91,11 @@ public class RatDataListActivity extends AnchorPane implements NewFilterCallback
         notifyFilterUpdated();
     }
 
+    /**
+     * Private inner class for defining how RatData is displayed in the ListView
+     * @author Cameron
+     *
+     */
     private class RatDataListCell extends ListCell<RatData> {
     	
     	@Override

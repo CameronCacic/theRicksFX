@@ -18,7 +18,7 @@
 			</padding>
 			<children>
 				<Button text="Apply" onAction="#onApplyButtonClicked"/>
-				<Button text="Cancel" onAction="#onCancelButtonClicked"/>
+				<Button text="Close" onAction="#onCancelButtonClicked"/>
 				<Pane HBox.hgrow="ALWAYS"/>
 				<Button text="Clear" onAction="#onClearButtonClicked"/>
 			</children>
